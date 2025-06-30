@@ -1,106 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <link rel="stylesheet" href="estilos.css">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=git push -u origin master
-, initial-scale=1.0">
-    <title>Repositorio de Archivos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloudler</title>
+    <link rel="stylesheet" href="./css/styless.css">
+    <link rel="shortcut icon" href="./img/Logo.svg" type="image/x-icon">
 </head>
+
 <body>
-     <header class="header">
-        <div class="logo">☁</div>
+
+    <header class="header">
+        <div class="logo">
+            <img src="./img/Logo.svg" alt="logo">
+        </div>
         <nav>
-            <ul class="nav">
+            <ul class="nav-links">
                 <li><a href="#">INICIO</a></li>
-                <li><a href="#">INFORMACIÓN</a></li>
-                <li><a href="#">PRECIOS</a></li>
+                <li><a href="#">INFORMACION</a></li>
+                <li><a href="#Content-4">PRECIOS</a></li>
             </ul>
         </nav>
-        <div class="login-btn">LOGIN</div>
+        <a href="/login.html" class="btn"><button>INICIA SESION</button></a>
     </header>
 
-    <!-- Title -->
-    <h1 class="title">Accede a todos tu repositorio en un mismo sitio</h1>
+    <section class="content-1">
+        <h1>Accede a toda tu infomación en un mismo sitio</h1>
+        <img src="/img/content-1.jpg" alt="base de datos">
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="company-name">nombre empresa</div>
-            
-            <div class="search-container">
-                <span class="search-icon">🔍</span>
-                <input type="text" class="search-input" placeholder="Buscar">
+        <div class="btn-1">
+            <div class="btn-1-1">
+                <label for="#">Ingresa tu correo</label> <!--Cambiar a un input-->
+                <button type="button">Registrate</button>
             </div>
-
-            <button class="create-btn">+ Crear</button>
-
-            <nav class="sidebar-nav">
-                <div class="menu-item">
-                    <div class="menu-icon"></div>
-                    <span>Mis archivos</span>
-                </div>
-                <div class="menu-item">
-                    <div class="menu-icon"></div>
-                    <span>Compartir</span>
-                </div>
-            </nav>
-        </aside>
-
-        <!-- File Explorer -->
-        <main class="file-explorer">
-            <div class="file-header">
-                <button class="back-btn">←</button>
-                <div class="breadcrumb">Carpeta A/ Carpeta B/ Carpeta C</div>
+            <div class="btn-1-2">
+                <button type="button">Inicia Sesion</button>
             </div>
+        </div>
+    </section>
 
-            <div class="file-list-header">
-                <div class="header-item header-name">
-                    <input type="checkbox" class="file-checkbox">
-                    <span>Nombre</span>
-                    <span>▼</span>
+    <main>
+        <section class="content-2">
+            <div class="izq">
+                <h1>Conectate en todos tus dispositivos</h1>
+                <p>Accede a toda tu información en un mismo sitio</p>
+            </div>
+            <div class="der">
+                <img src="./img/Group 8627.png" alt="" srcset="">
+            </div>
+        </section>
+        <br><br><br>
+        <section class="content-3">
+            <div class="izq-1">
+                <h1>Guarda toda tu información en un solo sitio</h1>
+            </div>
+            <div class="der-1"><img src="./img/nubes.png" alt="nubes"></div>
+        </section>
+        <br><br><br>
+        <section class="content-4" id="content-4">
+            <div class="plan">
+                <div class="plan-1">
+                    <h2>Gratis</h2>
+                    <ul>
+                        <li><img src="./img/check.svg" alt="check">Lorem ipsum dolor sit amet.</li>
+                        <li><img src="./img/X.svg" alt="X">Lorem ipsum dolor sit amet.</li>
+                        <li><img src="./img/X.svg" alt="X">Lorem ipsum dolor sit amet.</li>
+                        <li><img src="./img/X.svg" alt="X">Lorem ipsum dolor sit amet.</li>
+                        <li><img src="./img/X.svg" alt="X">Lorem ipsum dolor sit amet.</li>
+                    </ul>
+                    <button class="btn-seleccionar">Seleccionar</button>
                 </div>
-                <div class="header-item header-modified">
-                    <span>Modificado</span>
-                    <span>▼</span>
+                <div class="plan-1">
+
+                    <h2>Normal</h2>
+                    <ul>
+                        <li><img src="./img/check.svg" alt="check">Lorem ipsum dolor sit amet.</li>
+                        <li><img src="./img/X.svg" alt="X">Lorem ipsum dolor sit amet.</li>
+                        <li><img src="./img/check.svg" alt="check">Lorem ipsum dolor sit amet.</li>
+                        <li><img src="./img/X.svg" alt="X">Lorem ipsum dolor sit amet.</li>
+                        <li><img src="./img/X.svg" alt="X">Lorem ipsum dolor sit amet.</li>
+                    </ul>
+                    <button class="btn-seleccionar">Seleccionar</button>
+                </div>
+
+                <div class="plan-1">
+                    <h2>Premium</h2>
+                    <ul>
+                        <li><img src="./img/check.svg" alt="check">Lorem ipsum dolor sit amet.</li>
+                        <li><img src="./img/check.svg" alt="check">Lorem ipsum dolor sit amet.</li>
+                        <li><img src="./img/check.svg" alt="check">Lorem ipsum dolor sit amet.</li>
+                        <li><img src="./img/check.svg" alt="check">Lorem ipsum dolor sit amet.</li>
+                        <li><img src="./img/check.svg" alt="check">Lorem ipsum dolor sit amet.</li>
+                    </ul>
+                    <button class="btn-seleccionar">Seleccionar</button>
+                </div>
+        </section>
+    </main>
+    <br><br><br>
+    <footer>
+        <section class="content-5">
+            <h2>Empresas que usan nuestro servicio</h2>
+            <div class="empresas">
+                <img src="./img/ford.svg" alt="">
+                <img src="./img/figma.svg" alt="">
+                <img src="./img/american-airlines.svg" alt="">
+            </div>
+            <div class="content-5-1">
+                <div>
+                    <h3>
+                        Producto
+                    </h3>
+                    <p>Precio</p><br>
+                    <p>Caracteristicas</p><br>
+                    <p>Recursos</p><br>
+                </div>
+                <div>
+                    <h3>Soporte</h3>
+                    <p>Soporte</p><br>
+                    <p>Preguntas Frecuentes</p><br>
+                    <p>Documentacion</p><br>
+                </div>
+                <div>
+                    <h3>Compañia</h3>
+                    <p>Sobre Nosotros</p><br>
+                    <p>Blog</p><br>
+                    <p>Redes Sociales</p><br>
                 </div>
             </div>
-
-            <div class="file-list">
-                <div class="file-item">
-                    <input type="checkbox" class="file-checkbox">
-                    <div class="file-icon"></div>
-                    <div class="file-name">Archivo 1</div>
-                    <div class="file-date">Fecha</div>
-                </div>
-                <div class="file-item">
-                    <input type="checkbox" class="file-checkbox">
-                    <div class="file-icon"></div>
-                    <div class="file-name">Archivo 2</div>
-                    <div class="file-date">Fecha</div>
-                </div>
-                <div class="file-item">
-                    <input type="checkbox" class="file-checkbox">
-                    <div class="file-icon"></div>
-                    <div class="file-name">Archivo 3</div>
-                    <div class="file-date">Fecha</div>
-                </div>
-                <div class="file-item">
-                    <input type="checkbox" class="file-checkbox">
-                    <div class="file-icon folder-icon"></div>
-                    <div class="file-name">Archivo 4</div>
-                    <div class="file-date">Fecha</div>
-                </div>
+            <img src="./img/line.png" style="width: 90%; height: auto; margin: auto;">
+            <h3>Redes Sociales</h3>
+            <div class="redes">
+                <img src="./img/Faceebook.svg" alt="facebook">
+                <img src="./img/google.svg" alt="">
+                <img src="./img/reddit.svg" alt="Reddit">
             </div>
-        </main>
-    </div>
-
-    <!-- Bottom Actions -->
-    <div class="bottom-actions">
-        <input type="email" class="email-input" placeholder="Ingresa tu correo">
-        <button class="action-btn register-btn">Regístrate</button>
-        <button class="action-btn login-action-btn">Inicia Sesión</button>
-    </div>
+        </section>
+    </footer>
 </body>
+
 </html>

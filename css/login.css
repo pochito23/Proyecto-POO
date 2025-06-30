@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Ruda:wght@400..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Ubuntu", sans-serif;
+    font-size: 20px;
+}
+
+body {
+    background-color: #fff;
+}
+.header {
+    background-image: linear-gradient(to top, #1C1B28 0%, #05040C 100%);
+    -image: linear-gradient(to top, #1C1B28 50%, #05040C 50%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    padding: 5px 10%;
+    /*Se mueva  el header*/
+    box-shadow: 0 10px 10px rgba(0, 11, 41, 0.492);
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+.header .logo {
+    cursor: pointer;
+}
+
+.header .logo img {
+    height: 60px;
+    width: auto;
+    transition: all 0.3s;
+}
+
+.header .logo img:hover {
+    transform: scale(1.2);
+}
+
+.header .nav-links {
+    list-style: none;
+}
+
+.header .nav-links li {
+    display: inline-block;
+    padding: 0 20px;
+}
+
+.header .nav-links li:hover {
+    transform: scale(1.1);
+    transition: all 0.3s ease 0s;
+}
+
+.header .nav-links a {
+    font-size: 700;
+    color: #fff;
+    text-decoration: none;
+}
+
+.header .nav-links li a:hover {
+    color: #3F61EE;
+}
+
+.header .btn button {
+    font-weight: 700;
+    color: #3F61EE;
+    padding: 9px 25px;
+    background: #1C1B28;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transform: all 0.3s ease 0s;
+}
+
+.header .btn button:hover {
+    background-color: #3F61EE;
+    color: #fff;
+    transform: scale(1.1);
+}
+
+
+/* login de la pagina */
+.login{
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
