@@ -1,12 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="estilos.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=git push -u origin master
 , initial-scale=1.0">
-    <title>Hola mundo</title>
+    <title>Repositorio de Archivos</title>
 </head>
 <body>
-    
+     <header class="header">
+        <div class="logo">☁</div>
+        <nav>
+            <ul class="nav">
+                <li><a href="#">INICIO</a></li>
+                <li><a href="#">INFORMACIÓN</a></li>
+                <li><a href="#">PRECIOS</a></li>
+            </ul>
+        </nav>
+        <div class="login-btn">LOGIN</div>
+    </header>
+
+    <!-- Title -->
+    <h1 class="title">Accede a todos tu repositorio en un mismo sitio</h1>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="company-name">nombre empresa</div>
+            
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" placeholder="Buscar">
+            </div>
+
+            <button class="create-btn">+ Crear</button>
+
+            <nav class="sidebar-nav">
+                <div class="menu-item">
+                    <div class="menu-icon"></div>
+                    <span>Mis archivos</span>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon"></div>
+                    <span>Compartir</span>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- File Explorer -->
+        <main class="file-explorer">
+            <div class="file-header">
+                <button class="back-btn">←</button>
+                <div class="breadcrumb">Carpeta A/ Carpeta B/ Carpeta C</div>
+            </div>
+
+            <div class="file-list-header">
+                <div class="header-item header-name">
+                    <input type="checkbox" class="file-checkbox">
+                    <span>Nombre</span>
+                    <span>▼</span>
+                </div>
+                <div class="header-item header-modified">
+                    <span>Modificado</span>
+                    <span>▼</span>
+                </div>
+            </div>
+
+            <div class="file-list">
+                <div class="file-item">
+                    <input type="checkbox" class="file-checkbox">
+                    <div class="file-icon"></div>
+                    <div class="file-name">Archivo 1</div>
+                    <div class="file-date">Fecha</div>
+                </div>
+                <div class="file-item">
+                    <input type="checkbox" class="file-checkbox">
+                    <div class="file-icon"></div>
+                    <div class="file-name">Archivo 2</div>
+                    <div class="file-date">Fecha</div>
+                </div>
+                <div class="file-item">
+                    <input type="checkbox" class="file-checkbox">
+                    <div class="file-icon"></div>
+                    <div class="file-name">Archivo 3</div>
+                    <div class="file-date">Fecha</div>
+                </div>
+                <div class="file-item">
+                    <input type="checkbox" class="file-checkbox">
+                    <div class="file-icon folder-icon"></div>
+                    <div class="file-name">Archivo 4</div>
+                    <div class="file-date">Fecha</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bottom Actions -->
+    <div class="bottom-actions">
+        <input type="email" class="email-input" placeholder="Ingresa tu correo">
+        <button class="action-btn register-btn">Regístrate</button>
+        <button class="action-btn login-action-btn">Inicia Sesión</button>
+    </div>
 </body>
 </html>
