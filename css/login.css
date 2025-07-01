@@ -1,33 +1,49 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Ruda:wght@400..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
+/* ===== VARIABLES GLOBALES ===== */
+:root {
+  --primary-color: #3F61EE;
+  --dark-bg: #1C1B28;
+  --darker-bg: #05040C;
+  --text-light: #fff;
+  --shadow: 0 10px 10px rgba(0, 11, 41, 0.492);
+  --border-radius: 10px;
+  --header-height: 80px;
+}
+
+/* ===== ESTILOS BASE ===== */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     font-family: "Ubuntu", sans-serif;
-    font-size: 20px;
 }
 
 body {
     background-color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
+
+/* ===== HEADER ===== */
 .header {
-    background-image: linear-gradient(to top, #1C1B28 0%, #05040C 100%);
-    -image: linear-gradient(to top, #1C1B28 50%, #05040C 50%);
+    background-image: linear-gradient(to top, var(--dark-bg) 0%, var(--darker-bg) 100%);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 80px;
+    height: var(--header-height);
     padding: 5px 10%;
-    /*Se mueva  el header*/
-    box-shadow: 0 10px 10px rgba(0, 11, 41, 0.492);
+    box-shadow: var(--shadow);
     position: fixed;
     width: 100%;
     z-index: 1000;
+    flex-wrap: wrap;
 }
 
 .header .logo {
     cursor: pointer;
+    order: 1;
 }
 
 .header .logo img {
@@ -42,48 +58,235 @@ body {
 
 .header .nav-links {
     list-style: none;
+    order: 3;
+    width: 100%;
 }
 
 .header .nav-links li {
     display: inline-block;
     padding: 0 20px;
+    transition: all 0.3s ease;
 }
 
 .header .nav-links li:hover {
     transform: scale(1.1);
-    transition: all 0.3s ease 0s;
 }
 
 .header .nav-links a {
-    font-size: 700;
-    color: #fff;
+    font-weight: 700;
+    color: var(--text-light);
     text-decoration: none;
 }
 
 .header .nav-links li a:hover {
-    color: #3F61EE;
+    color: var(--primary-color);
+}
+
+.header .btn {
+    order: 2;
 }
 
 .header .btn button {
     font-weight: 700;
-    color: #3F61EE;
+    color: var(--primary-color);
     padding: 9px 25px;
-    background: #1C1B28;
+    background: var(--dark-bg);
     border: none;
     border-radius: 50px;
     cursor: pointer;
-    transform: all 0.3s ease 0s;
+    transition: all 0.3s ease;
 }
 
 .header .btn button:hover {
-    background-color: #3F61EE;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--text-light);
     transform: scale(1.1);
 }
 
+/* ===== CONTENEDOR PRINCIPAL ===== */
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding-top: var(--header-height);
+}
 
-/* login de la pagina */
-.login{
+.fondo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.fondo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.1;
+}
+
+/* ===== FORMULARIO LOGIN ===== */
+.login {
     background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border-radius: var(--border-radius);
+    width: 100%;
+    max-width: 500px;
+    padding: 40px;
+    margin: 40px;
+    text-align: center;
+}
+
+.login > div:first-child {
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+    color: var(--dark-bg);
+    font-weight: 700;
+}
+
+.login div {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.login label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--dark-bg);
+}
+
+.login input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.login input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(63, 97, 238, 0.2);
+}
+
+.login button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.login button:hover {
+    background-color: #2a4ec7;
+    transform: translateY(-2px);
+}
+
+/* ===== RESPONSIVE: TABLET (1024px) ===== */
+@media (max-width: 1024px) {
+    .login {
+        padding: 30px;
+        max-width: 450px;
+    }
+    
+    .login > div:first-child {
+        font-size: 1.6rem;
+    }
+}
+
+/* ===== RESPONSIVE: MÓVIL (768px) ===== */
+@media (max-width: 768px) {
+    .header {
+        padding: 10px 5%;
+        height: auto;
+        position: relative;
+    }
+    
+    main {
+        padding-top: 0;
+    }
+    
+    .login {
+        padding: 25px;
+        margin: 20px;
+        width: 90%;
+    }
+    
+    .login > div:first-child {
+        font-size: 1.4rem;
+    }
+    
+    .login input, 
+    .login button {
+        padding: 12px;
+    }
+}
+
+/* ===== RESPONSIVE: MÓVIL PEQUEÑO (480px) ===== */
+@media (max-width: 480px) {
+    .login {
+        padding: 20px 15px;
+        margin: 15px;
+    }
+    
+    .login > div:first-child {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
+    
+    .login div {
+        margin-bottom: 20px;
+    }
+    
+    .header .nav-links li {
+        padding: 0 10px;
+    }
+    
+    .header .btn button {
+        padding: 7px 15px;
+    }
+}
+
+/* ===== MENÚ HAMBURGUESA (solo móvil) ===== */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: var(--dark-bg);
+        padding: 15px 0;
+        margin-top: 15px;
+    }
+    
+    .nav-links.active {
+        display: flex;
+    }
+    
+    .nav-links li {
+        padding: 10px 0 !important;
+        text-align: center;
+    }
+    
+    .hamburger {
+        display: block;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.8rem;
+        cursor: pointer;
+        order: 2;
+    }
 }

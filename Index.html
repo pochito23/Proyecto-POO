@@ -10,32 +10,32 @@
 </head>
 
 <body>
-
     <header class="header">
         <div class="logo">
             <img src="./img/Logo.svg" alt="logo">
         </div>
+        <button class="hamburger" aria-label="Menú">☰</button>
         <nav>
             <ul class="nav-links">
                 <li><a href="#">INICIO</a></li>
                 <li><a href="#">INFORMACION</a></li>
-                <li><a href="#Content-4">PRECIOS</a></li>
+                <li><a href="#content-4">PRECIOS</a></li>
             </ul>
         </nav>
         <a href="/login.html" class="btn"><button>INICIA SESION</button></a>
     </header>
 
     <section class="content-1">
-        <h1>Accede a toda tu infomación en un mismo sitio</h1>
-        <img src="/img/content-1.jpg" alt="base de datos">
+        <h1>Accede a toda tu información en un mismo sitio</h1>
+        <img src="./img/content-1.jpg" alt="base de datos" class="content-1-img">
 
         <div class="btn-1">
             <div class="btn-1-1">
-                <label for="#">Ingresa tu correo</label> <!--Cambiar a un input-->
-                <button type="button">Registrate</button>
+                <input type="email" placeholder="Ingresa tu correo" class="email-input">
+                <button type="button" class="register-btn">Regístrate</button>
             </div>
             <div class="btn-1-2">
-                <button type="button">Inicia Sesion</button>
+                <button type="button" class="login-btn">Inicia Sesión</button>
             </div>
         </div>
     </section>
@@ -43,100 +43,132 @@
     <main>
         <section class="content-2">
             <div class="izq">
-                <h1>Conectate en todos tus dispositivos</h1>
+                <h1>Conéctate en todos tus dispositivos</h1>
                 <p>Accede a toda tu información en un mismo sitio</p>
             </div>
             <div class="der">
-                <img src="./img/Group 8627.png" alt="" srcset="">
+                <img src="./img/Group 8627.png" alt="Dispositivos conectados" class="devices-img">
             </div>
         </section>
-        <br><br><br>
+
         <section class="content-3">
             <div class="izq-1">
                 <h1>Guarda toda tu información en un solo sitio</h1>
             </div>
-            <div class="der-1"><img src="./img/nubes.png" alt="nubes"></div>
+            <div class="der-1">
+                <img src="./img/nubes.png" alt="Almacenamiento en la nube" class="cloud-img">
+            </div>
         </section>
-        <br><br><br>
+
         <section class="content-4" id="content-4">
+            <h2 class="plans-title">Nuestros Planes</h2>
             <div class="plan">
                 <div class="plan-1">
                     <h2>Gratis</h2>
                     <ul>
-                        <li><img src="./img/check.svg" alt="check">Lorem ipsum dolor sit amet.</li>
-                        <li><img src="./img/X.svg" alt="X">Lorem ipsum dolor sit amet.</li>
-                        <li><img src="./img/X.svg" alt="X">Lorem ipsum dolor sit amet.</li>
-                        <li><img src="./img/X.svg" alt="X">Lorem ipsum dolor sit amet.</li>
-                        <li><img src="./img/X.svg" alt="X">Lorem ipsum dolor sit amet.</li>
+                        <li><img src="./img/check.svg" alt="check">5GB de almacenamiento</li>
+                        <li><img src="./img/X.svg" alt="X">Soporte prioritario</li>
+                        <li><img src="./img/X.svg" alt="X">Compartir archivos</li>
+                        <li><img src="./img/X.svg" alt="X">Copia de seguridad</li>
+                        <li><img src="./img/X.svg" alt="X">Encriptación avanzada</li>
                     </ul>
                     <button class="btn-seleccionar">Seleccionar</button>
                 </div>
-                <div class="plan-1">
-
+                <div class="plan-1 plan-recommended">
                     <h2>Normal</h2>
                     <ul>
-                        <li><img src="./img/check.svg" alt="check">Lorem ipsum dolor sit amet.</li>
-                        <li><img src="./img/X.svg" alt="X">Lorem ipsum dolor sit amet.</li>
-                        <li><img src="./img/check.svg" alt="check">Lorem ipsum dolor sit amet.</li>
-                        <li><img src="./img/X.svg" alt="X">Lorem ipsum dolor sit amet.</li>
-                        <li><img src="./img/X.svg" alt="X">Lorem ipsum dolor sit amet.</li>
+                        <li><img src="./img/check.svg" alt="check">50GB de almacenamiento</li>
+                        <li><img src="./img/X.svg" alt="X">Soporte prioritario</li>
+                        <li><img src="./img/check.svg" alt="check">Compartir archivos</li>
+                        <li><img src="./img/X.svg" alt="X">Copia de seguridad</li>
+                        <li><img src="./img/X.svg" alt="X">Encriptación avanzada</li>
                     </ul>
                     <button class="btn-seleccionar">Seleccionar</button>
                 </div>
-
                 <div class="plan-1">
                     <h2>Premium</h2>
                     <ul>
-                        <li><img src="./img/check.svg" alt="check">Lorem ipsum dolor sit amet.</li>
-                        <li><img src="./img/check.svg" alt="check">Lorem ipsum dolor sit amet.</li>
-                        <li><img src="./img/check.svg" alt="check">Lorem ipsum dolor sit amet.</li>
-                        <li><img src="./img/check.svg" alt="check">Lorem ipsum dolor sit amet.</li>
-                        <li><img src="./img/check.svg" alt="check">Lorem ipsum dolor sit amet.</li>
+                        <li><img src="./img/check.svg" alt="check">1TB de almacenamiento</li>
+                        <li><img src="./img/check.svg" alt="check">Soporte prioritario</li>
+                        <li><img src="./img/check.svg" alt="check">Compartir archivos</li>
+                        <li><img src="./img/check.svg" alt="check">Copia de seguridad</li>
+                        <li><img src="./img/check.svg" alt="check">Encriptación avanzada</li>
                     </ul>
                     <button class="btn-seleccionar">Seleccionar</button>
                 </div>
+            </div>
         </section>
     </main>
-    <br><br><br>
+
     <footer>
         <section class="content-5">
             <h2>Empresas que usan nuestro servicio</h2>
             <div class="empresas">
-                <img src="./img/ford.svg" alt="">
-                <img src="./img/figma.svg" alt="">
-                <img src="./img/american-airlines.svg" alt="">
+                <img src="./img/ford.svg" alt="Ford" class="company-logo">
+                <img src="./img/figma.svg" alt="Figma" class="company-logo">
+                <img src="./img/american-airlines.svg" alt="American Airlines" class="company-logo">
             </div>
             <div class="content-5-1">
-                <div>
-                    <h3>
-                        Producto
-                    </h3>
-                    <p>Precio</p><br>
-                    <p>Caracteristicas</p><br>
-                    <p>Recursos</p><br>
+                <div class="footer-section">
+                    <h3>Producto</h3>
+                    <ul>
+                        <li><a href="#">Precio</a></li>
+                        <li><a href="#">Características</a></li>
+                        <li><a href="#">Recursos</a></li>
+                    </ul>
                 </div>
-                <div>
+                <div class="footer-section">
                     <h3>Soporte</h3>
-                    <p>Soporte</p><br>
-                    <p>Preguntas Frecuentes</p><br>
-                    <p>Documentacion</p><br>
+                    <ul>
+                        <li><a href="#">Soporte</a></li>
+                        <li><a href="#">Preguntas Frecuentes</a></li>
+                        <li><a href="#">Documentación</a></li>
+                    </ul>
                 </div>
-                <div>
-                    <h3>Compañia</h3>
-                    <p>Sobre Nosotros</p><br>
-                    <p>Blog</p><br>
-                    <p>Redes Sociales</p><br>
+                <div class="footer-section">
+                    <h3>Compañía</h3>
+                    <ul>
+                        <li><a href="#">Sobre Nosotros</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Redes Sociales</a></li>
+                    </ul>
                 </div>
             </div>
-            <img src="./img/line.png" style="width: 90%; height: auto; margin: auto;">
+            <img src="./img/line.png" alt="" class="divider-line">
             <h3>Redes Sociales</h3>
             <div class="redes">
-                <img src="./img/Faceebook.svg" alt="facebook">
-                <img src="./img/google.svg" alt="">
-                <img src="./img/reddit.svg" alt="Reddit">
+                <a href="#"><img src="./img/Faceebook.svg" alt="Facebook" class="social-icon"></a>
+                <a href="#"><img src="./img/google.svg" alt="Google" class="social-icon"></a>
+                <a href="#"><img src="./img/reddit.svg" alt="Reddit" class="social-icon"></a>
             </div>
         </section>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            
+            hamburger.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+                hamburger.innerHTML = navLinks.classList.contains('active') ? '✕' : '☰';
+            });
+            
+            function checkScreenSize() {
+                if (window.innerWidth <= 768) {
+                    hamburger.style.display = 'block';
+                    navLinks.classList.remove('active');
+                    hamburger.innerHTML = '☰';
+                } else {
+                    hamburger.style.display = 'none';
+                    navLinks.classList.add('active');
+                }
+            }
+            
+            window.addEventListener('resize', checkScreenSize);
+            checkScreenSize();
+        });
+    </script>
 </body>
 
 </html>
