@@ -2,13 +2,15 @@
 
 /* ===== VARIABLES GLOBALES ===== */
 :root {
-  --primary-color: #3F61EE;
-  --dark-bg: #1C1B28;
-  --darker-bg: #05040C;
-  --text-light: #fff;
-  --shadow: 0 10px 10px rgba(0, 11, 41, 0.492);
-  --border-radius: 10px;
-  --header-height: 80px;
+    --primary-color: #44A08D;
+    --nav-bg: #093637;
+    --bg-light: #44A08D;
+    --text-light: #fff;
+    --text-title: #0B4F51;
+    --alert: #f04444;
+    --shadow: 0 10px 10px rgba(0, 11, 41, 0.492);
+    --border-radius: 10px;
+    --header-height: 80px;
 }
 
 /* ===== ESTILOS BASE ===== */
@@ -17,24 +19,26 @@
     margin: 0;
     padding: 0;
     font-family: "Ubuntu", sans-serif;
+
 }
 
 body {
-    background-color: #fff;
+    background-image: linear-gradient(to top, var(--bg-light) 0%, var(--nav-bg) 100%);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    /* background-image: url('../img/FondoNubes.png'); */
 }
 
 /* ===== HEADER ===== */
 .header {
-    background-image: linear-gradient(to top, var(--dark-bg) 0%, var(--darker-bg) 100%);
+    background: var(--nav-bg);
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: var(--header-height);
     padding: 5px 10%;
-    box-shadow: var(--shadow);
+    /* box-shadow: var(--shadow); */
     position: fixed;
     width: 100%;
     z-index: 1000;
@@ -142,7 +146,7 @@ main {
     text-align: center;
 }
 
-.login > div:first-child {
+.login>div:first-child {
     margin-bottom: 30px;
     font-size: 1.8rem;
     color: var(--dark-bg);
@@ -154,11 +158,21 @@ main {
     text-align: left;
 }
 
+.login h1 {
+    color: var(--text-title);
+}
+
+.login p {
+    font-weight: 300;
+    font-size: 15px;
+    padding-top: 10px;
+}
+
 .login label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
-    color: var(--dark-bg);
+    color: var(--text-title);
 }
 
 .login input {
@@ -191,9 +205,34 @@ main {
 }
 
 .login button:hover {
-    background-color: #2a4ec7;
+    background-color: #358675;
     transform: translateY(-2px);
 }
+
+.login a {
+    display: flex;
+    text-decoration: none;
+    color: #0B4F51;
+    font-weight: 300;
+    justify-content: center;
+    margin: 5px;
+}
+
+.login a:hover {
+    text-decoration: underline;
+}
+
+.alert {
+    display: flex;
+    color: var(--alert);
+    font-weight: 100;
+}
+
+.alert label {
+    color: var(--alert);
+    padding-left: 5px;
+}
+
 
 /* ===== RESPONSIVE: TABLET (1024px) ===== */
 @media (max-width: 1024px) {
@@ -201,8 +240,8 @@ main {
         padding: 30px;
         max-width: 450px;
     }
-    
-    .login > div:first-child {
+
+    .login>div:first-child {
         font-size: 1.6rem;
     }
 }
@@ -214,22 +253,22 @@ main {
         height: auto;
         position: relative;
     }
-    
+
     main {
         padding-top: 0;
     }
-    
+
     .login {
         padding: 25px;
         margin: 20px;
         width: 90%;
     }
-    
-    .login > div:first-child {
+
+    .login>div:first-child {
         font-size: 1.4rem;
     }
-    
-    .login input, 
+
+    .login input,
     .login button {
         padding: 12px;
     }
@@ -241,20 +280,20 @@ main {
         padding: 20px 15px;
         margin: 15px;
     }
-    
-    .login > div:first-child {
+
+    .login>div:first-child {
         font-size: 1.2rem;
         margin-bottom: 20px;
     }
-    
+
     .login div {
         margin-bottom: 20px;
     }
-    
+
     .header .nav-links li {
         padding: 0 10px;
     }
-    
+
     .header .btn button {
         padding: 7px 15px;
     }
@@ -270,16 +309,16 @@ main {
         padding: 15px 0;
         margin-top: 15px;
     }
-    
+
     .nav-links.active {
         display: flex;
     }
-    
+
     .nav-links li {
         padding: 10px 0 !important;
         text-align: center;
     }
-    
+
     .hamburger {
         display: block;
         background: none;

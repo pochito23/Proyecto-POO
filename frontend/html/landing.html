@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clouder</title>
+<link rel="stylesheet" href="/frontend/css/estilosLanding.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://kit.fontawesome.com/399269c2e0.js" crossorigin="anonymous"></script>
+
+</head>
+<body class="bg-gradient-to-br from-[#085C57] to-[#0A6B65] text-white">
+    <!-- Header fijo en el top -->
+    <header class="bg-[#093637] text-white w-full fixed top-0 left-0 z-50">
+      <nav class="container mx-auto px-4 flex items-center justify-between h-16">
+        <div id="logo" class="w-14">
+          <svg
+            width="56"
+            height="56"
+            viewBox="0 0 56 56"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g clip-path="url(#clip0_264_247)">
+              <path
+                d="M42.0001 23.3333H39.0601C38.1871 19.9522 36.3833 16.8839 33.8536 14.4768C31.3239 12.0698 28.1697 10.4206 24.7495 9.71656C21.3294 9.01256 17.7803 9.28201 14.5056 10.4943C11.2309 11.7066 8.36188 13.8131 6.22458 16.5745C4.08727 19.3359 2.76736 22.6414 2.41484 26.1154C2.06231 29.5895 2.6913 33.0927 4.23033 36.2272C5.76936 39.3616 8.15673 42.0015 11.1211 43.8469C14.0856 45.6923 17.5082 46.6692 21.0001 46.6666H42.0001C45.0942 46.6666 48.0617 45.4374 50.2496 43.2495C52.4376 41.0616 53.6667 38.0941 53.6667 34.9999C53.6667 31.9057 52.4376 28.9383 50.2496 26.7503C48.0617 24.5624 45.0942 23.3333 42.0001 23.3333Z"
+                stroke="#F3F3F3"
+                stroke-width="6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+            <path
+              d="M23 30L17 35.0164L23 39"
+              stroke="#E4E4E4"
+              stroke-width="3"
+            />
+            <path
+              d="M35 30L41 35.0164L35 39"
+              stroke="#E4E4E4"
+              stroke-width="3"
+            />
+            <path d="M31 30L26 39" stroke="#E4E4E4" stroke-width="2" />
+            <defs>
+              <clipPath id="clip0_264_247">
+                <rect width="56" height="56" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
+        </div>
+        
+        <!-- Botón menú móvil -->
+        <button id="mobile-toggle" class="md:hidden text-white text-2xl hover:text-[#34D399] transition-colors">
+          ☰
+        </button>
+        
+        <!-- Menú de navegación desktop -->
+        <ul class="hidden md:flex space-x-8">
+          <li><a href="#inicio" class="hover:text-[#34D399] transition-colors">Inicio</a></li>
+          <li><a href="#caracteristicas" class="hover:text-[#34D399] transition-colors">Características</a></li>
+          <li><a href="#planes" class="hover:text-[#34D399] transition-colors">Planes</a></li>
+          <li><a href="#contacto" class="hover:text-[#34D399] transition-colors">Contacto</a></li>
+        </ul>
+      </nav>
+      
+      <!-- Menú móvil -->
+      <div id="menu-mobile" class="menu-mobile md:hidden bg-[#072829]">
+        <ul class="py-4 px-4 space-y-3">
+          <li><a href="Login.html" class="block hover:text-[#34D399] transition-colors">Iniciar sesion</a></li>
+          <li><a href="registro.html" class="block hover:text-[#34D399] transition-colors">Registrarse</a></li>
+
+        </ul>
+      </div>
+    </header>
+
+    <!-- Contenido principal con padding-top para compensar header fijo -->
+    <main id="inicio" class="min-h-screen flex flex-col justify-center items-center relative px-4 pt-16">
+      <!-- Fondo con textos animados -->
+      <div class="absolute inset-0 pointer-events-none overflow-hidden">
+        <span class="absolute text-white/20 font-black text-3xl md:text-4xl animate-float1 top-20 left-5">&lt;body&gt;</span>
+        <span class="absolute text-white/20 font-black text-3xl md:text-4xl animate-float2 bottom-20 right-10">&lt;div&gt;</span>
+        <span class="absolute text-white/20 font-black text-3xl md:text-4xl animate-float3 top-80 left-10">{body}</span>
+        <span class="absolute text-white/20 font-black text-3xl md:text-4xl animate-float4 bottom-40 right-20">{function}</span>
+        <span class="absolute text-white/20 font-black text-2xl md:text-3xl animate-float1 top-40 right-5">&lt;/div&gt;</span>
+        <span class="absolute text-white/20 font-black text-2xl md:text-3xl animate-float2 bottom-60 left-20">{class}</span>
+      </div>
+
+      <!-- Contenido principal -->
+      <div class="text-center z-10">
+        <h1 class="font-extrabold text-4xl md:text-5xl lg:text-6xl bg-gradient-to-r from-white to-[#34D399] bg-clip-text text-transparent mb-6">
+          TU CÓDIGO, ORGANIZADO Y VISUAL
+        </h1>
+        
+        <p class="max-w-2xl mx-auto text-base md:text-lg lg:text-xl mb-8 leading-relaxed">
+          Clouder combina el almacenamiento inteligente de un gestor de almacenamiento con la visualización interactiva de un gestor de código. Organiza tus proyectos como nunca antes.
+        </p>
+
+        <a href="Login.html"><button class="bg-gradient-to-r from-[#10B981] to-[#34D399] text-white font-bold text-lg rounded-full px-8 py-3 shadow-lg hover:shadow-[0_0_25px_#34D399] transition-all duration-300 ease-in-out hover:scale-105 hover:-translate-y-1">
+          ¡Comienza ya!
+        </button></a>
+      </div>
+    </main>
+
+
+    <section id="caracteristicas" class="bg-gradient-to-tr from-[#F8FAFC] to-[#B6B6B6] min-h-screen pt-16 flex-col items-center">    
+        <h1 class="text-[#085C57] text-center font-extrabold text-4xl md:text-5xl lg:text-6xl">Características Poderosas</h1>
+        <h3 class="text-center max-w-2xl mx-auto text-base md:text-lg lg:text-xl mb-8 leading-relaxed" >Todo lo que necesitas para gestionar tus proyectos de código de manera eficiente</h3>
+        <div class="grid grid-cols-1 bg-slate-300 gap-4 rounded-xl lg:grid-cols-3  m-4">
+        <div class="div-car ">
+            <i class="ico-gr fa-solid fa-folder"></i>
+            <h2>Gestor de Carpetas</h2>
+            <p>Puedes acceder a tus carpetas con un gestor amigable e intuitivo que te permitirá organizar mejor tus proyectos</p> 
+        </div>
+        <div class="div-car">
+            <i class="ico-gr fa-solid fa-eye"></i>
+            <h2>Visualizacion instantanea</h2>
+            <p>Podrás visualizar tus proyectos completos con un solo clic, sin necesidad de abrir múltiples archivos</p>
+        </div>
+        <div class="div-car">
+            <i class="ico-gr fa-solid fa-user-group"></i>
+            <h2>Comparte tu contenido</h2>
+            <p>¡Enséñale a tus amigos y compañeros lo que hiciste! Comparte fácilmente tus proyectos con otros desarrolladores</p>
+        </div>
+         <div class="div-car">
+          <i class="ico-gr fa-solid fa-pen-to-square"></i>
+          <h2>Distintos planes para ti</h2>
+          <p>Con nuestros planes tienes distintas opciones. Elige la que más te convenga según tus necesidades</p>
+        </div>
+         <div class="div-car">
+          <i class="ico-gr fa-solid fa-lock"></i>
+          <h2>Seguridad</h2>
+          <p>Nadie más que tú puede acceder a tus archivos. Mantenemos tu código seguro con encriptación de alta calidad</p>
+        </div>
+         <div class="div-car">
+          <i class="ico-gr fa-solid fa-pencil"></i>
+          <h2>Autocompletado</h2>
+          <p>Autocompletado avanzado para HTML5, CSS3 y JavaScript que acelera tu desarrollo y reduce errores</p>
+        </div>
+        </div>
+    </section>
+
+
+<section id="planes" class="grid grid-cols-1 md:grid-cols-2 gap-8 min-h-screen p-4">
+<div class="card-pre">
+  <h2 class="text-3xl font-bold mb-6">Gratis</h2>
+  
+  <div class="text-5xl font-black mb-1"><i class="fa-solid fa-dollar-sign"></i>0<span class="text-lg font-normal">/mes</span></div>
+  
+  <ul class="space-y-3 my-8 text-left">
+    <li class="flex items-center">
+      <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      Repositorios limitados
+    </li>
+    
+    <li class="flex items-center">
+      <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      100MB de almacenamiento
+    </li>
+    
+    <li class="flex items-center">
+      <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      Vista previa
+    </li>
+    
+  </ul>
+  
+  <button class="bg-green-500 hover:bg-green-400 text-white font-bold py-3 px-8 rounded-full w-full hover:-translate-y-1 transition-all">
+    Comenzar gratis
+  </button>
+</div>
+
+
+<div class="card-pre">
+  <h2 class="text-3xl font-bold mb-6">Estudiante</h2>
+  
+  <div class="text-5xl font-black mb-1"><i class="fa-solid fa-dollar-sign"></i>6<span class="text-lg font-normal">/mes</span></div>
+  
+  <ul class="space-y-3 my-8 text-left">
+    <li class="flex items-center">
+      <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      Repositorios ilimitados
+    </li>
+    
+    <li class="flex items-center">
+      <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      1GB de almacenamiento
+    </li>
+    
+    <li class="flex items-center">
+      <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      Vista previa 
+    </li>
+    
+    <li class="flex items-center">
+      <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      Compartir
+    </li>
+    
+  </ul>
+  
+  <button class="bg-green-500 hover:bg-green-400 text-white font-bold py-3 px-8 rounded-full w-full hover:-translate-y-1 transition-all">
+    Más Popular
+  </button>
+  </div>
+
+
+  <div class="card-pre">
+
+  <h2 class="text-3xl font-bold mb-6">Pro</h2>
+  
+  <div class="text-5xl font-black mb-1">$12<span class="text-lg font-normal">/mes</span></div>
+  
+  <ul class="space-y-3 my-8 text-left">
+    <li class="flex items-center">
+      <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      Repositorios ilimitados
+    </li>
+    
+    <li class="flex items-center">
+      <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      10GB de almacenamiento
+    </li>
+    
+
+  </ul>
+  
+  <button class="bg-green-500 hover:bg-green-400 text-white font-bold py-3 px-8 rounded-full w-full hover:-translate-y-1 transition-all">
+    Empezar
+  </button>
+</div>
+
+
+<div class="card-pre">
+  <h2 class="text-3xl font-bold mb-6">Empresarial</h2>
+  
+  <div class="text-5xl font-black mb-1">$120<span class="text-lg font-normal">/mes</span></div>
+  
+  <ul class="space-y-3 my-8 text-left">
+    <li class="flex items-center">
+      <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      Repositorios ilimitados
+    </li>
+    
+    <li class="flex items-center">
+      <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      100GB de almacenamiento
+    </li>
+    
+    <li class="flex items-center">
+      <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      Vista previa avanzada
+    </li>
+    
+    <li class="flex items-center">
+      <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      Colaboración en tiempo real
+    </li>
+    
+    <li class="flex items-center">
+      <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      Dominio personalizado
+    </li>
+    
+    <li class="flex items-center">
+      <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      Soporte prioritario
+    </li>
+  </ul>
+  
+  <button class="bg-green-500 hover:bg-green-400 text-white font-bold py-3 px-8 rounded-full w-full hover:-translate-y-1 transition-all">
+    Empezar
+  </button>
+</div>
+
+
+</section>
+
+
+<footer id="contacto" class="bg-emerald-800 text-white p-8">
+  <h1 class="text-center text-4xl font-bold mb-6">¿Listo para revolucionar tu flujo de trabajo?</h1>
+
+  <div class="flex justify-center gap-6 text-2xl mb-6">
+    <a href="https://www.facebook.com/profile.php?id=61578649118619" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+    <a href="https://www.instagram.com/clouder.hn/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+    <a href="https://github.com/clouderhn" target="_blank"><i class="fa-brands fa-github"></i></a>
+    <a href="mailto:clouder.hn@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+    <a href="https://wa.me/50489846511231" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+  </div>
+
+  <hr class="border-white opacity-30 mb-4">
+
+  <p class="text-center">© 2025 Clouder. Hecho con ❤️ para desarrolladores.</p>
+</footer>
+<script src="/frontend/js/controlador.js"></script>
+
+</body>
+</html> 
