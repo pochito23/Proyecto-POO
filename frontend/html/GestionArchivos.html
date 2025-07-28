@@ -1,0 +1,145 @@
+<!-- GestionArchivos.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestión de Archivos</title>
+  <link rel="stylesheet" href="../css/gestionArchivos.css" />
+</head>
+<body>
+  <!-- Navbar superior -->
+  <nav class="navbar">
+    <a href="GestionArchivos.html" class="navbar-logo">
+      <img src="../img/logo.svg" alt="Logo" class="logo-svg" />Cloudler
+    </a>    
+    <input type="text" class="navbar-search" placeholder="Buscar..." />
+    <div class="navbar-profile">👤</div>
+  </nav>
+
+  <!-- Contenedor principal -->
+  <div class="container">
+    <!-- Barra lateral -->
+    <aside class="sidebar">
+      <button id="crearBtn">+ Crear</button>
+      <ul class="menu-lateral">
+        <li>📁 Mis archivos</li>
+        <li>🔗 Compartir</li>
+        <li>⬇️ Descargar</li>
+        <li>✏️ Editar</li>
+        <li>🗑️ Borrar</li>
+        <li>🔒 Cerrar sesión</li>
+      </ul>
+      <div class="almacenamiento">
+        <p>Almacenamiento</p>
+        <div class="barra">
+          <div class="usado" style="width: 60%;">3GB / 5GB</div>
+        </div>
+        <button class="expandir">Aumentar almacenamiento</button>
+      </div>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="contenido">
+      <header class="header">
+        <div id="breadcrumb">
+          <button id="btnAtras" style="display: none;">⬅️ Atrás</button>
+          Menú principal
+        </div>
+
+        <div class="header-actions">
+          <select id="ordenarPor">
+            <option value="nombre-asc">Nombre A-Z</option>
+            <option value="nombre-desc">Nombre Z-A</option>
+            <option value="fecha-reciente">Más reciente</option>
+            <option value="fecha-antigua">Más antigua</option>
+            <option value="tamano-mayor">Tamaño mayor</option>
+            <option value="tamano-menor">Tamaño menor</option>
+          </select>
+        </div>
+      </header>
+
+      <!-- Modal para crear archivo o carpeta -->
+      <div id="modalCrear" class="modal">
+        <div class="modal-content">
+          <h3>¿Qué deseas crear?</h3>
+          <button class="modal-btn" onclick="crearElemento('carpeta')">📁 Nueva Carpeta</button>
+          <button class="modal-btn" onclick="crearElemento('archivo')">📄 Nuevo Archivo</button>
+          <button class="modal-cerrar" onclick="cerrarModal()">Cancelar</button>
+        </div>
+      </div>
+
+      <!-- Tabla de archivos -->
+      <section class="tabla">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Nombre</th>
+              <th>Modificado</th>
+              <th>Tamaño</th>
+              <th>⋮</th>
+            </tr>
+          </thead>
+          <tbody id="archivoTabla">
+            <!-- Aquí irán archivos/carpetas creados dinámicamente -->
+            <tr>
+              <td colspan="5" style="text-align:center; padding: 20px;" id="mensajeVacio">
+                No hay archivos creados.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <!-- Script de funcionalidades básicas -->
+  <script>
+    // Mostrar menú de opciones ⋮
+    function toggleMenu(button) {
+      const menu = button.nextElementSibling;
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+
+      // Cerrar otros menús
+      document.querySelectorAll('.menu-opciones').forEach(m => {
+        if (m !== menu) m.style.display = 'none';
+      });
+    }
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.btn-opciones')) {
+        document.querySelectorAll('.menu-opciones').forEach(m => m.style.display = 'none');
+      }
+    });
+
+    // Mostrar modal al hacer clic en "+ Crear"
+    document.getElementById("crearBtn").addEventListener("click", function () {
+      document.getElementById("modalCrear").style.display = "flex";
+    });
+
+    // Cerrar modal al hacer clic fuera o en cancelar
+    window.addEventListener("click", function (e) {
+      const modal = document.getElementById("modalCrear");
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+
+    function cerrarModal() {
+      document.getElementById("modalCrear").style.display = "none";
+    }
+
+    // Botón "Atrás" para volver al menú principal (función base)
+    document.getElementById("btnAtras").addEventListener("click", function () {
+      document.getElementById("breadcrumb").innerHTML = `
+        <button id="btnAtras" style="display: none;">⬅️ Atrás</button> Menú principal
+      `;
+    });
+  </script>
+
+  <!-- Tu script JS externo -->
+  <script src="../js/gestionArchivos.js"></script>
+</body>
+</html>
+
