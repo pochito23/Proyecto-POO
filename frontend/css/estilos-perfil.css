@@ -1,0 +1,220 @@
+:root {
+    --primary-color: #44A08D;
+    --nav-bg: #093637;
+    --bg-light: #44A08D;
+    --text-light: #fff;
+    --text-title: #0B4F51;
+    --alert: #f04444;
+
+}
+
+ * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #1a1a1a;
+    color: white;
+    min-height: 100vh;
+}
+
+.header {
+    background-color: var(--nav-bg);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #4ade80, #22d3ee);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.user-text {
+    color: #888;
+    font-size: 14px;
+}
+
+.inicio-btn {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 8px 16px;
+}
+
+.inicio-btn:hover {
+    color: white;
+}
+
+.profile-section {
+    background: var(--primary-color);   
+    padding: 40px 61px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    background-color: #1f2937;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.profile-avatar svg {
+    width: 40px;
+    height: 40px;
+    color: #6b7280;
+}
+
+.profile-info h3 {
+    font-size: 14px;
+    font-weight: normal;
+    margin-bottom: -10px;
+    opacity: 0.9;
+}
+
+.profile-info h1 {
+    font-size: 55px;
+    font-weight: 300;
+    margin-bottom: 5px;
+}
+
+.profile-info .plan {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.menu-section {
+    background-color:var(--nav-bg);
+    padding: 10px 100px;
+    flex: 1;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 0;
+    color: #d1d5db;
+    text-decoration: none;
+    font-size: 16px;
+    border-bottom: 1px solid #374151;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    color: white;
+}
+
+.menu-item:last-child {
+    border-bottom: none;
+}
+
+.menu-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.storage-section {
+    margin: 20px 0;
+}
+
+.storage-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.storage-info {
+    font-size: 12px;
+    color: #9ca3af;
+    margin-bottom: 10px;
+}
+
+.storage-bar {
+    width: 200px;
+    height: 4px;
+    background-color: #374151;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.storage-progress {
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #06b6d4);
+    border-radius: 2px;
+}
+
+
+@media (max-width: 768px) {
+
+    .profile-section {
+        background: var(--primary-color);   
+        padding: 40px 45px;
+        display: flex;
+        align-items: center;
+        gap: 30px;
+    }
+    .profile-info h1 {
+        font-size: 40px;
+        font-weight: 300;
+        margin-bottom: 5px;
+    }
+
+    .menu-section {
+        background-color:var(--nav-bg);
+        padding: 10px 70px;
+        flex: 1;
+    }
+}   
+
+@media (max-width: 480px) {
+
+    .profile-section {
+        background: var(--primary-color);   
+        padding: 40px 20px;
+        display: flex;
+        align-items: center;
+        gap: 30px;
+    }
+
+    .profile-info h1 {
+        font-size: 40px;
+        font-weight: 300;
+        margin-bottom: 5px;
+    }
+
+    .menu-section {
+        background-color:var(--nav-bg);
+        padding: 10px 50px  ;
+        flex: 1;
+    }
+}

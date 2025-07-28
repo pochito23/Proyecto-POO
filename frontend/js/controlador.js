@@ -1,4 +1,36 @@
-//==============Codigo del registro, inicio de sesion de cuenta y recuperar contraseña ============================
+var usuario =[{
+correo: '',
+contraseña: '',
+usuario:'',
+plan: '',
+pregunta:'',
+respuesta:''
+}]
+
+
+// Menú móvil
+  const mobileToggle = document.getElementById('mobile-toggle');
+  const mobileMenu = document.getElementById('menu-mobile');
+  
+  mobileToggle.addEventListener('click', () => {
+    mobileMenu.classList.toggle('active');
+  });
+  
+  // Función del botón principal
+  function comenzar() {
+    alert('¡Bienvenido a Clouder! Funcionalidad próximamente...');
+    // Aquí puedes redirigir a otra página o abrir un modal
+  }
+  
+  // Cerrar menú móvil al hacer click en un enlace
+  const mobileLinks = document.querySelectorAll('#menu-mobile a');
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+    });
+  });
+
+  //==============Codigo del registro, inicio de sesion de cuenta y recuperar contraseña ============================
 //============================ Recuperar password (no se me ocurrieron mejores nombres jsjs)============================
 function Siguiente() {
     const label = document.querySelector('div.login-logo p i');
