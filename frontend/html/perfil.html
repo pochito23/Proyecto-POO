@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/frontend/css/estilos-perfil.css">
+    <script src="https://kit.fontawesome.com/1cc070e35a.js" crossorigin="anonymous"></script>
     <title>Perfil Usuario</title>
 </head>
 <body>
@@ -16,11 +17,12 @@
         </header>
 
         <div class="profile-section">
-            <div class="profile-avatar">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
+            <div class="profile-avatar" onclick="document.getElementById('fileInput').click()">
+            <img id="avatar" alt="Avatar Preview">
+                <div id="iconContainer">
+                    <i class="fa-regular fa-user fa-2x"></i>
+                </div>
+                <input type="file" id="fileInput" accept="image/*" onchange="previewAvatar(event)">
             </div>
             <div class="profile-info">
                 <h3>Perfil</h3>
@@ -67,13 +69,33 @@
             </a>
 
             <a href="Login.html" class="menu-item">
-                <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4l2 2h4a2 2 0 0 1 2 2v2"></path>
-                    <polyline points="15,9 20,14 15,19"></polyline>
-                </svg>
+                <div class="menu-icon">
+                    <i class="fa-solid fa-arrow-right-from-bracket "></i>
+                </div>
                 Cerrar sesión
             </a>
         </div>
     </div>
+
+    <script>
+  function previewAvatar(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const img = document.getElementById("avatar");
+        const icon = document.getElementById("iconContainer");
+
+        img.src = e.target.result;
+        img.style.display = "block";
+        icon.style.display = "none";
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+</script>
+
 </body>
 </html>
