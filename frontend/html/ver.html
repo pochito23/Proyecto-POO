@@ -1,109 +1,515 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloudler</title>
-    <link rel="stylesheet" href="/frontend/css/login.css">
-    <link rel="shortcut icon" href="./img/Logo.svg" type="image/x-icon">
-    <script src="./js/formularios.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clouder - Tu Código, Organizado y Visual</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://kit.fontawesome.com/399269c2e0.js" crossorigin="anonymous"></script>
+<style>
+  body {
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  @keyframes float1 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(2deg); }
+  }
+  
+  @keyframes float2 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(-2deg); }
+  }
+  
+  @keyframes float3 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-25px) rotate(1deg); }
+  }
+  
+  @keyframes float4 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-18px) rotate(-1deg); }
+  }
+  
+  .animate-float1 { animation: float1 6s ease-in-out infinite; }
+  .animate-float2 { animation: float2 8s ease-in-out infinite; }
+  .animate-float3 { animation: float3 7s ease-in-out infinite; }
+  .animate-float4 { animation: float4 9s ease-in-out infinite; }
+  
+  .menu-mobile {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+  
+  .menu-mobile.active {
+    max-height: 300px;
+  }
+  
+  .div-car {
+    background: white;
+    color: #374151;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+  
+  .div-car:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  }
+  
+  .ico-gr {
+    font-size: 3rem;
+    color: #059669;
+    margin-bottom: 1rem;
+  }
+  
+  .div-car h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #085C57;
+  }
+  
+  .div-car p {
+    line-height: 1.6;
+  }
+  
+  .card-pre {
+    background: white;
+    color: #374151;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .card-pre:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  }
+  
+  .card-pre::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #10B981, #34D399);
+  }
+  
+  .hero-particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+  }
+  
+  .particle {
+    position: absolute;
+    background: rgba(52, 211, 153, 0.3);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: particleFloat 20s infinite linear;
+  }
+  
+  @keyframes particleFloat {
+    0% {
+      transform: translateY(100vh) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100px) rotate(360deg);
+      opacity: 0;
+    }
+  }
+  
+  .smooth-scroll {
+    scroll-behavior: smooth;
+  }
+
+  /* Login Modal Styles */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+  }
+  
+  .modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    animation: modalSlideIn 0.3s ease-out;
+  }
+  
+  @keyframes modalSlideIn {
+    from {
+      transform: translateY(-50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .close {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #6B7280;
+    transition: color 0.3s;
+  }
+  
+  .close:hover {
+    color: #374151;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #374151;
+  }
+  
+  .form-group input, .form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #E5E7EB;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: #10B981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  }
+  
+  .alert {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    display: none;
+  }
+  
+  .alert.error {
+    background-color: #FEE2E2;
+    color: #DC2626;
+    border: 1px solid #FCA5A5;
+  }
+  
+  .alert.success {
+    background-color: #D1FAE5;
+    color: #065F46;
+    border: 1px solid #A7F3D0;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, #10B981, #34D399);
+    color: white;
+    font-weight: bold;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+  }
+  
+  .link-text {
+    color: #10B981;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+  }
+  
+  .link-text:hover {
+    color: #059669;
+    text-decoration: underline;
+  }
+</style>
 </head>
-
-<body>
-    <header class="header">
-        <div class="logo">
-            <img src="./img/Logo.svg" alt="logo">
+<body class="bg-gradient-to-br from-[#085C57] to-[#0A6B65] text-white smooth-scroll">
+    <!-- Header fijo en el top -->
+    <header class="bg-[#093637] text-white w-full fixed top-0 left-0 z-50">
+      <nav class="container mx-auto px-4 flex items-center justify-between h-16">
+        <div id="logo" class="w-14 cursor-pointer" onclick="scrollToSection('inicio')">
+          <svg
+            width="56"
+            height="56"
+            viewBox="0 0 56 56"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g clip-path="url(#clip0_264_247)">
+              <path
+                d="M42.0001 23.3333H39.0601C38.1871 19.9522 36.3833 16.8839 33.8536 14.4768C31.3239 12.0698 28.1697 10.4206 24.7495 9.71656C21.3294 9.01256 17.7803 9.28201 14.5056 10.4943C11.2309 11.7066 8.36188 13.8131 6.22458 16.5745C4.08727 19.3359 2.76736 22.6414 2.41484 26.1154C2.06231 29.5895 2.6913 33.0927 4.23033 36.2272C5.76936 39.3616 8.15673 42.0015 11.1211 43.8469C14.0856 45.6923 17.5082 46.6692 21.0001 46.6666H42.0001C45.0942 46.6666 48.0617 45.4374 50.2496 43.2495C52.4376 41.0616 53.6667 38.0941 53.6667 34.9999C53.6667 31.9057 52.4376 28.9383 50.2496 26.7503C48.0617 24.5624 45.0942 23.3333 42.0001 23.3333Z"
+                stroke="#F3F3F3"
+                stroke-width="6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+            <path
+              d="M23 30L17 35.0164L23 39"
+              stroke="#E4E4E4"
+              stroke-width="3"
+            />
+            <path
+              d="M35 30L41 35.0164L35 39"
+              stroke="#E4E4E4"
+              stroke-width="3"
+            />
+            <path d="M31 30L26 39" stroke="#E4E4E4" stroke-width="2" />
+            <defs>
+              <clipPath id="clip0_264_247">
+                <rect width="56" height="56" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
         </div>
-        <button class="hamburger" aria-label="Menú">☰</button>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="/index.html">INICIO</a></li>
-<<<<<<< HEAD:Login.html
-
-=======
-                
->>>>>>> 5af19081356a4374247bd5b3213fc98be0d8dc8d:frontend/html/ver.html
-            </ul>
-        </nav>
-        <a href="/login.html" class="btn"><button>INICIA SESION</button></a>
+        
+        <!-- Botón menú móvil -->
+        <button id="mobile-toggle" class="md:hidden text-white text-2xl hover:text-[#34D399] transition-colors">
+          ☰
+        </button>
+        
+        <!-- Menú de navegación desktop -->
+        <ul class="hidden md:flex space-x-8">
+          <li><a href="#inicio" class="hover:text-[#34D399] transition-colors cursor-pointer" onclick="scrollToSection('inicio')">Inicio</a></li>
+          <li><a href="#caracteristicas" class="hover:text-[#34D399] transition-colors cursor-pointer" onclick="scrollToSection('caracteristicas')">Características</a></li>
+          <li><a href="#planes" class="hover:text-[#34D399] transition-colors cursor-pointer" onclick="scrollToSection('planes')">Planes</a></li>
+          <li><a href="#contacto" class="hover:text-[#34D399] transition-colors cursor-pointer" onclick="scrollToSection('contacto')">Contacto</a></li>
+        </ul>
+        
+        <!-- Botones de autenticación -->
+        <div class="hidden md:flex space-x-4">
+          <button onclick="openLoginModal()" class="text-white hover:text-[#34D399] transition-colors">Iniciar Sesión</button>
+          <button onclick="openRegisterModal()" class="bg-gradient-to-r from-[#10B981] to-[#34D399] text-white font-bold px-4 py-2 rounded-full hover:shadow-lg transition-all">Registrarse</button>
+        </div>
+      </nav>
+      
+      <!-- Menú móvil -->
+      <div id="menu-mobile" class="menu-mobile md:hidden bg-[#072829]">
+        <ul class="py-4 px-4 space-y-3">
+          <li><a href="#inicio" class="block hover:text-[#34D399] transition-colors" onclick="scrollToSection('inicio')">Inicio</a></li>
+          <li><a href="#caracteristicas" class="block hover:text-[#34D399] transition-colors" onclick="scrollToSection('caracteristicas')">Características</a></li>
+          <li><a href="#planes" class="block hover:text-[#34D399] transition-colors" onclick="scrollToSection('planes')">Planes</a></li>
+          <li><a href="#contacto" class="block hover:text-[#34D399] transition-colors" onclick="scrollToSection('contacto')">Contacto</a></li>
+          <li><hr class="border-gray-600 my-2"></li>
+          <li><button onclick="openLoginModal()" class="block w-full text-left hover:text-[#34D399] transition-colors">Iniciar Sesión</button></li>
+          <li><button onclick="openRegisterModal()" class="block w-full text-left hover:text-[#34D399] transition-colors">Registrarse</button></li>
+        </ul>
+      </div>
     </header>
-    <main>
-        <div class="fondo">
-            <img src="./img/nubes2.svg" alt="fondo">
-        </div>
-        <div class="login">
-            <div class="login-logo" style="text-align: center;">
-                <img src="./img/Logo-dark.svg" alt="Cloudler Logo">
-<<<<<<< HEAD:Login.html
-                <h1>Inicia Sesion</h1>
-            </div>
-            <form action="#" id="form" onsubmit=" return validarFormulario()"> <!--Quite el metodo POST temporalmente-->
-                <div class="alert">
-                </div>
-                <div class="form-group">
-                    <label for="email">Correo</label>
-                    <input type="email" id="email" name="email" placeholder="Ingresa tu correo">
-                </div>
-                <div class="form-group">
-                    <label for="password">Contraseña</label>
-                    <input type="password" id="password" name="password" placeholder="••••••••">
-                </div>
-                <button type="submit" class="login-button">INICIAR SESIÓN</button>
-            </form>
-            <a href="./Recuperar-Contra.html">¿Olvidaste tu contraseña?</a>
-            <a href="./registro.html">¿Primera vez en Cloudler?<br> Crea una Cuenta</a>
 
-=======
-                <h1>Registrate</h1>
-            </div>
-            <form action="#" method="POST">
-                <div class="form-group">
-                    <label for="email">Correo</label>
-                    <input type="email" id="email" name="email" placeholder="Ingresa tu correo" required>
-                </div>
-                <div class="form-group">
-                    <label for="usuario">Usuario</label>
-                    <input type="text" id="usuario" name="usuario" placeholder="Ingresa tu usuario" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Contraseña</label>
-                    <input type="password" id="password" name="password" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="login-button">INICIAR SESIÓN</button>
-            </form>
-            <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a> 
-            <a href="./registro.html"></a>
-            <a href="./registro.html">¿Primera vez en Cloudler?<br> Crea una Cuenta</a>
->>>>>>> 5af19081356a4374247bd5b3213fc98be0d8dc8d:frontend/html/ver.html
-        </div>
+    <!-- Contenido principal con padding-top para compensar header fijo -->
+    <main id="inicio" class="min-h-screen flex flex-col justify-center items-center relative px-4 pt-16">
+      <!-- Partículas animadas -->
+      <div class="hero-particles"></div>
+      
+      <!-- Fondo con textos animados -->
+      <div class="absolute inset-0 pointer-events-none overflow-hidden">
+        <span class="absolute text-white/20 font-black text-3xl md:text-4xl animate-float1 top-20 left-5">&lt;body&gt;</span>
+        <span class="absolute text-white/20 font-black text-3xl md:text-4xl animate-float2 bottom-20 right-10">&lt;div&gt;</span>
+        <span class="absolute text-white/20 font-black text-3xl md:text-4xl animate-float3 top-80 left-10">{body}</span>
+        <span class="absolute text-white/20 font-black text-3xl md:text-4xl animate-float4 bottom-40 right-20">{function}</span>
+        <span class="absolute text-white/20 font-black text-2xl md:text-3xl animate-float1 top-40 right-5">&lt;/div&gt;</span>
+        <span class="absolute text-white/20 font-black text-2xl md:text-3xl animate-float2 bottom-60 left-20">{class}</span>
+      </div>
+
+      <!-- Contenido principal -->
+      <div class="text-center z-10">
+        <h1 class="font-extrabold text-4xl md:text-5xl lg:text-6xl bg-gradient-to-r from-white to-[#34D399] bg-clip-text text-transparent mb-6">
+          TU CÓDIGO, ORGANIZADO Y VISUAL
+        </h1>
+        
+        <p class="max-w-2xl mx-auto text-base md:text-lg lg:text-xl mb-8 leading-relaxed">
+          Clouder combina el almacenamiento inteligente de un gestor de almacenamiento con la visualización interactiva de un gestor de código. Organiza tus proyectos como nunca antes.
+        </p>
+
+        <button onclick="openRegisterModal()" class="bg-gradient-to-r from-[#10B981] to-[#34D399] text-white font-bold text-lg rounded-full px-8 py-3 shadow-lg hover:shadow-[0_0_25px_#34D399] transition-all duration-300 ease-in-out hover:scale-105 hover:-translate-y-1">
+          ¡Comienza ya!
+        </button>
+      </div>
     </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const hamburger = document.querySelector('.hamburger');
-            const navLinks = document.querySelector('.nav-links');
+    <section id="caracteristicas" class="bg-gradient-to-tr from-[#F8FAFC] to-[#B6B6B6] min-h-screen pt-20 pb-16">    
+        <div class="container mx-auto px-4">
+          <h1 class="text-[#085C57] text-center font-extrabold text-4xl md:text-5xl lg:text-6xl mb-6">Características Poderosas</h1>
+          <h3 class="text-center max-w-2xl mx-auto text-base md:text-lg lg:text-xl mb-12 leading-relaxed text-gray-700">Todo lo que necesitas para gestionar tus proyectos de código de manera eficiente</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="div-car">
+                <i class="ico-gr fa-solid fa-folder"></i>
+                <h2>Gestor de Carpetas</h2>
+                <p>Puedes acceder a tus carpetas con un gestor amigable e intuitivo que te permitirá organizar mejor tus proyectos</p> 
+            </div>
+            <div class="div-car">
+                <i class="ico-gr fa-solid fa-eye"></i>
+                <h2>Visualización Instantánea</h2>
+                <p>Podrás visualizar tus proyectos completos con un solo clic, sin necesidad de abrir múltiples archivos</p>
+            </div>
+            <div class="div-car">
+                <i class="ico-gr fa-solid fa-user-group"></i>
+                <h2>Comparte tu Contenido</h2>
+                <p>¡Enséñale a tus amigos y compañeros lo que hiciste! Comparte fácilmente tus proyectos con otros desarrolladores</p>
+            </div>
+            <div class="div-car">
+              <i class="ico-gr fa-solid fa-pen-to-square"></i>
+              <h2>Distintos Planes para Ti</h2>
+              <p>Con nuestros planes tienes distintas opciones. Elige la que más te convenga según tus necesidades</p>
+            </div>
+            <div class="div-car">
+              <i class="ico-gr fa-solid fa-lock"></i>
+              <h2>Seguridad</h2>
+              <p>Nadie más que tú puede acceder a tus archivos. Mantenemos tu código seguro con encriptación de alta calidad</p>
+            </div>
+            <div class="div-car">
+              <i class="ico-gr fa-solid fa-pencil"></i>
+              <h2>Autocompletado</h2>
+              <p>Autocompletado avanzado para HTML5, CSS3 y JavaScript que acelera tu desarrollo y reduce errores</p>
+            </div>
+          </div>
+        </div>
+    </section>
 
-            hamburger.addEventListener('click', function () {
-                navLinks.classList.toggle('active');
-                hamburger.innerHTML = navLinks.classList.contains('active') ? '✕' : '☰';
-            });
+    <section id="planes" class="min-h-screen py-20 px-4">
+      <div class="container mx-auto">
+        <h2 class="text-center font-extrabold text-4xl md:text-5xl mb-6">Elige tu Plan</h2>
+        <p class="text-center max-w-2xl mx-auto text-lg mb-12">Encuentra el plan perfecto para tus necesidades de desarrollo</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="card-pre">
+            <h2 class="text-3xl font-bold mb-6">Gratis</h2>
+            <div class="text-5xl font-black mb-1 text-[#10B981]">$0<span class="text-lg font-normal text-gray-600">/mes</span></div>
+            
+            <ul class="space-y-3 my-8 text-left">
+              <li class="flex items-center">
+                <svg class="w-5 h-5 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                Repositorios limitados
+              </li>
+              <li class="flex items-center">
+                <svg class="w-5 h-5 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                100MB de almacenamiento
+              </li>
+              <li class="flex items-center">
+                <svg class="w-5 h-5 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                Vista previa básica
+              </li>
+            </ul>
+            
+            <button onclick="selectPlan('gratis')" class="btn-primary">
+              Comenzar Gratis
+            </button>
+          </div>
 
-            function checkScreenSize() {
-                if (window.innerWidth <= 768) {
-                    hamburger.style.display = 'block';
-                    navLinks.classList.remove('active');
-                    hamburger.innerHTML = '☰';
-                } else {
-                    hamburger.style.display = 'none';
-                    navLinks.classList.add('active');
-                }
-            }
+          <div class="card-pre relative">
+            <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#10B981] to-[#34D399] text-white px-4 py-1 rounded-full text-sm font-bold">
+              MÁS POPULAR
+            </div>
+            <h2 class="text-3xl font-bold mb-6">Estudiante</h2>
+            <div class="text-5xl font-black mb-1 text-[#10B981]">$6<span class="text-lg font-normal text-gray-600">/mes</span></div>
+            
+            <ul class="space-y-3 my-8 text-left">
+              <li class="flex items-center">
+                <svg class="w-5 h-5 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                Repositorios ilimitados
+              </li>
+              <li class="flex items-center">
+                <svg class="w-5 h-5 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                1GB de almacenamiento
+              </li>
+              <li class="flex items-center">
+                <svg class="w-5 h-5 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                Vista previa avanzada
+              </li>
+              <li class="flex items-center">
+                <svg class="w-5 h-5 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                Compartir proyectos
+              </li>
+            </ul>
+            
+            <button onclick="selectPlan('estudiante')" class="btn-primary">
+              Seleccionar Plan
+            </button>
+          </div>
 
-            window.addEventListener('resize', checkScreenSize);
-            checkScreenSize();
-        });
-    </script>
-</body>
-
-</html>
+          <div class="card-pre">
+            <h2 class="text-3xl font-bold mb-6">Pro</h2>
+            <div class="text-5xl font-black mb-1 text-[#10B981]">$12<span class="text-lg font-normal text-gray-600">/mes</span></div>
+            
+            <ul class="space-y-3 my-8 text-left">
+              <li class="flex items-center">
+                <svg class="w-5 h-5 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                Repositorios ilimitados
+              </li>
+              <li class="flex items-center">
+                <svg class="w-5 h-5 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                10GB de almacenamiento
+              </li>
+              <li class="flex items-center">
+                <svg class="w-5 h-5 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                Análisis de código
+              </li>
+              <li class="flex items-center">
+                <svg class="w-5 h-5 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8

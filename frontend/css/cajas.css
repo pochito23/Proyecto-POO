@@ -1,0 +1,111 @@
+/* styles.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #0e1e1e;
+  color: white;
+}
+
+.navbar {
+  background-color: #093434;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.actions button {
+  background-color: #155e5e;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.editor-container {
+  flex: 1;
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+.preview-panel {
+  flex: 2;
+  background-color: white;
+  border-right: 2px solid #222;
+}
+
+.code-panel {
+  flex: 1;
+  background-color: #1e1e1e;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  gap: 5px;
+}
+
+.editor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #2a2a2a;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.editor-header {
+  padding: 5px 10px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+}
+
+.editor-header.html { background-color: #e44d26; }
+.editor-header.css { background-color: #2965f1; }
+.editor-header.js { background-color: #f0db4f; color: #000; }
+
+textarea {
+  flex: 1;
+  resize: none;
+  background-color: #1e1e1e;
+  color: white;
+  padding: 10px;
+  font-family: monospace;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+
+
+.editor-box {
+  flex: 1;
+  height: 100%;
+  width: 100%;
+  font-family: monospace;
+  border: none;
+}

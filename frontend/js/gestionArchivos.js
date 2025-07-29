@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <td style="position: relative;">
           <button class="btn-opciones" type="button">⋮</button>
           <ul class="menu-opciones">
-            <li class="abrir-opcion">${item.tipo === "carpeta" ? "📂 Abrir" : "🔍 Ver"}</li>
+            <li class="abrir-opcion"  onclick="window.location.href='cajas.html'">${item.tipo === "carpeta" ? "📂 Abrir" : "🔍 Ver"}</li>
             <li class="renombrar-opcion">✏️ Renombrar</li>
             <li class="eliminar-opcion">🗑️ Eliminar</li>
           </ul>

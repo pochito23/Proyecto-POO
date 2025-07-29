@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Gestión de Archivos</title>
   <link rel="stylesheet" href="../css/gestionArchivos.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
 <body>
   <!-- Overlay para cerrar sidebar en móvil -->
@@ -17,7 +19,7 @@
     </a>
     <input type="text" class="navbar-search" placeholder="Buscar..." />
     <button class="hamburguesa" id="btnHamburguesa" aria-label="Abrir menú">&#9776;</button>
-    <div class="navbar-profile">👤</div>
+    <div class="navbar-profile"    onclick=" window.location.href = 'perfil.html';">👤</div>
   </nav>
   
   <!-- Contenedor principal -->
@@ -42,7 +44,7 @@
       </ul>
     </aside>
     <!-- Contenido principal -->
-    <main class="contenido">
+    <main class="contenido ">
       <header class="header">
         <div id="breadcrumb">
           <button id="btnAtras" style="display: none;">⬅️ Atrás</button>
