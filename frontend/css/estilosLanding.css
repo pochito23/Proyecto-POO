@@ -7,6 +7,8 @@
   html {
   scroll-behavior: smooth;
 }
+
+
   
   body {
     font-family: 'Montserrat', sans-serif;
@@ -45,6 +47,14 @@
     max-height: 250px;
     opacity: 1;
   }
+.active {
+  border-bottom: 2px solid #34D399;
+}
+
+.menu-link {
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s ease;
+}
 
   .ico-gr{
     color:rgb(17, 238, 150);
