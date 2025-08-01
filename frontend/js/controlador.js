@@ -67,9 +67,7 @@ mobileLinks.forEach((link) => {
 
 //==============Codigo del registro, inicio de sesion de cuenta y recuperar contraseña ============================
 //============================ Recuperar password (no se me ocurrieron mejores nombres jsjs)============================
-if(document.getElementById("respuesta")) {
-  document.getElementById("respuesta").style.display = "none";
-}
+
 function recuperarClave(e) {
   e.preventDefault();
 
@@ -212,16 +210,26 @@ setTimeout(() => {
     }
   }
 
-  function mostrarPregunta() {
-    const pregunta = document.getElementById("pregunta").value;
-    const respuestaDiv = document.getElementById("respuesta").parentElement;
 
-    if (pregunta !== "") {
-      respuestaDiv.style.display = "block";
+document.addEventListener("DOMContentLoaded", function () {
+  const grupoRespuesta = document.getElementById("grupo-respuesta");
+  const selectPregunta = document.getElementById("pregunta");
+
+  grupoRespuesta.style.display = "none";
+
+  selectPregunta.addEventListener("change", function () {
+    if (selectPregunta.value !== "") {
+      grupoRespuesta.style.display = "block";
     } else {
-      respuestaDiv.style.display = "none";
+      grupoRespuesta.style.display = "none";
     }
-  }
+  });
+});
+
+
+
+
+
 
 
 function validarLogin(e){

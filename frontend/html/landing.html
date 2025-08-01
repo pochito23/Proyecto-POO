@@ -58,12 +58,17 @@
         </button>
         
         <!-- Menú de navegación desktop -->
-        <ul class="hidden md:flex space-x-8">
+        <ul class="hidden lg:flex space-x-8">
           <li><a href="#inicio" class="menu-link hover:text-[#34D399] transition-colors " id="link-inicio" onfocus="s">Inicio</a></li>
           <li><a href="#caracteristicas" class="menu-link hover:text-[#34D399] transition-colors " id="link-caracteristicas">Características</a></li>
           <li><a href="#planes" class="menu-link hover:text-[#34D399] transition-colors " id="link-planes">Planes</a></li>
           <li><a href="#contacto" class="menu-link hover:text-[#34D399] transition-colors " id="link-contacto">Contacto</a></li>
         </ul>
+                <!-- Botones de autenticación -->
+        <div class="hidden md:flex space-x-4">
+          <button onclick="window.location.href='Login.html'" class="text-white hover:text-[#34D399] transition-colors">Iniciar Sesión</button>
+          <button onclick="window.location.href='registro.html'" class="bg-gradient-to-r from-[#10B981] to-[#34D399] text-white font-bold px-4 py-2 rounded-full hover:shadow-lg transition-all">Registrarse</button>
+        </div>
       </nav>
       
       <!-- Menú móvil -->
@@ -105,12 +110,12 @@
     </main>
 
 
-    <section id="caracteristicas" class="bg-gradient-to-tr from-[#F8FAFC] to-[#B6B6B6] min-h-screen pt-16 flex-col items-center ">    
+    <!-- <section id="caracteristicas" class="bg-gradient-to-tr from-[#F8FAFC] to-[#B6B6B6] min-h-screen pt-20 pb-16 flex flex-col items-center">    
         <h1 class="text-[#085C57] text-center font-extrabold text-4xl md:text-5xl lg:text-6xl">Características Poderosas</h1>
         <h3 class="text-center max-w-2xl mx-auto text-base md:text-lg lg:text-xl mb-8 leading-relaxed" >Todo lo que necesitas para gestionar tus proyectos de código de manera eficiente</h3>
         <div class="grid grid-cols-1 bg-slate-300 gap-4 rounded-xl lg:grid-cols-3  m-4">
         <div class="div-car ">
-            <i class="ico-gr fa-solid fa-folder md:px-4 sm:pt-4"></i>
+            <i class="ico-gr fa-solid fa-folder md:px-4 md:p-4"></i>
             <h2>Gestor de Carpetas</h2>
             <p>Puedes acceder a tus carpetas con un gestor amigable e intuitivo que te permitirá organizar mejor tus proyectos</p> 
         </div>
@@ -139,6 +144,45 @@
           <h2>Autocompletado</h2>
           <p>Autocompletado avanzado para HTML5, CSS3 y JavaScript que acelera tu desarrollo y reduce errores</p>
         </div>
+        </div>
+    </section> -->
+    <section id="caracteristicas" class="bg-gradient-to-tr from-[#F8FAFC] to-[#B6B6B6] min-h-screen pt-20 pb-16">    
+        <div class="container mx-auto px-4">
+          <h1 class="text-[#085C57] text-center font-extrabold text-4xl md:text-5xl lg:text-6xl mb-6">Características Poderosas</h1>
+          <h3 class="text-center max-w-2xl mx-auto text-base md:text-lg lg:text-xl mb-12 leading-relaxed text-gray-700">Todo lo que necesitas para gestionar tus proyectos de código de manera eficiente</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="div-car">
+                <i class="ico-gr fa-solid fa-folder"></i>
+                <h2>Gestor de Carpetas</h2>
+                <p>Puedes acceder a tus carpetas con un gestor amigable e intuitivo que te permitirá organizar mejor tus proyectos</p> 
+            </div>
+            <div class="div-car">
+                <i class="ico-gr fa-solid fa-eye"></i>
+                <h2>Visualización Instantánea</h2>
+                <p>Podrás visualizar tus proyectos completos con un solo clic, sin necesidad de abrir múltiples archivos</p>
+            </div>
+            <div class="div-car">
+                <i class="ico-gr fa-solid fa-user-group"></i>
+                <h2>Comparte tu Contenido</h2>
+                <p>¡Enséñale a tus amigos y compañeros lo que hiciste! Comparte fácilmente tus proyectos con otros desarrolladores</p>
+            </div>
+            <div class="div-car">
+              <i class="ico-gr fa-solid fa-pen-to-square"></i>
+              <h2>Distintos Planes para Ti</h2>
+              <p>Con nuestros planes tienes distintas opciones. Elige la que más te convenga según tus necesidades</p>
+            </div>
+            <div class="div-car">
+              <i class="ico-gr fa-solid fa-lock"></i>
+              <h2>Seguridad</h2>
+              <p>Nadie más que tú puede acceder a tus archivos. Mantenemos tu código seguro con encriptación de alta calidad</p>
+            </div>
+            <div class="div-car">
+              <i class="ico-gr fa-solid fa-pencil"></i>
+              <h2>Autocompletado</h2>
+              <p>Autocompletado avanzado para HTML5, CSS3 y JavaScript que acelera tu desarrollo y reduce errores</p>
+            </div>
+          </div>
         </div>
     </section>
 
@@ -325,29 +369,7 @@
   <p class="text-center">© 2025 Clouder. Hecho con ❤️ para desarrolladores.</p>
 </footer>
 
-<script>
-const sections = document.querySelectorAll("#inicio, #caracteristicas, #planes, #contacto");
-const menuLinks = document.querySelectorAll(".menu-link");
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    const id = entry.target.getAttribute("id");
-    const link = document.querySelector(`#link-${id}`);
-
-    if (entry.isIntersecting) {
-      menuLinks.forEach((link) => link.classList.remove("active"));
-      if (link) { // Verificación adicional
-        link.classList.add("active");
-      }
-    }
-  });
-}, {
-  threshold: 0.6,
-});
-
-sections.forEach((section) => {
-  observer.observe(section);
-});
 </script>
 </body>
 </html> 
