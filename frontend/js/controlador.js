@@ -42,12 +42,12 @@ var usuarios = [
 ];
 
 // Menú móvil
-const mobileToggle = document.getElementById("mobile-toggle");
-const mobileMenu = document.getElementById("menu-mobile");
+const vistaMovil = document.getElementById("vista-movil");
+const Menu = document.getElementById("menu");
 
-if(mobileToggle && mobileMenu) {
-  mobileToggle.addEventListener("click", () => {
-    mobileMenu.classList.toggle("active");
+if(vistaMovil && Menu) {
+  vistaMovil.addEventListener("click", () => {
+    Menu.classList.toggle("active");
   });
 }
 
@@ -58,10 +58,10 @@ function comenzar() {
 }
 
 // Cerrar menú móvil al hacer click en un enlace
-const mobileLinks = document.querySelectorAll("#menu-mobile a");
-mobileLinks.forEach((link) => {
+const Links = document.querySelectorAll("#menu a");
+  Links.forEach((link) => {
   link.addEventListener("click", () => {
-    mobileMenu.classList.remove("active");
+    vistaMovil.classList.remove("active");
   });
 });
 

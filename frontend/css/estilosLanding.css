@@ -37,13 +37,13 @@
   .animate-float4 { animation: float4 5s ease-in-out infinite; }
 
   /* Menú móvil */
-  .menu-mobile {
+  .menu {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease-in-out;
     opacity: 0;
   }
-  .menu-mobile.active {
+  .menu.active {
     max-height: 250px;
     opacity: 1;
   }
@@ -69,9 +69,9 @@
     justify-content: center;
     align-items: center;
     gap: 8px;
-    padding: 20px; /* un poco más de padding para respirar */
-    min-height: 300px; /* altura mínima */
-    box-sizing: border-box; /* para que el padding no aumente tamaño total */
+    padding: 20px; 
+    min-height: 300px;
+    box-sizing: border-box; 
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
@@ -79,12 +79,12 @@
   }
 
   .div-car::before {
-  content: '';           /* Elemento pseudo vacío */
-  position: absolute;    /* Posicionado absoluto */
-  top: 0;               /* Pegado arriba */
-  left: 0;              /* De izquierda */
-  right: 0;             /* A derecha (ancho completo) */
-  height: 6px;          /* 4px de altura */
+  content: '';           
+  position: absolute;   
+  top: 0;            
+  left: 0;            
+  right: 0;             
+  height: 6px;          
   background: linear-gradient(90deg, #085C57 0%, #10B981 50%, #34D399 100%);
 }
 

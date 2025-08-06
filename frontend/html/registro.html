@@ -14,7 +14,7 @@
       <div class="logo">
         <img src="/frontend/img/Logo.svg" alt="logo" />
       </div>
-      <button class="hamburger" aria-label="Menú">☰</button>
+      <button class="movil" aria-label="Menú">☰</button>
       <nav>
         <ul class="nav-links">
           <li><a href="landing.html">INICIO</a></li>
@@ -74,34 +74,33 @@
       </div>
     </main>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const hamburger = document.querySelector(".hamburger");
-        const navLinks = document.querySelector(".nav-links");
+       <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const movil = document.querySelector('.movil');
+            const navLinks = document.querySelector('.nav-links');
 
-        hamburger.addEventListener("click", function () {
-          navLinks.classList.toggle("active");
-          hamburger.innerHTML = navLinks.classList.contains("active")
-            ? "✕"
-            : "☰";
+            movil.addEventListener('click', function () {
+                navLinks.classList.toggle('active');
+                movil.innerHTML = navLinks.classList.contains('active') ? '✕' : '☰';
+            });
+
+            function checkScreenSize() {
+                if (window.innerWidth <= 768) {
+
+                    movil.style.display = 'block';
+                    navLinks.classList.remove('active');
+                    movil.innerHTML = '☰';
+                      document.querySelector('.logo').style.display = "none";
+
+                } else {
+                    movil.style.display = 'none';
+                    navLinks.classList.add('active');
+                }
+            }
+
+            window.addEventListener('resize', checkScreenSize);
+            checkScreenSize();
         });
-
-        function checkScreenSize() {
-          if (window.innerWidth <= 768) {
-            hamburger.style.display = "block";
-            navLinks.classList.remove("active");
-            hamburger.innerHTML = "☰";
-          } else {
-            hamburger.style.display = "none";
-            navLinks.classList.add("active");
-          }
-        }
-
-        window.addEventListener("resize", checkScreenSize);
-        checkScreenSize();
-
-
-      });
     </script>
         <script src="/frontend/js/controlador.js"></script>
   </body>
