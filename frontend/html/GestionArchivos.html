@@ -15,25 +15,20 @@
   <!-- Navbar superior -->
   <nav class="navbar">
     <a href="GestionArchivos.html" class="navbar-logo">
-      <img src="../img/logo.svg" alt="Logo" class="logo-svg" />Cloudler
+      <img src="../img/logo.svg" alt="Logo" class="logo-svg" />
+      <p  class="hidden md:block">Cloudler</p>
     </a>
     <input type="text" class="navbar-search" placeholder="Buscar..." />
     <button class="hamburguesa" id="btnHamburguesa" aria-label="Abrir menú">&#9776;</button>
-    <div class="navbar-profile"    onclick=" window.location.href = 'perfil.html';">👤</div>
+    <div class="navbar-profile hidden md:block"    onclick=" window.location.href = 'perfil.html';">👤</div>
   </nav>
   
   <!-- Contenedor principal -->
   <div class="container">
     <!-- Sidebar -->
-    <aside class="sidebar">
+    <aside class="sidebar hidden md:block">
       <button id="crearBtn">+ Crear</button>
-      <div class="almacenamiento">
-        <p>Almacenamiento</p>
-        <div class="barra">
-          <div class="usado" style="width: 60%;">3GB / 5GB</div>
-        </div>
-        <button class="expandir">Aumentar almacenamiento</button>
-      </div>
+
       <ul class="menu-lateral">
         <li>📁 Mis archivos</li>
         <li>🔗 Compartir</li>
@@ -42,6 +37,13 @@
         <li>🗑️ Borrar</li>
         <li>🔒 Cerrar sesión</li>
       </ul>
+            <div class="almacenamiento m-0">
+        <p>Almacenamiento</p>
+        <div class="barra">
+          <div class="usado" style="width: 60%;">3GB / 5GB</div>
+        </div>
+        <button class="expandir">Aumentar almacenamiento</button>
+      </div>
     </aside>
     <!-- Contenido principal -->
     <main class="contenido ">
@@ -87,6 +89,34 @@
     </main>
   </div>
   <script src="../js/gestionArchivos.js"></script>
+      <!-- <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const movil = document.querySelector('.movil');
+            const navLinks = document.querySelector('.nav-links');
+
+            movil.addEventListener('click', function () {
+                navLinks.classList.toggle('active');
+                movil.innerHTML = navLinks.classList.contains('active') ? '✕' : '☰';
+            });
+
+            function checkScreenSize() {
+                if (window.innerWidth <= 768) {
+
+                    movil.style.display = 'block';
+                    navLinks.classList.remove('active');
+                    movil.innerHTML = '☰';
+                      document.querySelector('.logo').style.display = "none";
+
+                } else {
+                    movil.style.display = 'none';
+                    navLinks.classList.add('active');
+                }
+            }
+
+            window.addEventListener('resize', checkScreenSize);
+            checkScreenSize();
+        });
+    </script> -->
 </body>
 </html>
 

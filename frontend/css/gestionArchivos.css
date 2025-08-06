@@ -8,7 +8,7 @@ body {
 
 .container {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 /**************** Sidebar ****************/
@@ -26,7 +26,8 @@ body {
   border-right: 1px solid #e0e0e0;
   position: relative;
   z-index: 1201;
-  height: 100vh;
+  min-height: 80vh;
+  height: auto;
   overflow-y: auto;
   font-size: 1.13rem;
 }
@@ -51,9 +52,9 @@ body {
   border-radius: 10px;
   font-size: 1.18rem;
   font-weight: bold;
-  margin-bottom: 28px;
   transition: background 0.2s;
   letter-spacing: 0.5px;
+  width: 100%;
 }
 
 #crearBtn:hover {
@@ -63,11 +64,12 @@ body {
 .menu-lateral {
   list-style: none;
   padding: 0;
-  margin: 18px 0 0 0;
+  margin: 5px 0 0 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
   font-size: 1.13rem;
+  min-height: max-content;
 }
 
 .menu-lateral li {
@@ -86,13 +88,10 @@ body {
   color: #fff;
 }
 
-/* Más separación entre almacenamiento y cerrar sesión */
-.menu-lateral li:last-child {
-  margin-bottom: 38px;
-}
+
+
 .almacenamiento {
-  margin-top: 38px;
-  margin-bottom: 0;
+  margin: 0%;
   background: #fff;
   color: #222;
   border-radius: 12px;
@@ -375,6 +374,7 @@ body {
 }
 
 /**************** Responsive ****************/
+/*
 @media (max-width: 900px) {
   .navbar-search {
     min-width: 80px;
@@ -385,6 +385,7 @@ body {
     font-size: 1rem;
   }
 }
+
 @media (max-width: 768px) {
   .navbar {
     gap: 0;
@@ -445,4 +446,4 @@ body {
   .almacenamiento {
     padding: 8px 4px 8px 4px;
   }
-}
+} */
