@@ -52,22 +52,27 @@
           </svg>
         </div>
         
-        <!-- Botón menú móvil -->
-        <button id="mobile-toggle" class="md:hidden text-white text-2xl hover:text-[#34D399] transition-colors">
+        
+        <button id="vista-movil" class="md:hidden text-white text-2xl hover:text-[#34D399] transition-colors">
           ☰
         </button>
         
         <!-- Menú de navegación desktop -->
-        <ul class="hidden md:flex space-x-8">
-          <li><a href="#inicio" class="hover:text-[#34D399] transition-colors">Inicio</a></li>
-          <li><a href="#caracteristicas" class="hover:text-[#34D399] transition-colors">Características</a></li>
-          <li><a href="#planes" class="hover:text-[#34D399] transition-colors">Planes</a></li>
-          <li><a href="#contacto" class="hover:text-[#34D399] transition-colors">Contacto</a></li>
+        <ul class="hidden lg:flex space-x-8">
+          <li><a href="#inicio" class="menu-link hover:text-[#34D399] transition-colors " id="link-inicio">Inicio</a></li>
+          <li><a href="#caracteristicas" class="menu-link hover:text-[#34D399] transition-colors " id="link-caracteristicas">Características</a></li>
+          <li><a href="#planes" class="menu-link hover:text-[#34D399] transition-colors " id="link-planes">Planes</a></li>
+          <li><a href="#contacto" class="menu-link hover:text-[#34D399] transition-colors " id="link-contacto">Contacto</a></li>
         </ul>
+                
+        <div class="hidden md:flex space-x-4">
+          <button onclick="window.location.href='Login.html'" class="text-white hover:text-[#34D399] transition-colors">Iniciar Sesión</button>
+          <button onclick="window.location.href='registro.html'" class="bg-gradient-to-r from-[#10B981] to-[#34D399] text-white font-bold px-4 py-2 rounded-full hover:shadow-lg transition-all">Registrarse</button>
+        </div>
       </nav>
       
-      <!-- Menú móvil -->
-      <div id="menu-mobile" class="menu-mobile md:hidden bg-[#072829]">
+      
+      <div id="menu" class="menu md:hidden bg-[#072829]">
         <ul class="py-4 px-4 space-y-3">
           <li><a href="Login.html" class="block hover:text-[#34D399] transition-colors">Iniciar sesion</a></li>
           <li><a href="registro.html" class="block hover:text-[#34D399] transition-colors">Registrarse</a></li>
@@ -76,9 +81,9 @@
       </div>
     </header>
 
-    <!-- Contenido principal con padding-top para compensar header fijo -->
+    <!-- Contenido principal -->
     <main id="inicio" class="min-h-screen flex flex-col justify-center items-center relative px-4 pt-16">
-      <!-- Fondo con textos animados -->
+      
       <div class="absolute inset-0 pointer-events-none overflow-hidden">
         <span class="absolute text-white/20 font-black text-3xl md:text-4xl animate-float1 top-20 left-5">&lt;body&gt;</span>
         <span class="absolute text-white/20 font-black text-3xl md:text-4xl animate-float2 bottom-20 right-10">&lt;div&gt;</span>
@@ -88,7 +93,6 @@
         <span class="absolute text-white/20 font-black text-2xl md:text-3xl animate-float2 bottom-60 left-20">{class}</span>
       </div>
 
-      <!-- Contenido principal -->
       <div class="text-center z-10">
         <h1 class="font-extrabold text-4xl md:text-5xl lg:text-6xl bg-gradient-to-r from-white to-[#34D399] bg-clip-text text-transparent mb-6">
           TU CÓDIGO, ORGANIZADO Y VISUAL
@@ -105,40 +109,44 @@
     </main>
 
 
-    <section id="caracteristicas" class="bg-gradient-to-tr from-[#F8FAFC] to-[#B6B6B6] min-h-screen pt-16 flex-col items-center ">    
-        <h1 class="text-[#085C57] text-center font-extrabold text-4xl md:text-5xl lg:text-6xl">Características Poderosas</h1>
-        <h3 class="text-center max-w-2xl mx-auto text-base md:text-lg lg:text-xl mb-8 leading-relaxed" >Todo lo que necesitas para gestionar tus proyectos de código de manera eficiente</h3>
-        <div class="grid grid-cols-1 bg-slate-300 gap-4 rounded-xl lg:grid-cols-3  m-4">
-        <div class="div-car ">
-            <i class="ico-gr fa-solid fa-folder"></i>
-            <h2>Gestor de Carpetas</h2>
-            <p>Puedes acceder a tus carpetas con un gestor amigable e intuitivo que te permitirá organizar mejor tus proyectos</p> 
-        </div>
-        <div class="div-car">
-            <i class="ico-gr fa-solid fa-eye"></i>
-            <h2>Visualizacion instantanea</h2>
-            <p>Podrás visualizar tus proyectos completos con un solo clic, sin necesidad de abrir múltiples archivos</p>
-        </div>
-        <div class="div-car">
-            <i class="ico-gr fa-solid fa-user-group"></i>
-            <h2>Comparte tu contenido</h2>
-            <p>¡Enséñale a tus amigos y compañeros lo que hiciste! Comparte fácilmente tus proyectos con otros desarrolladores</p>
-        </div>
-         <div class="div-car">
-          <i class="ico-gr fa-solid fa-pen-to-square"></i>
-          <h2>Distintos planes para ti</h2>
-          <p>Con nuestros planes tienes distintas opciones. Elige la que más te convenga según tus necesidades</p>
-        </div>
-         <div class="div-car">
-          <i class="ico-gr fa-solid fa-lock"></i>
-          <h2>Seguridad</h2>
-          <p>Nadie más que tú puede acceder a tus archivos. Mantenemos tu código seguro con encriptación de alta calidad</p>
-        </div>
-         <div class="div-car">
-          <i class="ico-gr fa-solid fa-pencil"></i>
-          <h2>Autocompletado</h2>
-          <p>Autocompletado avanzado para HTML5, CSS3 y JavaScript que acelera tu desarrollo y reduce errores</p>
-        </div>
+    
+    <section id="caracteristicas" class="bg-gradient-to-tr from-[#F8FAFC] to-[#B6B6B6] min-h-screen pt-20 pb-16">    
+        <div class="container mx-auto px-4">
+          <h1 class="text-[#085C57] text-center font-extrabold text-4xl md:text-5xl lg:text-6xl mb-6">Características Poderosas</h1>
+          <h3 class="text-center max-w-2xl mx-auto text-base md:text-lg lg:text-xl mb-12 leading-relaxed text-gray-700">Todo lo que necesitas para gestionar tus proyectos de código de manera eficiente</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="div-car">
+                <i class="ico-gr fa-solid fa-folder"></i>
+                <h2>Gestor de Carpetas</h2>
+                <p>Puedes acceder a tus carpetas con un gestor amigable e intuitivo que te permitirá organizar mejor tus proyectos</p> 
+            </div>
+            <div class="div-car">
+                <i class="ico-gr fa-solid fa-eye"></i>
+                <h2>Visualización Instantánea</h2>
+                <p>Podrás visualizar tus proyectos completos con un solo clic, sin necesidad de abrir múltiples archivos</p>
+            </div>
+            <div class="div-car">
+                <i class="ico-gr fa-solid fa-user-group"></i>
+                <h2>Comparte tu Contenido</h2>
+                <p>¡Enséñale a tus amigos y compañeros lo que hiciste! Comparte fácilmente tus proyectos con otros desarrolladores</p>
+            </div>
+            <div class="div-car">
+              <i class="ico-gr fa-solid fa-pen-to-square"></i>
+              <h2>Distintos Planes para Ti</h2>
+              <p>Con nuestros planes tienes distintas opciones. Elige la que más te convenga según tus necesidades</p>
+            </div>
+            <div class="div-car">
+              <i class="ico-gr fa-solid fa-lock"></i>
+              <h2>Seguridad</h2>
+              <p>Nadie más que tú puede acceder a tus archivos. Mantenemos tu código seguro con encriptación de alta calidad</p>
+            </div>
+            <div class="div-car">
+              <i class="ico-gr fa-solid fa-pencil"></i>
+              <h2>Autocompletado</h2>
+              <p>Autocompletado avanzado para HTML5, CSS3 y JavaScript que acelera tu desarrollo y reduce errores</p>
+            </div>
+          </div>
         </div>
     </section>
 
@@ -180,7 +188,7 @@
 
 
 <div class="card-pre">
-  <h2 class="text-3xl font-bold mb-6">Estudiante</h2>
+  <h2 class="text-3xl font-bold mb-6" >Estudiante</h2>
   
   <div class="text-5xl font-black mb-1"><i class="fa-solid fa-dollar-sign"></i>6<span class="text-lg font-normal">/mes</span></div>
   
@@ -215,7 +223,7 @@
     
   </ul>
   
-  <button class="bg-green-500 hover:bg-green-400 text-white font-bold py-3 px-8 rounded-full w-full hover:-translate-y-1 transition-all">
+  <button class="bg-green-500 hover:bg-green-400 text-white font-bold py-3 px-8 rounded-full w-full hover:-translate-y-1 transition-all" onclick="window.location.href='planes.html'">
     Más Popular
   </button>
   </div>
@@ -325,5 +333,7 @@
   <p class="text-center">© 2025 Clouder. Hecho con ❤️ para desarrolladores.</p>
 </footer>
 
+
+</script>
 </body>
 </html> 

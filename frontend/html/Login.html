@@ -15,14 +15,13 @@
         <div class="logo">
             <img src="/frontend/img/Logo.svg" alt="logo">
         </div>
-        <button class="hamburger" aria-label="Menú">☰</button>
+        <button class="movil" aria-label="Menú">☰</button>
         <nav>
             <ul class="nav-links">
                 <li><a href="landing.html">INICIO</a></li>
 
             </ul>
         </nav>
-        <a href="Login.html" class="btn"><button>INICIA SESION</button></a>
     </header>
     <main>
         <div class="fondo">
@@ -54,21 +53,24 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const hamburger = document.querySelector('.hamburger');
+            const movil = document.querySelector('.movil');
             const navLinks = document.querySelector('.nav-links');
 
-            hamburger.addEventListener('click', function () {
+            movil.addEventListener('click', function () {
                 navLinks.classList.toggle('active');
-                hamburger.innerHTML = navLinks.classList.contains('active') ? '✕' : '☰';
+                movil.innerHTML = navLinks.classList.contains('active') ? '✕' : '☰';
             });
 
             function checkScreenSize() {
                 if (window.innerWidth <= 768) {
-                    hamburger.style.display = 'block';
+
+                    movil.style.display = 'block';
                     navLinks.classList.remove('active');
-                    hamburger.innerHTML = '☰';
+                    movil.innerHTML = '☰';
+                      document.querySelector('.logo').style.display = "none";
+
                 } else {
-                    hamburger.style.display = 'none';
+                    movil.style.display = 'none';
                     navLinks.classList.add('active');
                 }
             }

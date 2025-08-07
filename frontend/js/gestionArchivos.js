@@ -285,7 +285,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
       mostrarModalInfo("Descargando: <br>" + seleccionados.join("<br>"));
-      // Aquí puedes implementar la lógica real de descarga si lo deseas
+          //Aqui se pondra la logica para descargar los archivos
       return;
     }
 
@@ -313,7 +313,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
       mostrarModalInfo("Compartiendo: <br>" + seleccionados.join("<br>"));
-      // Aquí puedes implementar la lógica real de compartir
+          //Aqui se pondra la logica para compartir los archivos
       return;
     }
 
@@ -354,7 +354,7 @@ document.addEventListener("DOMContentLoaded", function () {
     modal.innerHTML = `
       <div class="modal-content">
         <div style="margin-bottom:15px;">¿Seguro que deseas cerrar sesión?</div>
-        <button class="modal-btn" id="btnCerrarSesionAhora">Cerrar sesión</button>
+        <button class="modal-btn" id="btnCerrarSesionAhora" >Cerrar sesión</button>
         <button class="modal-cerrar" id="btnCancelarCerrarSesion">Cancelar</button>
       </div>
     `;
@@ -362,7 +362,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("btnCerrarSesionAhora").onclick = () => {
       // Aquí puedes limpiar datos, redirigir, etc.
       localStorage.removeItem("cloudlerData");
-      window.location.reload();
+      window.location.href = "landing.html";
     };
     document.getElementById("btnCancelarCerrarSesion").onclick = cerrarModal;
   }
@@ -445,15 +445,15 @@ document.addEventListener("DOMContentLoaded", function () {
   renderizarCarpeta(ubicacionActual);
 
   // Responsive: mover almacenamiento arriba en sidebar en móvil
-  function ajustarSidebar() {
-    if (window.innerWidth < 768) {
-      sidebar.insertBefore(almacenamiento, sidebar.children[1]);
-    } else {
-      sidebar.appendChild(almacenamiento);
-    }
-  }
-  ajustarSidebar();
-  window.addEventListener("resize", ajustarSidebar);
+  // function ajustarSidebar() {
+  //   if (window.innerWidth < 768) {
+  //     sidebar.insertBefore(almacenamiento, sidebar.children[1]);
+  //   } else {
+  //     sidebar.appendChild(almacenamiento);
+  //   }
+  // }
+  // ajustarSidebar();
+  // window.addEventListener("resize", ajustarSidebar);
 
   // Exponer funciones globales para el modal inline del HTML (opcional)
   window.cerrarModal = cerrarModal;

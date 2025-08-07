@@ -13,7 +13,6 @@
     --header-height: 80px;
 }
 
-/* ===== ESTILOS BASE ===== */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -27,10 +26,8 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    /* background-image: url('../img/FondoNubes.png'); */
 }
 
-/* ===== HEADER ===== */
 .header {
     background: var(--nav-bg);
     display: flex;
@@ -319,7 +316,7 @@ main {
         text-align: center;
     }
 
-    .hamburger {
+    .movil {
         display: block;
         background: none;
         border: none;

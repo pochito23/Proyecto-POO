@@ -7,6 +7,8 @@
   html {
   scroll-behavior: smooth;
 }
+
+
   
   body {
     font-family: 'Montserrat', sans-serif;
@@ -35,27 +37,27 @@
   .animate-float4 { animation: float4 5s ease-in-out infinite; }
 
   /* Menú móvil */
-  .menu-mobile {
+  .menu {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease-in-out;
     opacity: 0;
   }
-  .menu-mobile.active {
+  .menu.active {
     max-height: 250px;
     opacity: 1;
   }
 
+
+.menu-link {
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
   .ico-gr{
-    color:rgb(17, 238, 150);
-    background-color: #085C57;
-    border-radius: 100%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding:5px;
+    font-size: 3rem;
+    color: #059669;
+    margin-bottom: 1rem;
   }
 
   .div-car{
@@ -67,21 +69,22 @@
     justify-content: center;
     align-items: center;
     gap: 8px;
-    padding: 20px; /* un poco más de padding para respirar */
-    min-height: 300px; /* altura mínima */
-    box-sizing: border-box; /* para que el padding no aumente tamaño total */
+    padding: 20px; 
+    min-height: 300px;
+    box-sizing: border-box; 
     position: relative;
     overflow: hidden;
+    transition: all 0.3s ease;
 
   }
 
   .div-car::before {
-  content: '';           /* Elemento pseudo vacío */
-  position: absolute;    /* Posicionado absoluto */
-  top: 0;               /* Pegado arriba */
-  left: 0;              /* De izquierda */
-  right: 0;             /* A derecha (ancho completo) */
-  height: 6px;          /* 4px de altura */
+  content: '';           
+  position: absolute;   
+  top: 0;            
+  left: 0;            
+  right: 0;             
+  height: 6px;          
   background: linear-gradient(90deg, #085C57 0%, #10B981 50%, #34D399 100%);
 }
 
@@ -94,12 +97,19 @@
     color: black;
     font-size: medium;
   }
+    .div-car:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  }
 
   .grid-pl{
     border-color:#10B981;
     background-color: #0A7364;
     color: white;
+        
+
   }
+
   
   .card-pre{
   background: linear-gradient(to bottom right, #0f766e, #2dd4bf);
@@ -109,4 +119,10 @@
   color: white; 
   text-align: center; 
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); 
+  transition: all 0.3s ease;
+  }
+
+    .card-pre:hover {
+    transform: translateY(-10px);
+
   }
