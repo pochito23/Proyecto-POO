@@ -248,3 +248,155 @@ function validarLogin(e){
     alert('❌ Credenciales incorrectas');
   }
 }
+
+   // Datos de los planes
+      const planesData = {
+        gratis: {
+          nombre: "Plan Gratuito",
+          precio: "$0.00",
+          cantidad: 1,
+          beneficios: [
+            "✅  Proyecto unico",
+            "✅  vista previa",
+            "✅  Acceso web",
+            "❌  Sin soporte prioritario",
+          ],
+        },
+        basico: {
+          nombre: "Plan Básico",
+          precio: "$9.99",
+          cantidad: 5,
+          beneficios: [
+            "✅  5 proyectos",
+            "✅  Acceso web y móvil",
+            "✅  Soporte por email",
+            "✅  Sincronización automática",
+            "❌  Sin soporte prioritario",
+
+          ],
+        },
+        pro: {
+          nombre: "Plan Pro",
+          precio: "$12.00",
+          cantidad: 10,
+          beneficios: [
+            "✅  10 proyectos",
+            "✅  Todas las características básicas",
+            "✅  Soporte prioritario 24/7",
+
+          ],
+        },
+        empresarial: {
+          nombre: "Plan Empresarial",
+          precio: "$49.99",
+          cantidad: 20,
+          beneficios: [
+            "✅  Almacenamiento ilimitado",
+            "✅  Todas las características Pro",
+            "✅  Administración de usuarios",
+            "✅  Gerente de cuenta dedicado",
+          ],
+        },
+      };
+
+      // Obtener plan seleccionado
+      let planSeleccionado = "basico"; // Default
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("plan")) {
+        planSeleccionado = urlParams.get("plan").toLowerCase();
+      }
+
+      // Llenar información del plan
+      function cargarInformacionPlan() {
+        const plan = planesData[planSeleccionado] || planesData.basico;
+
+        document.getElementById("resumenPlan").innerHTML = `
+                <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                    <div>
+                        <h3 class="font-bold text-text-title">${plan.nombre}</h3>
+                        <p class="text-gray-600">Suscripción mensual</p>
+                    </div>
+                    <div class="text-xl font-bold text-primary">${plan.precio}/mes</div>
+                </div>
+            `;
+
+        document.getElementById(
+          "precioTotal"
+        ).textContent = `${plan.precio}/mes`;
+
+        const beneficiosHTML = plan.beneficios
+          .map(
+            (beneficio) =>
+              `<li class="flex items-center text-sm text-gray-700">
+                    <span class="mr-2">${beneficio.substring(0, 2)}</span>
+                    <span>${beneficio.substring(3)}</span>
+                </li>`
+          )
+          .join("");
+
+        document.getElementById("beneficiosPlan").innerHTML = beneficiosHTML;
+      }
+// Event listener para cambio de plan
+document.getElementById('selectorPlan').addEventListener('change', function(e) {
+    planSeleccionado = e.target.value;
+    cargarInformacionPlan();
+});
+      // Formatear número de tarjeta
+      document
+        .getElementById("numeroTarjeta")
+        .addEventListener("input", function (e) {
+          let valor = e.target.value.replace(/\s/g, "").replace(/[^0-9]/gi, "");
+          let valorFormateado = valor.match(/.{1,4}/g)?.join(" ") || valor;
+          if (valorFormateado !== valor) {
+            e.target.value = valorFormateado;
+          }
+        });
+
+      // Formatear fecha de vencimiento
+      document
+        .getElementById("fechaVencimiento")
+        .addEventListener("input", function (e) {
+          let valor = e.target.value.replace(/\D/g, "");
+          if (valor.length >= 2) {
+            valor = valor.substring(0, 2) + "/" + valor.substring(2, 4);
+          }
+          e.target.value = valor;
+        });
+
+      // Formatear CVV
+      document.getElementById("cvv").addEventListener("input", function (e) {
+        e.target.value = e.target.value.replace(/[^0-9]/g, "");
+      });
+
+      // Manejar envío del formulario
+      document
+        .getElementById("formularioPago")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // Simular procesamiento
+          const boton = document.getElementById("textoBoton");
+          boton.textContent = "Procesando...";
+
+          setTimeout(() => {
+            // Actualizar plan del usuario (simulado)
+            // En un sistema real, aquí harías la llamada al backend
+
+            // Mostrar modal de confirmación
+            document
+              .getElementById("modalConfirmacion")
+              .classList.remove("hidden");
+            document.getElementById("modalConfirmacion").classList.add("flex");
+          }, 2000);
+        });
+
+      // Redirigir a gestión
+      function redirigirGestion() {
+        window.location.href = "GestionArchivos.html";
+      }
+
+      // Cargar información al iniciar
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById('selectorPlan').value = planSeleccionado;
+        cargarInformacionPlan();
+      });
