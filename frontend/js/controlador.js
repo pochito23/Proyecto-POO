@@ -1,5 +1,6 @@
 var usuarios = [
   {
+    id: 1,
     correo: "eduardo@gmail.com",
     contraseña: "1234",
     usuario: "eduardo",
@@ -8,6 +9,7 @@ var usuarios = [
     respuesta: "perro",
   },
   {
+    id: 2,
     correo: "Kevin@gmail.com",
     contraseña: "1234",
     usuario: "kevin",
@@ -16,6 +18,7 @@ var usuarios = [
     respuesta: "...",
   },
   {
+    id: 3,
     correo: "Kristhian@gmail.com",
     contraseña: "1234",
     usuario: "kristiam",
@@ -24,6 +27,7 @@ var usuarios = [
     respuesta: "gato",
   },
   {
+    id: 4,
     correo: "Maria@gmail.com",
     contraseña: "1234",
     usuario: "maria",
@@ -32,6 +36,7 @@ var usuarios = [
     respuesta: "uruguay",
   },
   {
+    id: 5,
     correo: "Jose@gmail.com",
     contraseña: "1234",
     usuario: "Pochito",
@@ -45,7 +50,7 @@ var usuarios = [
 const vistaMovil = document.getElementById("vista-movil");
 const Menu = document.getElementById("menu");
 
-if(vistaMovil && Menu) {
+if (vistaMovil && Menu) {
   vistaMovil.addEventListener("click", () => {
     Menu.classList.toggle("active");
   });
@@ -59,7 +64,7 @@ function comenzar() {
 
 // Cerrar menú móvil al hacer click en un enlace
 const Links = document.querySelectorAll("#menu a");
-  Links.forEach((link) => {
+Links.forEach((link) => {
   link.addEventListener("click", () => {
     vistaMovil.classList.remove("active");
   });
@@ -98,83 +103,83 @@ function recuperarClave(e) {
   };
 }
 
-  function validarRespuestaSeguridad(usuario) {
-    const respuestaInput = document
-      .getElementById("respuestaSeguridad")
-      .value.trim();
-    const respuestaCorrecta = usuario.respuesta || "respuesta_default";
+function validarRespuestaSeguridad(usuario) {
+  const respuestaInput = document
+    .getElementById("respuestaSeguridad")
+    .value.trim();
+  const respuestaCorrecta = usuario.respuesta || "respuesta_default";
 
-    if (respuestaInput.toLowerCase() === respuestaCorrecta.toLowerCase()) {
-      alert(`✅ Tu contraseña es: ${usuario.contraseña}`);
-    } else {
-      alert("❌ Respuesta incorrecta");
-    }
+  if (respuestaInput.toLowerCase() === respuestaCorrecta.toLowerCase()) {
+    alert(`✅ Tu contraseña es: ${usuario.contraseña}`);
+  } else {
+    alert("❌ Respuesta incorrecta");
+  }
+}
+
+//============================ Validacion del formulario ============================
+function validarFormulario() {
+  const email = document.getElementById("email").value.trim();
+  const usuario = document.getElementById("usuario").value.trim();
+  const password = document.getElementById("password").value;
+  const pregunta = document.getElementById("pregunta").value;
+  const respuesta = document.getElementById("respuesta").value.trim();
+  const alert = document.querySelector(".alert");
+
+  //Regex
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passRegex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+
+  //Campos vacios
+  alert.innerHTML = ``;
+  if (email === "") {
+    alert.innerHTML = `<i class="fa-solid fa-exclamation"></i> <label>Debe de completar el campo de email</label>`;
+    return false;
+  } else if (usuario === "") {
+    alert.innerHTML = `<i class="fa-solid fa-exclamation"></i> <label>Debe de completar el campo de Usuario</label>`;
+    return false;
+  } else if (password === "") {
+    alert.innerHTML = `<i class="fa-solid fa-exclamation"></i> <label>Debe de completar el campo de contraseña</label>`;
+    return false;
+  } else if (document.querySelector("#pregunta").value === "") {
+    alert.innerHTML = `<i class="fa-solid fa-exclamation"></i> <label>Debe seleccionar una pregunta de seguridad</label>`;
+    return false;
+  } else if (document.querySelector("#respuesta").value.trim() === "") {
+    alert.innerHTML = `<i class="fa-solid fa-exclamation"></i> <label>Debe completar la respuesta de seguridad</label>`;
+    return false;
   }
 
-  //============================ Validacion del formulario ============================
-  function validarFormulario() {
-    const email = document.getElementById("email").value.trim();
-    const usuario = document.getElementById("usuario").value.trim();
-    const password = document.getElementById("password").value;
-    const pregunta = document.getElementById("pregunta").value;
-    const respuesta = document.getElementById("respuesta").value.trim();
-    const alert = document.querySelector(".alert");
-
-    //Regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const passRegex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
-
-    //Campos vacios
-    alert.innerHTML = ``;
-    if (email === "") {
-      alert.innerHTML = `<i class="fa-solid fa-exclamation"></i> <label>Debe de completar el campo de email</label>`;
-      return false;
-    } else if (usuario === "") {
-      alert.innerHTML = `<i class="fa-solid fa-exclamation"></i> <label>Debe de completar el campo de Usuario</label>`;
-      return false;
-    } else if (password === "") {
-      alert.innerHTML = `<i class="fa-solid fa-exclamation"></i> <label>Debe de completar el campo de contraseña</label>`;
-      return false;
-    } else if (document.querySelector("#pregunta").value === "") {
-      alert.innerHTML = `<i class="fa-solid fa-exclamation"></i> <label>Debe seleccionar una pregunta de seguridad</label>`;
-      return false;
-    } else if (document.querySelector("#respuesta").value.trim() === "") {
-      alert.innerHTML = `<i class="fa-solid fa-exclamation"></i> <label>Debe completar la respuesta de seguridad</label>`;
-      return false;
-    }
-
-    //Validacion del correo y password
-    if (!emailRegex.test(email)) {
-      alert.innerHTML = `<i class="fa-solid fa-exclamation"></i> <label>El correo no cumple con los requisitos</label>`;
-      return false;
-    }
-    if (!passRegex.test(password)) {
-      alert.innerHTML = `<i class="fa-solid fa-exclamation"></i>
+  //Validacion del correo y password
+  if (!emailRegex.test(email)) {
+    alert.innerHTML = `<i class="fa-solid fa-exclamation"></i> <label>El correo no cumple con los requisitos</label>`;
+    return false;
+  }
+  if (!passRegex.test(password)) {
+    alert.innerHTML = `<i class="fa-solid fa-exclamation"></i>
             <label>La contraseña debe tener al menos 6 caracteres, una mayúscula, una minúscula, un número y un caracter especial.</label>`;
-      return false;
-    }
-        return true;
+    return false;
   }
+  return true;
+}
 
-  //Funcion para validar que el usuario no exista
-  function Registro(e) {
-    e.preventDefault();
+//Funcion para validar que el usuario no exista
+function Registro(e) {
+  e.preventDefault();
 
-        const correo = document.getElementById("email").value;
-    const Usuario = document.getElementById("usuario").value;
-    const contraseña = document.getElementById("password").value;
-    const pregunta = document.getElementById("pregunta").value;
-    const respuesta = document.getElementById("respuesta").value;
+  const correo = document.getElementById("email").value;
+  const Usuario = document.getElementById("usuario").value;
+  const contraseña = document.getElementById("password").value;
+  const pregunta = document.getElementById("pregunta").value;
+  const respuesta = document.getElementById("respuesta").value;
 
 
 
-    if (usuarios.find((u) => u.usuario === Usuario || u.correo === correo)) {
-  alert("❌ Usuario o correo ya registrado");
-  return;
+  if (usuarios.find((u) => u.usuario === Usuario || u.correo === correo)) {
+    alert("❌ Usuario o correo ya registrado");
+    return;
 
-    } else {
-      alert("✅ Usuario registrado correctamente.Ahora inicia sesion");
-      document.getElementById("inicioSes").innerHTML = `
+  } else {
+    alert("✅ Usuario registrado correctamente.Ahora inicia sesion");
+    document.getElementById("inicioSes").innerHTML = `
   <button style="
     font-size: 16px;
     font-weight: bold;
@@ -190,25 +195,25 @@ function recuperarClave(e) {
     INICIA SESIÓN
   </button>
 `;
-setTimeout(() => {
-  document.getElementById("inicioSes").innerHTML = `<button>INICIA SESIÓN</button>`;
-}, 5000); // 5 segundos
+    setTimeout(() => {
+      document.getElementById("inicioSes").innerHTML = `<button>INICIA SESIÓN</button>`;
+    }, 5000); // 5 segundos
 
-      usuarios.push({
-        correo: correo,
-        contraseña: contraseña,
-        usuario: Usuario,
-        plan: "",
-        pregunta: pregunta,
-        respuesta: respuesta,
-      });
-      document.getElementById("email").value = "";
-      document.getElementById("usuario").value = "";
-      document.getElementById("password").value = "";
-      document.getElementById("pregunta").value = "";
-      document.getElementById("respuesta").value = "";
-    }
+    usuarios.push({
+      correo: correo,
+      contraseña: contraseña,
+      usuario: Usuario,
+      plan: "",
+      pregunta: pregunta,
+      respuesta: respuesta,
+    });
+    document.getElementById("email").value = "";
+    document.getElementById("usuario").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("pregunta").value = "";
+    document.getElementById("respuesta").value = "";
   }
+}
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -232,7 +237,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-function validarLogin(e){
+function validarLogin(e) {
   e.preventDefault();
 
   const email = document.getElementById("email").value.trim();
@@ -242,7 +247,7 @@ function validarLogin(e){
     (u) => u.correo === email && u.contraseña === contraseña
   );
 
-  if(usuarioEncontrado){
+  if (usuarioEncontrado) {
     window.location.href = 'GestionArchivos.html';
   } else {
     alert('❌ Credenciales incorrectas');
