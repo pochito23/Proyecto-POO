@@ -1,6 +1,7 @@
-/* gestionArchivos.css */
-
 body {
+  display: flex;
+   flex-direction: column; 
+  min-height: 100vh;
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
   background-color: #f5f5f5;
@@ -8,7 +9,7 @@ body {
 
 .container {
   display: flex;
-  min-height: 100vh;
+  flex:1;
 }
 
 /**************** Sidebar ****************/
@@ -26,10 +27,11 @@ body {
   border-right: 1px solid #e0e0e0;
   position: relative;
   z-index: 1201;
-  min-height: 80vh;
+  min-height: 100vh;
   height: auto;
   overflow-y: auto;
   font-size: 1.13rem;
+  transition: transform 0.3s ease;
 }
 
 .sidebar button {
@@ -45,6 +47,7 @@ body {
 }
 
 #crearBtn {
+  margin-top: 50px;
   background: #006666;
   color: #fff;
   padding: 18px 0;
@@ -87,8 +90,6 @@ body {
   background: #005f6b;
   color: #fff;
 }
-
-
 
 .almacenamiento {
   margin: 0%;
@@ -147,12 +148,27 @@ body {
   background: #009688;
 }
 
+/**************** Sidebar Overlay ****************/
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1200;
+}
+
+.sidebar-overlay.activa {
+  display: block;
+}
+
 /**************** Contenido Principal ****************/
 .contenido {
   flex-grow: 1;
   padding: 20px;
   background-color: white;
-
 }
 
 .header {
@@ -161,6 +177,8 @@ body {
   align-items: center;
   font-size: 18px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .header-actions {
@@ -173,11 +191,17 @@ body {
   border-radius: 5px;
   border: 1px solid #ccc;
   font-size: 14px;
+  min-width: 140px;
+}
+
+.tabla {
+  overflow-x: auto;
 }
 
 .tabla table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 600px;
 }
 
 .tabla th,
@@ -207,19 +231,25 @@ body {
   padding: 0 18px;
   height: 56px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  position: relative;
+  position: fixed;
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  width: 100%; 
+  z-index: 1400; 
+  box-sizing: border-box
 }
 
 .hamburguesa {
   display: none;
   background: #00bcd4;
   border: none;
-  font-size: 2rem;
+  font-size: 1.5rem;
   color: #fff;
   cursor: pointer;
   z-index: 1101;
   border-radius: 8px;
-  padding: 4px 12px;
+  padding: 8px 12px;
   transition: background 0.2s;
 }
 
@@ -336,6 +366,8 @@ body {
   text-align: center;
   animation: slideUp 0.4s ease-out;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  max-width: 90vw;
+  width: 400px;
 }
 
 .modal-btn {
@@ -373,6 +405,119 @@ body {
   to { transform: translateY(0); opacity: 1; }
 }
 
+/**************** Mobile Responsive ****************/
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 280px;
+    transform: translateX(-100%);
+    z-index: 1300;
+  }
+  
+  .sidebar.abierta {
+    transform: translateX(0);
+  }
+  
+  .hamburguesa {
+    display: block;
+  }
+  
+  .navbar-profile {
+    display: none;
+  }
+  
+  .navbar-logo p {
+    display: none;
+  }
+  
+  .contenido {
+    margin-top: 56px;
+    padding: 15px 10px;
+  }
+  
+  .header {
+    font-size: 16px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .header-actions {
+    justify-content: center;
+  }
+  
+  #ordenarPor {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .tabla th,
+  .tabla td {
+    padding: 8px 6px;
+    font-size: 14px;
+  }
+  
+  .tabla th:first-child,
+  .tabla td:first-child {
+    width: 30px;
+  }
+  
+  .tabla th:last-child,
+  .tabla td:last-child {
+    width: 40px;
+  }
+  
+  .modal-content {
+    padding: 20px;
+    margin: 10px;
+  }
+  
+  .navbar-search {
+    margin: 0 10px;
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0 10px;
+  }
+  
+  .navbar-search {
+    margin: 0 5px;
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+  
+  .contenido {
+    padding: 10px 5px;
+  }
+  
+  .sidebar {
+    width: 260px;
+  }
+  
+  .tabla table {
+    min-width: 500px;
+  }
+  
+  .tabla th,
+  .tabla td {
+    padding: 6px 4px;
+    font-size: 13px;
+  }
+  
+  .icono {
+    font-size: 16px;
+    margin-right: 4px;
+  }
+  
+  .header {
+    font-size: 14px;
+  }
+}
 /**************** Responsive ****************/
 /*
 @media (max-width: 900px) {

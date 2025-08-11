@@ -1,265 +1,404 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Checkout - Cloudler</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="shortcut icon" href="/frontend/img/Logo.svg" type="image/x-icon"/>
+    <link
+      rel="shortcut icon"
+      href="/frontend/img/Logo.svg"
+      type="image/x-icon"
+    />
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary': '#44A08D',
-                        'primary-dark': '#358675',
-                        'nav-bg': '#093637',
-                        'bg-light': '#44A08D',
-                        'text-title': '#0B4F51',
-                        'alert': '#f04444'
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#44A08D",
+              "primary-dark": "#358675",
+              "nav-bg": "#093637",
+              "bg-light": "#44A08D",
+              "text-title": "#0B4F51",
+              "alert": "#f04444",
+            },
+          },
+        },
+      };
     </script>
-</head>
-<body class="min-h-screen bg-gradient-to-t from-bg-light to-nav-bg">
+  </head>
+  <body class="min-h-screen bg-gradient-to-t from-bg-light to-nav-bg">
     <!-- Header -->
     <header class="bg-nav-bg fixed w-full z-50 shadow-lg">
-        <div class="flex justify-between items-center h-20 px-4 md:px-10">
-            <div class="cursor-pointer">
-                <img src="/frontend/img/Logo.svg" alt="Cloudler" class="h-16 w-auto transition-transform hover:scale-110">
-            </div>
-            <nav class="hidden md:block">
-                <ul class="flex space-x-6">
-                    <li><a href="GestionArchivos.html" class="text-white font-bold hover:text-primary transition-colors">GESTIÓN</a></li>
-                    <li><a href="landing.html" class="text-white font-bold hover:text-primary transition-colors">INICIO</a></li>
-                </ul>
-            </nav>
+      <div class="flex justify-between items-center h-20 px-4 md:px-10">
+        <div class="cursor-pointer">
+          <img
+            src="/frontend/img/Logo.svg"
+            alt="Cloudler"
+            class="h-16 w-auto transition-transform hover:scale-110"
+          />
         </div>
+        <nav class="hidden md:block">
+          <ul class="flex space-x-6">
+            <li>
+              <a
+                href="GestionArchivos.html"
+                class="text-white font-bold hover:text-primary transition-colors"
+                >GESTIÓN</a
+              >
+            </li>
+            <li>
+              <a
+                href="landing.html"
+                class="text-white font-bold hover:text-primary transition-colors"
+                >INICIO</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
     <main class="pt-24 px-4 pb-8">
-        <div class="max-w-6xl mx-auto">
-            <!-- Título -->
-            <div class="text-center mb-8">
-                <h1 class="text-4xl font-bold text-white mb-2">Finalizar Suscripción</h1>
-                <p class="text-white/80">Complete su información para activar su plan</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Resumen del Plan -->
-                <div class="bg-white rounded-xl shadow-2xl p-8">
-                    <h2 class="text-2xl font-bold text-text-title mb-6">Resumen del Plan</h2>
-                    
-                    <div id="resumenPlan" class="space-y-4">
-                        <!-- Se llena dinámicamente -->
-                    </div>
-                    
-                    <div class="border-t pt-4 mt-6">
-                        <div class="flex justify-between items-center text-lg font-bold text-text-title">
-                            <span>Total:</span>
-                            <span id="precioTotal">$0.00/mes</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Beneficios -->
-                    <div class="mt-8">
-                        <h3 class="font-bold text-text-title mb-4">Beneficios incluidos:</h3>
-                        <ul id="beneficiosPlan" class="space-y-2">
-                            <!-- Se llena dinámicamente -->
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Formulario de Pago -->
-                <div class="bg-white rounded-xl shadow-2xl p-8">
-                    <h2 class="text-2xl font-bold text-text-title mb-6">Información de Pago</h2>
-                    
-                    <form id="formularioPago" class="space-y-6">
-                        <!-- Información Personal -->
-                        <div class="space-y-4">
-                            <h3 class="font-semibold text-text-title text-lg">Datos Personales</h3>
-                            
-                            <div class="grid md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-text-title font-medium mb-2">Nombre</label>
-                                    <input type="text" id="nombre" required
-                                           class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                                           placeholder="Juan">
-                                </div>
-                                <div>
-                                    <label class="block text-text-title font-medium mb-2">Apellido</label>
-                                    <input type="text" id="apellido" required
-                                           class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                                           placeholder="Pérez">
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-text-title font-medium mb-2">Teléfono</label>
-                                <input type="tel" id="telefono" required
-                                       class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                                       placeholder="+504 9999-9999">
-                            </div>
-                        </div>
-
-                        <!-- Información de Tarjeta -->
-                        <div class="space-y-4">
-                            <h3 class="font-semibold text-text-title text-lg">Tarjeta de Crédito</h3>
-                            
-                            <div>
-                                <label class="block text-text-title font-medium mb-2">Número de Tarjeta</label>
-                                <input type="text" id="numeroTarjeta" required maxlength="19"
-                                       class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                                       placeholder="1234 5678 9012 3456">
-                            </div>
-                            
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-text-title font-medium mb-2">Fecha de Vencimiento</label>
-                                    <input type="text" id="fechaVencimiento" required maxlength="5"
-                                           class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                                           placeholder="MM/AA">
-                                </div>
-                                <div>
-                                    <label class="block text-text-title font-medium mb-2">CVV</label>
-                                    <input type="text" id="cvv" required maxlength="4"
-                                           class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                                           placeholder="123">
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-text-title font-medium mb-2">Nombre en la Tarjeta</label>
-                                <input type="text" id="nombreTarjeta" required
-                                       class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                                       placeholder="JUAN PEREZ">
-                            </div>
-                        </div>
-
-                        <!-- Dirección de Facturación -->
-                        <div class="space-y-4">
-                            <h3 class="font-semibold text-text-title text-lg">Dirección de Facturación</h3>
-                            
-                            <div>
-                                <label class="block text-text-title font-medium mb-2">Dirección</label>
-                                <input type="text" id="direccion" required
-                                       class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                                       placeholder="Calle Principal #123">
-                            </div>
-                            
-                            <div class="grid md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-text-title font-medium mb-2">Ciudad</label>
-                                    <input type="text" id="ciudad" required
-                                           class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                                           placeholder="Tegucigalpa">
-                                </div>
-                                <div>
-                                    <label class="block text-text-title font-medium mb-2">Código Postal</label>
-                                    <input type="text" id="codigoPostal" required
-                                           class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                                           placeholder="11101">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Términos y Condiciones -->
-                        <div class="flex items-start space-x-3">
-                            <input type="checkbox" id="terminos" required class="mt-1 w-4 h-4 text-primary">
-                            <label for="terminos" class="text-sm text-gray-600">
-                                Acepto los <a href="#" class="text-primary hover:underline">términos y condiciones</a> 
-                                y la <a href="#" class="text-primary hover:underline">política de privacidad</a>
-                            </label>
-                        </div>
-
-                        <!-- Botón de Pago -->
-                        <button type="submit" 
-                                class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-4 px-6 rounded-lg transition-all transform hover:scale-105 hover:shadow-lg">
-                            <span id="textoBoton">Confirmar Suscripción</span>
-                        </button>
-                    </form>
-                </div>
-            </div>
+      <div class="max-w-6xl mx-auto">
+        <!-- Título -->
+        <div class="text-center mb-8">
+          <h1 class="text-4xl font-bold text-white mb-2">
+            Finalizar Suscripción
+          </h1>
+          <p class="text-white/80">
+            Complete su información para activar su plan
+          </p>
         </div>
+        <div class="mb-4">
+          <label class="block text-text-title font-medium mb-2 text-white">Seleccionar Plan</label
+          >
+          <select
+            id="selectorPlan"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+          >
+            <option value="gratis">Plan Gratuito - $0.00/mes</option>
+            <option value="basico" selected>Plan Básico - $9.99/mes</option>
+            <option value="pro">Plan Pro - $12.00/mes</option>
+            <option value="empresarial">Plan Empresarial - $49.99/mes</option>
+          </select>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8">
+          <!-- Resumen del Plan -->
+          <div class="bg-white rounded-xl shadow-2xl p-8">
+            <h2 class="text-2xl font-bold text-text-title mb-6">
+              Resumen del Plan
+            </h2>
+
+            <div id="resumenPlan" class="space-y-4">
+              <!-- Se llena dinámicamente -->
+            </div>
+
+            <div class="border-t pt-4 mt-6">
+              <div
+                class="flex justify-between items-center text-lg font-bold text-text-title"
+              >
+                <span>Total:</span>
+                <span id="precioTotal">$0.00/mes</span>
+              </div>
+            </div>
+
+            <!-- Beneficios -->
+            <div class="mt-8">
+              <h3 class="font-bold text-text-title mb-4">
+                Beneficios incluidos:
+              </h3>
+              <ul id="beneficiosPlan" class="space-y-2">
+                <!-- Se llena dinámicamente -->
+              </ul>
+            </div>
+          </div>
+
+          <!-- Formulario de Pago -->
+          <div class="bg-white rounded-xl shadow-2xl p-8">
+            <h2 class="text-2xl font-bold text-text-title mb-6">
+              Información de Pago
+            </h2>
+
+            <form id="formularioPago" class="space-y-6">
+              <!-- Información Personal -->
+              <div class="space-y-4">
+                <h3 class="font-semibold text-text-title text-lg">
+                  Datos Personales
+                </h3>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-text-title font-medium mb-2"
+                      >Nombre</label
+                    >
+                    <input
+                      type="text"
+                      id="nombre"
+                      required
+                      class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                      placeholder="Juan"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-text-title font-medium mb-2"
+                      >Apellido</label
+                    >
+                    <input
+                      type="text"
+                      id="apellido"
+                      required
+                      class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                      placeholder="Pérez"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-text-title font-medium mb-2"
+                    >Teléfono</label
+                  >
+                  <input
+                    type="tel"
+                    id="telefono"
+                    required
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                    placeholder="+504 9999-9999"
+                  />
+                </div>
+              </div>
+
+              <!-- Información de Tarjeta -->
+              <div class="space-y-4">
+                <h3 class="font-semibold text-text-title text-lg">
+                  Tarjeta de Crédito
+                </h3>
+
+                <div>
+                  <label class="block text-text-title font-medium mb-2"
+                    >Número de Tarjeta</label
+                  >
+                  <input
+                    type="text"
+                    id="numeroTarjeta"
+                    required
+                    maxlength="19"
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                    placeholder="1234 5678 9012 3456"
+                  />
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-text-title font-medium mb-2"
+                      >Fecha de Vencimiento</label
+                    >
+                    <input
+                      type="text"
+                      id="fechaVencimiento"
+                      required
+                      maxlength="5"
+                      class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                      placeholder="MM/AA"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-text-title font-medium mb-2"
+                      >CVV</label
+                    >
+                    <input
+                      type="text"
+                      id="cvv"
+                      required
+                      maxlength="4"
+                      class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                      placeholder="123"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-text-title font-medium mb-2"
+                    >Nombre en la Tarjeta</label
+                  >
+                  <input
+                    type="text"
+                    id="nombreTarjeta"
+                    required
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                    placeholder="JUAN PEREZ"
+                  />
+                </div>
+              </div>
+
+              <!-- Dirección de Facturación -->
+              <div class="space-y-4">
+                <h3 class="font-semibold text-text-title text-lg">
+                  Dirección de Facturación
+                </h3>
+
+                <div>
+                  <label class="block text-text-title font-medium mb-2"
+                    >Dirección</label
+                  >
+                  <input
+                    type="text"
+                    id="direccion"
+                    required
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                    placeholder="Calle Principal #123"
+                  />
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-text-title font-medium mb-2"
+                      >Ciudad</label
+                    >
+                    <input
+                      type="text"
+                      id="ciudad"
+                      required
+                      class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                      placeholder="Tegucigalpa"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-text-title font-medium mb-2"
+                      >Código Postal</label
+                    >
+                    <input
+                      type="text"
+                      id="codigoPostal"
+                      required
+                      class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                      placeholder="11101"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Términos y Condiciones -->
+              <div class="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  id="terminos"
+                  required
+                  class="mt-1 w-4 h-4 text-primary"
+                />
+                <label for="terminos" class="text-sm text-gray-600">
+                  Acepto los
+                  <a href="#" class="text-primary hover:underline"
+                    >términos y condiciones</a
+                  >
+                  y la
+                  <a href="#" class="text-primary hover:underline"
+                    >política de privacidad</a
+                  >
+                </label>
+              </div>
+
+              <!-- Botón de Pago -->
+              <button
+                type="submit"
+                class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-4 px-6 rounded-lg transition-all transform hover:scale-105 hover:shadow-lg"
+              >
+                <span id="textoBoton">Confirmar Suscripción</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
     </main>
 
     <!-- Modal de Confirmación -->
-    <div id="modalConfirmacion" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-xl p-8 max-w-md w-full text-center animate-pulse">
-            <div class="text-6xl mb-4">🎉</div>
-            <h3 class="text-2xl font-bold text-text-title mb-4">¡Suscripción Exitosa!</h3>
-            <p class="text-gray-600 mb-6">Bienvenido a tu nuevo plan. Ya puedes disfrutar de todos los beneficios.</p>
-            <button onclick="redirigirGestion()" 
-                    class="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-6 rounded-lg transition-all">
-                Ir a Gestión de Archivos
-            </button>
-        </div>
+    <div
+      id="modalConfirmacion"
+      class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4"
+    >
+      <div
+        class="bg-white rounded-xl p-8 max-w-md w-full text-center animate-pulse"
+      >
+        <div class="text-6xl mb-4">🎉</div>
+        <h3 class="text-2xl font-bold text-text-title mb-4">
+          ¡Suscripción Exitosa!
+        </h3>
+        <p class="text-gray-600 mb-6">
+          Bienvenido a tu nuevo plan. Ya puedes disfrutar de todos los
+          beneficios.
+        </p>
+        <button
+          onclick="redirigirGestion()"
+          class="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-6 rounded-lg transition-all"
+        >
+          Ir a Gestión de Archivos
+        </button>
+      </div>
     </div>
 
     <script>
-        // Datos de los planes
-        const planesData = {
-            gratis: {
-                nombre: 'Plan Gratuito',
-                precio: '$0.00',
-                beneficios: [
-                    '✅ 1GB de almacenamiento',
-                    '✅ Subida de archivos básica',
-                    '✅ Acceso web',
-                    '❌ Sin soporte prioritario'
-                ]
-            },
-            basico: {
-                nombre: 'Plan Básico',
-                precio: '$9.99',
-                beneficios: [
-                    '✅ 50GB de almacenamiento',
-                    '✅ Subida de archivos avanzada',
-                    '✅ Acceso web y móvil',
-                    '✅ Soporte por email',
-                    '✅ Sincronización automática'
-                ]
-            },
-            pro: {
-                nombre: 'Plan Pro',
-                precio: '$19.99',
-                beneficios: [
-                    '✅ 500GB de almacenamiento',
-                    '✅ Todas las características básicas',
-                    '✅ Colaboración en tiempo real',
-                    '✅ Soporte prioritario 24/7',
-                    '✅ Versiones de archivos',
-                    '✅ Integración con aplicaciones'
-                ]
-            },
-            empresarial: {
-                nombre: 'Plan Empresarial',
-                precio: '$49.99',
-                beneficios: [
-                    '✅ Almacenamiento ilimitado',
-                    '✅ Todas las características Pro',
-                    '✅ Administración de usuarios',
-                    '✅ Seguridad avanzada',
-                    '✅ API personalizada',
-                    '✅ Gerente de cuenta dedicado'
-                ]
-            }
-        };
+      // Datos de los planes
+      const planesData = {
+        gratis: {
+          nombre: "Plan Gratuito",
+          precio: "$0.00",
+          cantidad: 1,
+          beneficios: [
+            "✅  Proyecto unico",
+            "✅  vista previa",
+            "✅  Acceso web",
+            "❌  Sin soporte prioritario",
+          ],
+        },
+        planEstudiante: {
+          nombre: "Plan Básico",
+          precio: "$6.00",
+          cantidad: 5,
+          beneficios: [
+            "✅  5 proyectos",
+            "✅  Acceso web y móvil",
+            "✅  Soporte por email",
+            "✅  Sincronización automática",
+            "❌  Sin soporte prioritario",
 
-        // Obtener plan seleccionado
-        let planSeleccionado = 'basico'; // Default
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('plan')) {
-            planSeleccionado = urlParams.get('plan').toLowerCase();
-        }
+          ],
+        },
+        pro: {
+          nombre: "Plan Pro",
+          precio: "$12.00",
+          cantidad: 10,
+          beneficios: [
+            "✅  10 proyectos",
+            "✅  Todas las características básicas",
+            "✅  Soporte prioritario 24/7",
 
-        // Llenar información del plan
-        function cargarInformacionPlan() {
-            const plan = planesData[planSeleccionado] || planesData.basico;
-            
-            document.getElementById('resumenPlan').innerHTML = `
+          ],
+        },
+        empresarial: {
+          nombre: "Plan Empresarial",
+          precio: "$49.99",
+          cantidad: 20,
+          beneficios: [
+            "✅  Almacenamiento ilimitado",
+            "✅  Todas las características Pro",
+            "✅  Administración de usuarios",
+            "✅  Gerente de cuenta dedicado",
+          ],
+        },
+      };
+
+      // Obtener plan seleccionado
+      let planSeleccionado = "basico"; // Default
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("plan")) {
+        planSeleccionado = urlParams.get("plan").toLowerCase();
+      }
+
+      // Llenar información del plan
+      function cargarInformacionPlan() {
+        const plan = planesData[planSeleccionado] || planesData.basico;
+
+        document.getElementById("resumenPlan").innerHTML = `
                 <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
                     <div>
                         <h3 class="font-bold text-text-title">${plan.nombre}</h3>
@@ -268,69 +407,87 @@
                     <div class="text-xl font-bold text-primary">${plan.precio}/mes</div>
                 </div>
             `;
-            
-            document.getElementById('precioTotal').textContent = `${plan.precio}/mes`;
-            
-            const beneficiosHTML = plan.beneficios.map(beneficio => 
-                `<li class="flex items-center text-sm text-gray-700">
+
+        document.getElementById(
+          "precioTotal"
+        ).textContent = `${plan.precio}/mes`;
+
+        const beneficiosHTML = plan.beneficios
+          .map(
+            (beneficio) =>
+              `<li class="flex items-center text-sm text-gray-700">
                     <span class="mr-2">${beneficio.substring(0, 2)}</span>
                     <span>${beneficio.substring(3)}</span>
                 </li>`
-            ).join('');
-            
-            document.getElementById('beneficiosPlan').innerHTML = beneficiosHTML;
-        }
+          )
+          .join("");
 
-        // Formatear número de tarjeta
-        document.getElementById('numeroTarjeta').addEventListener('input', function(e) {
-            let valor = e.target.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
-            let valorFormateado = valor.match(/.{1,4}/g)?.join(' ') || valor;
-            if (valorFormateado !== valor) {
-                e.target.value = valorFormateado;
-            }
+        document.getElementById("beneficiosPlan").innerHTML = beneficiosHTML;
+      }
+// Event listener para cambio de plan
+document.getElementById('selectorPlan').addEventListener('change', function(e) {
+    planSeleccionado = e.target.value;
+    cargarInformacionPlan();
+});
+      // Formatear número de tarjeta
+      document
+        .getElementById("numeroTarjeta")
+        .addEventListener("input", function (e) {
+          let valor = e.target.value.replace(/\s/g, "").replace(/[^0-9]/gi, "");
+          let valorFormateado = valor.match(/.{1,4}/g)?.join(" ") || valor;
+          if (valorFormateado !== valor) {
+            e.target.value = valorFormateado;
+          }
         });
 
-        // Formatear fecha de vencimiento
-        document.getElementById('fechaVencimiento').addEventListener('input', function(e) {
-            let valor = e.target.value.replace(/\D/g, '');
-            if (valor.length >= 2) {
-                valor = valor.substring(0, 2) + '/' + valor.substring(2, 4);
-            }
-            e.target.value = valor;
+      // Formatear fecha de vencimiento
+      document
+        .getElementById("fechaVencimiento")
+        .addEventListener("input", function (e) {
+          let valor = e.target.value.replace(/\D/g, "");
+          if (valor.length >= 2) {
+            valor = valor.substring(0, 2) + "/" + valor.substring(2, 4);
+          }
+          e.target.value = valor;
         });
 
-        // Formatear CVV
-        document.getElementById('cvv').addEventListener('input', function(e) {
-            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+      // Formatear CVV
+      document.getElementById("cvv").addEventListener("input", function (e) {
+        e.target.value = e.target.value.replace(/[^0-9]/g, "");
+      });
+
+      // Manejar envío del formulario
+      document
+        .getElementById("formularioPago")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // Simular procesamiento
+          const boton = document.getElementById("textoBoton");
+          boton.textContent = "Procesando...";
+
+          setTimeout(() => {
+            // Actualizar plan del usuario (simulado)
+            // En un sistema real, aquí harías la llamada al backend
+
+            // Mostrar modal de confirmación
+            document
+              .getElementById("modalConfirmacion")
+              .classList.remove("hidden");
+            document.getElementById("modalConfirmacion").classList.add("flex");
+          }, 2000);
         });
 
-        // Manejar envío del formulario
-        document.getElementById('formularioPago').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Simular procesamiento
-            const boton = document.getElementById('textoBoton');
-            boton.textContent = 'Procesando...';
-            
-            setTimeout(() => {
-                // Actualizar plan del usuario (simulado)
-                // En un sistema real, aquí harías la llamada al backend
-                
-                // Mostrar modal de confirmación
-                document.getElementById('modalConfirmacion').classList.remove('hidden');
-                document.getElementById('modalConfirmacion').classList.add('flex');
-            }, 2000);
-        });
+      // Redirigir a gestión
+      function redirigirGestion() {
+        window.location.href = "GestionArchivos.html";
+      }
 
-        // Redirigir a gestión
-        function redirigirGestion() {
-            window.location.href = 'GestionArchivos.html';
-        }
-
-        // Cargar información al iniciar
-        document.addEventListener('DOMContentLoaded', function() {
-            cargarInformacionPlan();
-        });
+      // Cargar información al iniciar
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById('selectorPlan').value = planSeleccionado;
+        cargarInformacionPlan();
+      });
     </script>
-</body>
+  </body>
 </html>
