@@ -1,32 +1,32 @@
 <!-- GestionArchivos.html -->
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" style="height: 100%;">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Gestión de Archivos</title>
   <link rel="stylesheet" href="../css/gestionArchivos.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-
+    <link
+      rel="shortcut icon"
+      href="/frontend/img/Logo.svg"
+      type="image/x-icon"
+    />
 </head>
 <body>
-  <!-- Overlay para cerrar sidebar en móvil -->
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
-  <!-- Navbar superior -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
   <nav class="navbar">
+    <button class="hamburguesa" id="btnHamburguesa" aria-label="Abrir menú">☰</button>
     <a href="GestionArchivos.html" class="navbar-logo">
       <img src="../img/logo.svg" alt="Logo" class="logo-svg" />
-      <p  class="hidden md:block">Cloudler</p>
+      <p>Cloudler</p>
     </a>
     <input type="text" class="navbar-search" placeholder="Buscar..." />
-    <button class="hamburguesa" id="btnHamburguesa" aria-label="Abrir menú">&#9776;</button>
-    <div class="navbar-profile hidden md:block"    onclick=" window.location.href = 'perfil.html';">👤</div>
+    <div class="navbar-profile" onclick="window.location.href = 'perfil.html';">👤</div>
   </nav>
   
-  <!-- Contenedor principal -->
   <div class="container">
-    <!-- Sidebar -->
-    <aside class="sidebar hidden md:block">
+    <aside class="sidebar">
       <button id="crearBtn">+ Crear</button>
 
       <ul class="menu-lateral">
@@ -37,22 +37,22 @@
         <li>🗑️ Borrar</li>
         <li>🔒 Cerrar sesión</li>
       </ul>
-            <div class="almacenamiento m-0">
+      <div class="almacenamiento">
         <p>Almacenamiento</p>
         <div class="barra">
           <div class="usado" style="width: 60%;">3GB / 5GB</div>
         </div>
-        <button class="expandir">Aumentar almacenamiento</button>
+        <button class="expandir" onclick="window.location.href='planes.html'">Aumentar almacenamiento</button>
       </div>
     </aside>
-    <!-- Contenido principal -->
-    <main class="contenido ">
+    
+    <main class="contenido">
       <header class="header">
         <div id="breadcrumb">
           <button id="btnAtras" style="display: none;">⬅️ Atrás</button>
           Menú principal
         </div>
-        <div class="header-actions">
+        <div class="acciones-header">
           <select name="ordenarPor" id="ordenarPor">
             <option value="nombre-asc">Nombre A-Z</option>
             <option value="nombre-desc">Nombre Z-A</option>
@@ -63,9 +63,9 @@
           </select>
         </div>
       </header>
-      <!-- Modal para crear archivo o carpeta -->
+      
       <div id="modalCrear" class="modal"></div>
-      <!-- Tabla de archivos -->
+      
       <section class="tabla">
         <table>
           <thead>
@@ -79,7 +79,7 @@
           </thead>
           <tbody id="archivoTabla">
             <tr>
-              <td colspan="5" style="text-align:center; padding: 20px;" id="mensajeVacio">
+              <td colspan="5" style="text-align:center; padding: 20px;">
                 No hay archivos creados.
               </td>
             </tr>
@@ -88,35 +88,7 @@
       </section>
     </main>
   </div>
-  <script src="../js/gestionArchivos.js"></script>
-      <!-- <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const movil = document.querySelector('.movil');
-            const navLinks = document.querySelector('.nav-links');
-
-            movil.addEventListener('click', function () {
-                navLinks.classList.toggle('active');
-                movil.innerHTML = navLinks.classList.contains('active') ? '✕' : '☰';
-            });
-
-            function checkScreenSize() {
-                if (window.innerWidth <= 768) {
-
-                    movil.style.display = 'block';
-                    navLinks.classList.remove('active');
-                    movil.innerHTML = '☰';
-                      document.querySelector('.logo').style.display = "none";
-
-                } else {
-                    movil.style.display = 'none';
-                    navLinks.classList.add('active');
-                }
-            }
-
-            window.addEventListener('resize', checkScreenSize);
-            checkScreenSize();
-        });
-    </script> -->
+  <script src="/frontend/js/gestionArchivos.js"></script>
 </body>
 </html>
 

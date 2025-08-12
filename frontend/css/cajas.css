@@ -1,4 +1,3 @@
-/* styles.css */
 * {
   margin: 0;
   padding: 0;
@@ -14,7 +13,7 @@ body {
   color: white;
 }
 
-.navbar {
+.barra-superior {
   background-color: #093434;
   padding: 10px 20px;
   display: flex;
@@ -22,7 +21,7 @@ body {
   align-items: center;
 }
 
-.logo {
+.logo-editor {
   font-size: 1.5rem;
   font-weight: bold;
   display: flex;
@@ -30,12 +29,12 @@ body {
   gap: 10px;
 }
 
-.actions {
+.botones-acciones {
   display: flex;
   gap: 10px;
 }
 
-.actions button {
+.botones-acciones button {
   background-color: #155e5e;
   color: white;
   border: none;
@@ -45,20 +44,27 @@ body {
   font-weight: bold;
 }
 
-.editor-container {
+#contenedor-principal {
   flex: 1;
   display: flex;
   height: 100%;
   overflow: hidden;
 }
 
-.preview-panel {
+.panel-vista {
   flex: 2;
   background-color: white;
   border-right: 2px solid #222;
+  display: flex;
 }
 
-.code-panel {
+.panel-vista iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.panel-codigo {
   flex: 1;
   background-color: #1e1e1e;
   display: flex;
@@ -67,7 +73,7 @@ body {
   gap: 5px;
 }
 
-.editor {
+.editor-caja {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -76,36 +82,54 @@ body {
   overflow: hidden;
 }
 
-.editor-header {
+.encabezado-editor {
   padding: 5px 10px;
   font-weight: bold;
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #ffffff;
-}
-
-.editor-header.html { background-color: #e44d26; }
-.editor-header.css { background-color: #2965f1; }
-.editor-header.js { background-color: #f0db4f; color: #000; }
-
-textarea {
-  flex: 1;
-  resize: none;
-  background-color: #1e1e1e;
   color: white;
-  padding: 10px;
-  font-family: monospace;
-  border: none;
-  outline: none;
-  font-size: 14px;
 }
 
+.encabezado-editor.html {
+   background-color: #e44d26; 
+  }
+.encabezado-editor.css { 
+  background-color: #2965f1; 
+}
+.encabezado-editor.js { 
+  background-color: #f0db4f; color: #000; 
+}
 
-.editor-box {
+.area-editor {
   flex: 1;
   height: 100%;
   width: 100%;
   font-family: monospace;
-  border: none;
+}
+
+.vista-horizontal {
+  flex-direction: row;
+}
+
+.vista-horizontal-inversa {
+  flex-direction: row-reverse;
+}
+
+.vista-vertical {
+  flex-direction: column;
+}
+
+.vista-vertical-inversa {
+  flex-direction: column-reverse;
+}
+
+.vista-vertical .panel-vista,
+.vista-vertical-inversa .panel-vista {
+  flex: 1;
+}
+
+.vista-vertical .panel-codigo,
+.vista-vertical-inversa .panel-codigo {
+  flex: 1;
 }
