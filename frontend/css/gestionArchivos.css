@@ -34,6 +34,14 @@ body {
   transition: transform 0.3s ease;
 }
 
+#btnAtras{
+  color: #004d4d;
+  background-color: #c8c3cc;
+    width: 100px;
+    height: 50px;
+    border-radius: 100%;
+}
+
 .sidebar button {
   background-color: #006666;
   color: white;
