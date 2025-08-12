@@ -1,84 +1,67 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CodeCloud</title>
-  <link rel="stylesheet" href="/frontend/css/cajas.css" />
-   <script src="https://kit.fontawesome.com/23380610bd.js" crossorigin="anonymous"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cloudler Editor</title>
+  <link rel="stylesheet" href="/frontend/css/cajas.css">
+      <link
+      rel="shortcut icon"
+      href="/frontend/img/Logo.svg"
+      type="image/x-icon"
+    />
+  <script src="https://kit.fontawesome.com/23380610bd.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <header class="navbar">
-    <div class="logo">
-      <i class="fa-solid fa-cloud"></i> Cloudler
-    </div>
-    <div class="actions">
-      <button class="grid-btn"><i class="fa-solid fa-table-cells"></i></button>
-      <button class="save-btn"><i class="fa-solid fa-cloud-arrow-up"></i> Guardar</button>
+  <header class="barra-superior">
+      <img src="../img/logo.svg" alt="Logo" class="logo-svg" /> 
+          <div class="botones-acciones">
+      <button id="btn-cambiar-vista" title="Cambiar diseño">
+        <i class="fa-solid fa-table-cells"></i>
+      </button>
+
+      <button id="btn-guardar" title="Guardar">
+        <i class="fa-solid fa-cloud-arrow-up"></i> Guardar
+      </button>
+
+        <button onclick="window.location.href='/frontend/html/GestionArchivos.html'">
+        <i class="fa-solid fa-less-than"></i>
+      </button>
     </div>
   </header>
 
-  <main class="editor-container">
-    <section class="preview-panel" id="preview"></section>
+  <main id="contenedor-principal" class="vista-horizontal">
+    
+    <section id="panel-vista-previa" class="panel-vista">
+      <iframe id="iframe-previo" title="Vista previa"></iframe>
+    </section>
 
-    <section class="code-panel">
-      <div class="editor">
-        <div class="editor-header html"><i class="fa-brands fa-html5"></i> HTML</div>
-        <div id="html-editor" class="editor-box" spellcheck="false"></div>
+    <section id="panel-editores" class="panel-codigo">
+      <div class="editor-caja">
+        <div class="encabezado-editor html">
+          <i class="fa-brands fa-html5"></i> HTML
+        </div>
+        <div id="editor-html" class="area-editor"></div>
       </div>
 
-      <div class="editor">
-        <div class="editor-header css"><i class="fa-brands fa-css3-alt"></i> CSS</div>
-        <div id="css-editor" class="editor-box" spellcheck="false"></div>
+      <div class="editor-caja">
+        <div class="encabezado-editor css">
+          <i class="fa-brands fa-css3-alt"></i> CSS
+        </div>
+        <div id="editor-css" class="area-editor"></div>
       </div>
 
-      <div class="editor">
-        <div class="editor-header js"><i class="fa-brands fa-js"></i> JS</div>
-        <div id="js-editor" class="editor-box" spellcheck="false"></div>
+      <div class="editor-caja">
+        <div class="encabezado-editor js">
+          <i class="fa-brands fa-js"></i> JS
+        </div>
+        <div id="editor-js" class="area-editor"></div>
       </div>
     </section>
   </main>
 
-
-
-
-
-  
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.31.1/ace.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.31.1/ext-language_tools.min.js"></script>
-<script>
-
- 
-  const htmlEditor = ace.edit("html-editor", {
-    mode: "ace/mode/html",
-    theme: "ace/theme/monokai",
-    selectionStyle: "text",
-    fontSize: "14px",
-    enableBasicAutocompletion: true,
-    enableSnippets: true,
-    enableLiveAutocompletion: true
-  });
-
-  const cssEditor = ace.edit("css-editor", {
-    mode: "ace/mode/css",
-    theme: "ace/theme/monokai",
-    fontSize: "14px",
-    enableBasicAutocompletion: true,
-    enableSnippets: true,
-    enableLiveAutocompletion: true
-  });
-
-  const jsEditor = ace.edit("js-editor", {
-    mode: "ace/mode/javascript",
-    theme: "ace/theme/monokai",
-    fontSize: "14px",
-    enableBasicAutocompletion: true,
-    enableSnippets: true,
-    enableLiveAutocompletion: true
-  });
-</script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.31.1/ace.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.31.1/ext-language_tools.min.js"></script>
+  <script src="/frontend/js/cajas.js"></script>
 </body>
 </html>

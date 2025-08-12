@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="modal-content">
         <h3>¿Qué deseas crear?</h3>
         <button class="modal-btn" id="btnNuevaCarpeta">📁 Nueva Carpeta</button>
-        <button class="modal-btn" id="btnNuevoArchivo">📄 Nuevo Archivo</button>
+        <button class="modal-btn" id="btnNuevoArchivo">📄 Nuevo Archivo</button><br>
         <button class="modal-cerrar" id="btnCancelarCrear">Cancelar</button>
       </div>
     `;
@@ -147,11 +147,22 @@ document.addEventListener("DOMContentLoaded", function () {
         </td>
       `;
       
-      fila.querySelector(".nombre-click").addEventListener("click", () => {
+      const nombreElemento = fila.querySelector(".nombre-click");
+
+      nombreElemento.addEventListener("touchend", (e) => {
+        e.preventDefault();
         if (item.tipo === "carpeta") {
           abrirElemento(item.nombre);
         } else {
-          mostrarModalInfo(`Vista previa de archivo: <b>${item.nombre}</b>`);
+          window.location.href = 'cajas.html';
+        }
+      });
+
+      nombreElemento.addEventListener("dblclick", () => {
+        if (item.tipo === "carpeta") {
+          abrirElemento(item.nombre);
+        } else {
+          window.location.href = 'cajas.html';
         }
       });
       archivoTabla.appendChild(fila);
@@ -165,6 +176,14 @@ document.addEventListener("DOMContentLoaded", function () {
       </button>
       <span class="breadcrumb-text">${ubicacionActual === 'root' ? 'Menú principal' : 'Carpeta: ' + ubicacionActual}</span>
     `;
+    const btnAtras = document.getElementById('btnAtras');
+    if (btnAtras) {
+      btnAtras.addEventListener('click', () => {
+        ubicacionActual = historial.pop() || "root";
+        renderizarBreadcrumb();
+        renderizarCarpeta(ubicacionActual);
+      });
+    }
   }
 
   function ordenarElementos(elementos) {
@@ -201,14 +220,9 @@ document.addEventListener("DOMContentLoaded", function () {
     return arr;
   }
 
-  document.body.addEventListener("click", function (e) {
-    if (e.target.id === "btnAtras" || e.target.closest("#btnAtras")) {
-      ubicacionActual = historial.pop() || "root";
-      renderizarBreadcrumb();
-      renderizarCarpeta(ubicacionActual);
-      return;
-    }
-
+  // *** ESTA ES LA PARTE QUE FALTABA ***
+  // Event listener para manejar los clicks en los menús de opciones
+  document.addEventListener("click", function (e) {
     if (e.target.classList.contains("btn-opciones")) {
       toggleMenu(e.target);
       e.stopPropagation();

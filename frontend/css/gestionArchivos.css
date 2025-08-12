@@ -185,7 +185,7 @@ body {
   gap: 10px;
 }
 
-.header-actions {
+.acciones-header {
   display: flex;
   gap: 10px;
 }
@@ -198,9 +198,7 @@ body {
   min-width: 140px;
 }
 
-.tabla {
-  overflow-x: auto;
-}
+
 
 .tabla table {
   width: 100%;
@@ -449,7 +447,8 @@ body {
     align-items: stretch;
   }
   
-  .header-actions {
+  .acciones-header {
+    margin-top: 20px;
     justify-content: center;
   }
   
