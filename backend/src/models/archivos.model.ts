@@ -19,7 +19,7 @@ import mongoose, { Document, Schema, Types } from 'mongoose';
   compartido: IPermisoCompartido[];
 }
 export interface IPermisoCompartido {
-  usuario: Types.ObjectId;
+  usuario: Number;
   permisos: 'lectura' | 'escritura';
 }
 // Esquema de MongoDB
@@ -99,7 +99,7 @@ const folderSchema: Schema = new Schema({
   
   compartido: [{
     usuario: {
-      type: Schema.Types.ObjectId,
+      type: Number,
       ref: 'Usuario',
       required: true
     },

@@ -59,13 +59,17 @@ const eliminarArchivo = (req, res) => __awaiter(void 0, void 0, void 0, function
     res.json({ mensaje: "Archivo eliminado" });
 });
 exports.eliminarArchivo = eliminarArchivo;
-// Compartir archivo con otro usuario
 const compartirArchivo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { usuario, permisos } = req.body;
     const archivo = yield archivos_model_1.default.findById(req.params.id);
     if (!archivo) {
         return res.status(404).json({ mensaje: "Archivo no encontrado" });
     }
-    archivo.compartido.push(req.body); // { usuario, permisos }
+    if (!usuario || !permisos) {
+        return res.status(400).json({ mensaje: "Falta usuario o permisos" });
+    }
+    // Convertir a número por si viene como string
+    archivo.compartido.push({ usuario: Number(usuario), permisos });
     yield archivo.save();
     res.json(archivo);
 });

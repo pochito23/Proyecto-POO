@@ -47,17 +47,26 @@ export const eliminarArchivo = async (req: Request, res: Response) => {
 };
 
 
-// Compartir archivo con otro usuario
+
+
 export const compartirArchivo = async (req: Request, res: Response) => {
+  const { usuario, permisos } = req.body;
   const archivo = await Archivo.findById(req.params.id);
-  if (!archivo){
-     return res.status(404).json({ mensaje: "Archivo no encontrado" });
+  
+  if (!archivo) {
+    return res.status(404).json({ mensaje: "Archivo no encontrado" });
   }
-  archivo.compartido.push(req.body); // { usuario, permisos }
+
+  if (!usuario || !permisos) {
+    return res.status(400).json({ mensaje: "Falta usuario o permisos" });
+  }
+
+  // Convertir a número por si viene como string
+  archivo.compartido.push({ usuario: Number(usuario), permisos });
   await archivo.save();
+
   res.json(archivo);
 };
-
 // Obtener archivos compartidos conmigo
 export const obtenerCompartidosConmigo = async (req: Request, res: Response) => {
   const numeroUsuario = parseInt(req.params.numeroUsuario);

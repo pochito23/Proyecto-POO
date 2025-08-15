@@ -108,7 +108,7 @@ const folderSchema = new mongoose_1.Schema({
     },
     compartido: [{
             usuario: {
-                type: mongoose_1.Schema.Types.ObjectId,
+                type: Number,
                 ref: 'Usuario',
                 required: true
             },
