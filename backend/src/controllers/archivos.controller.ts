@@ -1,35 +1,45 @@
 import { Request, Response } from "express";
+import mongoose, {Types} from "mongoose";
+import { ToObjectOptions } from "mongoose";
 import Archivo from "../models/archivos.model";
 
 // Obtener carpetas raíz del usuario
 export const obtenerCarpetasRaiz = async (req: Request, res: Response) => {
   const propietario = parseInt(req.params.numeroUsuario);
-  const carpetas = await Archivo.find({ propietario, carpetaPadre: null, tipo: 'carpeta' });
-  res.json(carpetas);
+  const elemtosRaiz = await Archivo.find({ propietario, carpetaPadre: null});
+  res.json(elemtosRaiz);
 };
 
-// Obtener contenido de una carpeta específica
+//obtener contenido de una carpeta específica
 export const obtenerContenidoCarpeta = async (req: Request, res: Response) => {
   const propietario = parseInt(req.params.numeroUsuario);
-  const carpetaPadre = req.params.id;
-  const contenido = await Archivo.find({ propietario, carpetaPadre });
+  let carpetaPadreId: Types.ObjectId | null = null;
+
+  if (req.params.id && req.params.id !== 'null') {
+    if (!Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ mensaje: "Id de carpeta inválido" });
+    }
+    carpetaPadreId = new Types.ObjectId(req.params.id);
+  }
+
+  const contenido = await Archivo.find({ propietario, carpetaPadre: carpetaPadreId });
   res.json(contenido);
 };
 
+
 // Crear nueva carpeta/proyecto/snippet
 export const crearArchivo = async (req: Request, res: Response) => {
-  try {
+
     const nuevoArchivo = new Archivo(req.body);
     await nuevoArchivo.save();
     res.status(201).json(nuevoArchivo);
-  } catch (error) {
-    res.status(400).json({ error: 'error' });
-  }
+
+
 };
 
 // Actualizar carpeta/código
 export const actualizarArchivo = async (req: Request, res: Response) => {
-  try {
+
     const archivoActualizado = await Archivo.findByIdAndUpdate(
       req.params.id,
       req.body,
@@ -39,9 +49,7 @@ export const actualizarArchivo = async (req: Request, res: Response) => {
       return res.status(404).json({ mensaje: "Archivo no encontrado" });
     }
     res.json(archivoActualizado);
-  } catch (error) {
-    res.status(400).json({ error: 'error' });
-  }
+
 };
 
 // Eliminar carpeta/archivo

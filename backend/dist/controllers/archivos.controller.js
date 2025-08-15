@@ -13,46 +13,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.obtenerCompartidosConmigo = exports.compartirArchivo = exports.moverArchivo = exports.eliminarArchivo = exports.actualizarArchivo = exports.crearArchivo = exports.obtenerContenidoCarpeta = exports.obtenerCarpetasRaiz = void 0;
+const mongoose_1 = require("mongoose");
 const archivos_model_1 = __importDefault(require("../models/archivos.model"));
 // Obtener carpetas raíz del usuario
 const obtenerCarpetasRaiz = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const propietario = parseInt(req.params.numeroUsuario);
-    const carpetas = yield archivos_model_1.default.find({ propietario, carpetaPadre: null, tipo: 'carpeta' });
-    res.json(carpetas);
+    const elemtosRaiz = yield archivos_model_1.default.find({ propietario, carpetaPadre: null });
+    res.json(elemtosRaiz);
 });
 exports.obtenerCarpetasRaiz = obtenerCarpetasRaiz;
-// Obtener contenido de una carpeta específica
+//obtener contenido de una carpeta específica
 const obtenerContenidoCarpeta = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const propietario = parseInt(req.params.numeroUsuario);
-    const carpetaPadre = req.params.id;
-    const contenido = yield archivos_model_1.default.find({ propietario, carpetaPadre });
+    let carpetaPadreId = null;
+    if (req.params.id && req.params.id !== 'null') {
+        if (!mongoose_1.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({ mensaje: "Id de carpeta inválido" });
+        }
+        carpetaPadreId = new mongoose_1.Types.ObjectId(req.params.id);
+    }
+    const contenido = yield archivos_model_1.default.find({ propietario, carpetaPadre: carpetaPadreId });
     res.json(contenido);
 });
 exports.obtenerContenidoCarpeta = obtenerContenidoCarpeta;
 // Crear nueva carpeta/proyecto/snippet
 const crearArchivo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const nuevoArchivo = new archivos_model_1.default(req.body);
-        yield nuevoArchivo.save();
-        res.status(201).json(nuevoArchivo);
-    }
-    catch (error) {
-        res.status(400).json({ error: 'error' });
-    }
+    const nuevoArchivo = new archivos_model_1.default(req.body);
+    yield nuevoArchivo.save();
+    res.status(201).json(nuevoArchivo);
 });
 exports.crearArchivo = crearArchivo;
 // Actualizar carpeta/código
 const actualizarArchivo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const archivoActualizado = yield archivos_model_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (!archivoActualizado) {
-            return res.status(404).json({ mensaje: "Archivo no encontrado" });
-        }
-        res.json(archivoActualizado);
+    const archivoActualizado = yield archivos_model_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!archivoActualizado) {
+        return res.status(404).json({ mensaje: "Archivo no encontrado" });
     }
-    catch (error) {
-        res.status(400).json({ error: 'error' });
-    }
+    res.json(archivoActualizado);
 });
 exports.actualizarArchivo = actualizarArchivo;
 // Eliminar carpeta/archivo
