@@ -5,7 +5,6 @@ import {
   crearArchivo,
   actualizarArchivo,
   eliminarArchivo,
-  moverArchivo,
   compartirArchivo,
   obtenerCompartidosConmigo
 } from '../controllers/archivos.controller';
@@ -26,9 +25,6 @@ router.put('/actualizar/:id', actualizarArchivo);
 
 // Eliminar carpeta/archivo
 router.delete('/eliminar/:id', eliminarArchivo);
-
-// Mover a otra carpeta
-router.put('/mover/:id', moverArchivo);
 
 // Compartir con otro usuario
 router.post('/compartir/:id', compartirArchivo);
