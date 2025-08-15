@@ -5,6 +5,7 @@ export interface Usuario {
     usuario: string,
     plan: string,
     verificar: Array<Pregunta>,
+    
 }
 
 export interface Pregunta {
