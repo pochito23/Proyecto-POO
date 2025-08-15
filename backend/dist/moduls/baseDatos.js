@@ -11,23 +11,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.conectarDb = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
-const servidor = "localhost:27017";
-const nombreBaseDatos = "netflix";
-class Database {
-    constructor() {
-        this.conectar();
+const conectarDb = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield mongoose_1.default.connect("mongodb://localhost:27017/Clouder");
+        console.log('Conectado a base de datos');
     }
-    conectar() {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield mongoose_1.default.connect(`mongodb://${servidor}/${nombreBaseDatos}`);
-                console.log("Se conectó a la base de datos");
-            }
-            catch (error) {
-                console.error(JSON.stringify(error));
-            }
-        });
+    catch (error) {
+        console.error(error);
     }
-}
-module.exports = new Database();
+});
+exports.conectarDb = conectarDb;

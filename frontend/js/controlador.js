@@ -45,7 +45,7 @@ var usuarios = [
     respuesta: "uruguay",
   },
 ];
-
+//landing
 // Menú móvil
 const vistaMovil = document.getElementById("vista-movil");
 const Menu = document.getElementById("menu");
@@ -56,11 +56,7 @@ if (vistaMovil && Menu) {
   });
 }
 
-// Función del botón principal
-function comenzar() {
-  alert("¡Bienvenido a Clouder! Funcionalidad próximamente...");
-  // Aquí puedes redirigir a otra página o abrir un modal
-}
+
 
 // Cerrar menú móvil al hacer click en un enlace
 const Links = document.querySelectorAll("#menu a");
@@ -72,7 +68,7 @@ Links.forEach((link) => {
 
 //==============Codigo del registro, inicio de sesion de cuenta y recuperar contraseña ============================
 //============================ Recuperar password (no se me ocurrieron mejores nombres jsjs)============================
-
+//login,registro,recuperar clave
 function recuperarClave(e) {
   e.preventDefault();
 
@@ -87,10 +83,10 @@ function recuperarClave(e) {
     alert("❌ Email no encontrado");
     return;
   }
-  const label = document.querySelector("div.login-logo p i");
+  const loginlog = document.querySelector("div.login-logo p i");
   const content = document.querySelector(".form-group");
 
-  label.innerHTML = `Responde la siguiente pregunta de seguridad para recuperar tu cuenta`;
+  loginlog.innerHTML = `Responde la siguiente pregunta de seguridad para recuperar tu cuenta`;
   content.innerHTML = `
         <div class="form-group">
             <label for="respuestaSeguridad">${usuarioEncontrado.pregunta}</label>
@@ -232,11 +228,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-
-
-
-
 function validarLogin(e) {
   e.preventDefault();
 
@@ -253,6 +244,8 @@ function validarLogin(e) {
     alert('❌ Credenciales incorrectas');
   }
 }
+
+//============================ Planes y suscripciones ============================
 
    // Datos de los planes
       const planesData = {
@@ -305,10 +298,10 @@ function validarLogin(e) {
       };
 
       // Obtener plan seleccionado
-      let planSeleccionado = "basico"; // Default
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get("plan")) {
-        planSeleccionado = urlParams.get("plan").toLowerCase();
+      let planSeleccionado = "gratis";
+      const urlParametro = new URLSearchParams(window.location.search);
+      if (urlParametro.get("plan")) {
+        planSeleccionado = urlParametro.get("plan").toLowerCase();
       }
 
       // Llenar información del plan
@@ -341,12 +334,10 @@ function validarLogin(e) {
 
         document.getElementById("beneficiosPlan").innerHTML = beneficiosHTML;
       }
-// Event listener para cambio de plan
 document.getElementById('selectorPlan').addEventListener('change', function(e) {
     planSeleccionado = e.target.value;
     cargarInformacionPlan();
 });
-      // Formatear número de tarjeta
       document
         .getElementById("numeroTarjeta")
         .addEventListener("input", function (e) {
@@ -357,7 +348,6 @@ document.getElementById('selectorPlan').addEventListener('change', function(e) {
           }
         });
 
-      // Formatear fecha de vencimiento
       document
         .getElementById("fechaVencimiento")
         .addEventListener("input", function (e) {
@@ -368,26 +358,20 @@ document.getElementById('selectorPlan').addEventListener('change', function(e) {
           e.target.value = valor;
         });
 
-      // Formatear CVV
       document.getElementById("cvv").addEventListener("input", function (e) {
         e.target.value = e.target.value.replace(/[^0-9]/g, "");
       });
 
-      // Manejar envío del formulario
       document
         .getElementById("formularioPago")
         .addEventListener("submit", function (e) {
           e.preventDefault();
 
-          // Simular procesamiento
           const boton = document.getElementById("textoBoton");
           boton.textContent = "Procesando...";
 
           setTimeout(() => {
-            // Actualizar plan del usuario (simulado)
             // En un sistema real, aquí harías la llamada al backend
-
-            // Mostrar modal de confirmación
             document
               .getElementById("modalConfirmacion")
               .classList.remove("hidden");
