@@ -1,21 +1,12 @@
 import mongoose from 'mongoose';
 
-const servidor: string = "localhost:27017";
-const nombreBaseDatos: string = "netflix";
-
-class Database {
-    constructor() {
-        this.conectar();
-    }
-
-    async conectar(): Promise<void> {
-        try {
-            await mongoose.connect(`mongodb://${servidor}/${nombreBaseDatos}`);
-            console.log("Se conectó a la base de datos");
-        } catch (error: unknown) {
-            console.error(JSON.stringify(error));
-        }
+export const conectarDb = async () =>{
+    try {
+        await mongoose.connect("mongodb://localhost:27017/Clouder");
+        console.log('Conectado a base de datos');
+    } catch (error) {
+        console.error(error)
     }
 }
 
-export = new Database();
+    
