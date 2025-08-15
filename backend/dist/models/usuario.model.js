@@ -91,10 +91,6 @@ const usuarioSchema = new mongoose_1.Schema({
         type: String,
         required: [true, 'La respuesta de seguridad es requerida'],
         trim: true
-    },
-    fechaCreacion: {
-        type: Date,
-        default: Date.now
     }
 });
 usuarioSchema.methods.limiteProyectos = function () {
@@ -108,12 +104,12 @@ usuarioSchema.methods.limiteProyectos = function () {
 };
 usuarioSchema.methods.puedeCrearProyecto = function () {
     return __awaiter(this, void 0, void 0, function* () {
-        const Folder = mongoose_1.default.model('Folder');
+        const Folder = mongoose_1.default.model('archivos');
         const proyectosActuales = yield Folder.countDocuments({
             propietario: this._id,
             tipo: 'proyecto'
         });
-        return proyectosActuales < this.LimiteProyectos();
+        return proyectosActuales < this.limiteProyectos();
     });
 };
-exports.default = mongoose_1.default.model('Usuario', usuarioSchema, 'Usuarios');
+exports.default = mongoose_1.default.model('usuarios', usuarioSchema, 'usuarios');

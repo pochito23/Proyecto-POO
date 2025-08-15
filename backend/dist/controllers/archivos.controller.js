@@ -12,21 +12,97 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerArchivosPorId = void 0;
+exports.obtenerCompartidosConmigo = exports.compartirArchivo = exports.moverArchivo = exports.eliminarArchivo = exports.actualizarArchivo = exports.crearArchivo = exports.obtenerContenidoCarpeta = exports.obtenerCarpetasRaiz = void 0;
 const archivos_model_1 = __importDefault(require("../models/archivos.model"));
-//endpoint para conseguir los archivos de un usuario
-const obtenerArchivosPorId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = parseInt(req.params.id);
-    const archivos = yield archivos_model_1.default.findOne({ propietario: id });
-    if (archivos) {
-        res.json({
-            html: archivos.codigoHTML,
-            css: archivos.codigoCSS,
-            JS: archivos.codigoJS
-        });
+// Obtener carpetas raíz del usuario
+const obtenerCarpetasRaiz = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const propietario = parseInt(req.params.numeroUsuario);
+    const carpetas = yield archivos_model_1.default.find({ propietario, carpetaPadre: null, tipo: 'carpeta' });
+    res.json(carpetas);
+});
+exports.obtenerCarpetasRaiz = obtenerCarpetasRaiz;
+// Obtener contenido de una carpeta específica
+const obtenerContenidoCarpeta = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const propietario = parseInt(req.params.numeroUsuario);
+    const carpetaPadre = req.params.id;
+    const contenido = yield archivos_model_1.default.find({ propietario, carpetaPadre });
+    res.json(contenido);
+});
+exports.obtenerContenidoCarpeta = obtenerContenidoCarpeta;
+// Crear nueva carpeta/proyecto/snippet
+const crearArchivo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const nuevoArchivo = new archivos_model_1.default(req.body);
+        yield nuevoArchivo.save();
+        res.status(201).json(nuevoArchivo);
     }
-    else {
-        res.json({ mensaje: 'crea un archivo' });
+    catch (error) {
+        res.status(400).json({ error: 'error' });
     }
 });
-exports.obtenerArchivosPorId = obtenerArchivosPorId;
+exports.crearArchivo = crearArchivo;
+// Actualizar carpeta/código
+const actualizarArchivo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const archivoActualizado = yield archivos_model_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!archivoActualizado) {
+            return res.status(404).json({ mensaje: "Archivo no encontrado" });
+        }
+        res.json(archivoActualizado);
+    }
+    catch (error) {
+        res.status(400).json({ error: 'error' });
+    }
+});
+exports.actualizarArchivo = actualizarArchivo;
+// Eliminar carpeta/archivo
+const eliminarArchivo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const archivoEliminado = yield archivos_model_1.default.findByIdAndDelete(req.params.id);
+        if (!archivoEliminado) {
+            return res.status(404).json({ mensaje: "Archivo no encontrado" });
+        }
+        res.json({ mensaje: "Archivo eliminado" });
+    }
+    catch (error) {
+        res.status(400).json({ error: 'error' });
+    }
+});
+exports.eliminarArchivo = eliminarArchivo;
+// Mover a otra carpeta
+const moverArchivo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const archivo = yield archivos_model_1.default.findById(req.params.id);
+        if (!archivo)
+            return res.status(404).json({ mensaje: "Archivo no encontrado" });
+        archivo.carpetaPadre = req.body.nuevaCarpetaPadre;
+        yield archivo.save();
+        res.json(archivo);
+    }
+    catch (error) {
+        res.status(400).json({ error: 'error' });
+    }
+});
+exports.moverArchivo = moverArchivo;
+// Compartir con otro usuario
+const compartirArchivo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const archivo = yield archivos_model_1.default.findById(req.params.id);
+        if (!archivo)
+            return res.status(404).json({ mensaje: "Archivo no encontrado" });
+        archivo.compartido.push(req.body); // { usuario, permisos }
+        yield archivo.save();
+        res.json(archivo);
+    }
+    catch (error) {
+        res.status(400).json({ error: 'error' });
+    }
+});
+exports.compartirArchivo = compartirArchivo;
+// Obtener elementos compartidos conmigo
+const obtenerCompartidosConmigo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const numeroUsuario = parseInt(req.params.numeroUsuario);
+    const compartidos = yield archivos_model_1.default.find({ 'compartido.usuario': numeroUsuario });
+    res.json(compartidos);
+});
+exports.obtenerCompartidosConmigo = obtenerCompartidosConmigo;

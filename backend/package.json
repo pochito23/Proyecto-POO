@@ -91,6 +91,7 @@
     "json-buffer": "^3.0.1",
     "json-schema-traverse": "^0.4.1",
     "json-stable-stringify-without-jsonify": "^1.0.1",
+    "jsonwebtoken": "^9.0.2",
     "kareem": "^2.6.3",
     "keyv": "^4.5.4",
     "levn": "^0.4.1",
@@ -176,6 +177,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.2.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",

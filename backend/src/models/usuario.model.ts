@@ -8,7 +8,6 @@ export interface Usuario extends Document {
     plan: 'gratis'|'estudiante'|'pro'|'empresarial',
     preguntaSeguridad: '¿Cuál es el nombre de tu mascota?'|'¿Cómo se llamaba tu escuela primaria?'|'¿Cuál es el segundo nombre de tu madre?',
     respuestaSeguridad: string,
-    fechaCreacion: Date,
     numeroUsuario: number,
 
 }
@@ -61,10 +60,6 @@ const usuarioSchema: Schema = new Schema({
     type: String,
     required: [true, 'La respuesta de seguridad es requerida'],
     trim: true
-  },
-  fechaCreacion: {
-    type: Date,
-    default: Date.now
   }
 });
 
@@ -79,13 +74,13 @@ const usuarioSchema: Schema = new Schema({
 };
 
 usuarioSchema.methods.puedeCrearProyecto = async function(): Promise<boolean> {
-  const Folder = mongoose.model('Folder');
+  const Folder = mongoose.model('archivos');
   const proyectosActuales = await Folder.countDocuments({
     propietario: this._id,
     tipo: 'proyecto'
   });
   
-  return proyectosActuales < this.LimiteProyectos();
+  return proyectosActuales < this.limiteProyectos();
 };
 
-export default mongoose.model<Usuario>('Usuario', usuarioSchema, 'Usuarios');
+export default mongoose.model<Usuario>('usuarios', usuarioSchema, 'usuarios');
