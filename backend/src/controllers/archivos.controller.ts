@@ -73,3 +73,36 @@ export const obtenerCompartidosConmigo = async (req: Request, res: Response) => 
   const compartidos = await Archivo.find({ 'compartido.usuario': numeroUsuario });
   res.json(compartidos);
 };
+
+
+// Obtener archivos por oID
+  export const obtenerArchivosPorID = async (req: Request, res: Response) => {
+  const archivo = Archivo.findById(req.params.id);
+  if (!archivo) {
+    return res.status(404).json({ mensaje: "Archivo no encontrado" });
+  }
+  res.json(archivo);
+};
+
+// Obtener archivos por tipo
+  export const obtenerArchivosPorTipo = async (req: Request, res: Response) => {
+  const { numeroUsuario, tipo } = req.params;
+  const archivos =  Archivo.find({ propietario: numeroUsuario, tipo });
+  res.json(archivos);
+};
+
+export const buscarArchivos = async (req: Request, res: Response) => {
+    const propietario = parseInt(req.params.numeroUsuario);
+    const { q } = req.query;
+    
+    if (!q || typeof q !== 'string') {
+      return res.status(400).json({ mensaje: "Término de búsqueda requerido" });
+    }
+
+    const archivos = await Archivo.find({
+      propietario,
+      nombre: { $regex: q, $options: 'i' }
+    }).sort({ fechaModificacion: -1 });
+    
+    res.json(archivos);
+};

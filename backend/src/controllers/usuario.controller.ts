@@ -170,6 +170,10 @@ if (!usuarioActualizado) {
 export const cambiarPlan = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const plan  = req.body.plan;
+
+    if (!req.body.plan) {
+    return res.status(400).json({ mensaje: "Plan es requerido" });
+}
     
     const planesValidos = ['gratis', 'estudiante', 'pro', 'empresarial'];
     if (!planesValidos.includes(plan)) {

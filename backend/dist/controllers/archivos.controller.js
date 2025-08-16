@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerCompartidosConmigo = exports.compartirArchivo = exports.eliminarArchivo = exports.actualizarArchivo = exports.crearArchivo = exports.obtenerContenidoCarpeta = exports.obtenerCarpetasRaiz = void 0;
+exports.buscarArchivos = exports.obtenerArchivosPorTipo = exports.obtenerArchivosPorID = exports.obtenerCompartidosConmigo = exports.compartirArchivo = exports.eliminarArchivo = exports.actualizarArchivo = exports.crearArchivo = exports.obtenerContenidoCarpeta = exports.obtenerCarpetasRaiz = void 0;
 const mongoose_1 = require("mongoose");
 const archivos_model_1 = __importDefault(require("../models/archivos.model"));
 // Obtener carpetas/proyectos/snippets raíz del usuario
@@ -81,3 +81,32 @@ const obtenerCompartidosConmigo = (req, res) => __awaiter(void 0, void 0, void 0
     res.json(compartidos);
 });
 exports.obtenerCompartidosConmigo = obtenerCompartidosConmigo;
+// Obtener archivos por oID
+const obtenerArchivosPorID = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const archivo = archivos_model_1.default.findById(req.params.id);
+    if (!archivo) {
+        return res.status(404).json({ mensaje: "Archivo no encontrado" });
+    }
+    res.json(archivo);
+});
+exports.obtenerArchivosPorID = obtenerArchivosPorID;
+// Obtener archivos por tipo
+const obtenerArchivosPorTipo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { numeroUsuario, tipo } = req.params;
+    const archivos = archivos_model_1.default.find({ propietario: numeroUsuario, tipo });
+    res.json(archivos);
+});
+exports.obtenerArchivosPorTipo = obtenerArchivosPorTipo;
+const buscarArchivos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const propietario = parseInt(req.params.numeroUsuario);
+    const { q } = req.query;
+    if (!q || typeof q !== 'string') {
+        return res.status(400).json({ mensaje: "Término de búsqueda requerido" });
+    }
+    const archivos = yield archivos_model_1.default.find({
+        propietario,
+        nombre: { $regex: q, $options: 'i' }
+    }).sort({ fechaModificacion: -1 });
+    res.json(archivos);
+});
+exports.buscarArchivos = buscarArchivos;

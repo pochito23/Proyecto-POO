@@ -172,6 +172,9 @@ exports.actualizarUsuario = actualizarUsuario;
 const cambiarPlan = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = parseInt(req.params.id);
     const plan = req.body.plan;
+    if (!req.body.plan) {
+        return res.status(400).json({ mensaje: "Plan es requerido" });
+    }
     const planesValidos = ['gratis', 'estudiante', 'pro', 'empresarial'];
     if (!planesValidos.includes(plan)) {
         return res.status(400).json({ mensaje: "Plan no válido" });
