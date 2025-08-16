@@ -305,44 +305,256 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+// async function validarLogin(e) {
+//   e.preventDefault();
+
+//   const email = document.getElementById("email").value.trim();
+//   const contraseña = document.getElementById("password").value;
+
+//   if (!email || !contraseña) {
+//     alert("❌ Debes completar todos los campos");
+//     return;
+//   }
+//   const requestOptions = {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       correo: email,
+//       contraseña: contraseña,
+//     }),
+//   };
+
+//   const usuarioEncontrado = await fetch(
+//     `${urlPostman}/usuarios/login`,
+//     requestOptions
+//   );
+//   const data = await usuarioEncontrado.json();
+//   if (usuarioEncontrado.ok) {
+//     usuarioActual = data.usuario;
+//     localStorage.setItem("usuarioClouder", JSON.stringify(data));
+//     window.location.href = "GestionArchivos.html";
+//   } else {
+//     alert("❌ Credenciales incorrectas");
+//   }
+// }
+
+//============================ Planes y suscripciones ============================
+
+// Datos de los planes
+
 async function validarLogin(e) {
   e.preventDefault();
 
   const email = document.getElementById("email").value.trim();
   const contraseña = document.getElementById("password").value;
 
+  // Validaciones básicas
   if (!email || !contraseña) {
-    alert("❌ Debes completar todos los campos");
+    alert('❌ Por favor completa todos los campos');
     return;
   }
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      correo: email,
-      contraseña: contraseña,
-    }),
-  };
 
-  const usuarioEncontrado = await fetch(
-    `${urlPostman}/usuarios/login`,
-    requestOptions
-  );
-  const data = await usuarioEncontrado.json();
-  if (usuarioEncontrado.ok) {
-    usuarioActual = data.usuario;
-    localStorage.setItem("usuarioClouder", JSON.stringify(data));
-    window.location.href = "GestionArchivos.html";
-  } else {
-    alert("❌ Credenciales incorrectas");
+  try {
+    // Hacer petición POST al backend
+    const response = await fetch('http://localhost:3000/api/usuarios/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        correo: email,
+        contraseña: contraseña
+      })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      // Login exitoso
+      alert('✅ ' + data.mensaje);
+      
+      // Guardar datos del usuario en localStorage (opcional)
+      localStorage.setItem('usuario', JSON.stringify(data.usuario));
+      
+      // Redireccionar
+      window.location.href = 'GestionArchivos.html';
+    } else {
+      // Error en el login
+      alert('❌ ' + data.mensaje);
+    }
+  } catch (error) {
+    console.error('Error al hacer login:', error);
+    alert('❌ Error de conexión con el servidor');
   }
 }
 
-//============================ Planes y suscripciones ============================
+// También actualiza tu función de registro para usar el backend:
+async function Registro(e) {
+  e.preventDefault();
 
-// Datos de los planes
+  const correo = document.getElementById("email").value;
+  const usuario = document.getElementById("usuario").value;
+  const contraseña = document.getElementById("password").value;
+  const pregunta = document.getElementById("pregunta").value;
+  const respuesta = document.getElementById("respuesta").value;
+
+  // Validar formulario primero
+  if (!validarFormulario()) {
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:3000/api/usuarios/registro', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        correo,
+        usuario,
+        contraseña,
+        preguntaSeguridad: pregunta,
+        respuestaSeguridad: respuesta
+      })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert("✅ " + data.mensaje + ". Ahora inicia sesión");
+      
+      // Limpiar formulario
+      document.getElementById("email").value = "";
+      document.getElementById("usuario").value = "";
+      document.getElementById("password").value = "";
+      document.getElementById("pregunta").value = "";
+      document.getElementById("respuesta").value = "";
+      
+      // Efecto visual en botón
+      document.getElementById("inicioSes").innerHTML = `
+        <button style="
+          font-size: 16px;
+          font-weight: bold;
+          background-color: #0d9488;
+          color: white;
+          box-shadow: 0 0 10px #0d9488;
+          padding: 10px 20px;
+          border-radius: 8px;
+          border: none;
+          cursor: pointer;
+          transition: all 0.1s ease;
+        ">
+          INICIA SESIÓN
+        </button>
+      `;
+      
+      setTimeout(() => {
+        document.getElementById("inicioSes").innerHTML = `<button>INICIA SESIÓN</button>`;
+      }, 5000);
+      
+    } else {
+      alert('❌ ' + data.mensaje || data);
+    }
+  } catch (error) {
+    console.error('Error al registrar:', error);
+    alert('❌ Error de conexión con el servidor');
+  }
+}
+
+// Función para recuperar contraseña también actualizada:
+async function recuperarClave(e) {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value.trim();
+  
+  if (!email) {
+    alert("❌ Por favor ingresa tu correo");
+    return;
+  }
+
+  try {
+    // Primera petición para obtener la pregunta de seguridad
+    const response = await fetch('http://localhost:3000/api/usuarios/recuperar', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ correo: email })
+    });
+
+    const data = await response.json();
+
+    if (response.status === 400 && data.mensaje.includes("¿")) {
+      // El servidor devolvió la pregunta de seguridad
+      mostrarPreguntaSeguridad(email, data.mensaje);
+    } else if (response.status === 404) {
+      alert("❌ Email no encontrado");
+    } else {
+      alert("❌ " + data.mensaje);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('❌ Error de conexión con el servidor');
+  }
+}
+
+function mostrarPreguntaSeguridad(email, pregunta) {
+  const loginlog = document.querySelector("div.login-logo p i");
+  const content = document.querySelector(".form-group");
+
+  loginlog.innerHTML = `Responde la siguiente pregunta de seguridad para recuperar tu cuenta`;
+  content.innerHTML = `
+    <div class="form-group">
+        <label for="respuestaSeguridad">${pregunta}</label>
+        <input type="text" id="respuestaSeguridad" placeholder="Ingresa tu respuesta">
+    </div>
+  `;
+  
+  document.querySelector(".login-button").innerHTML = "VERIFICAR RESPUESTA";
+  document.querySelector(".login-button").onclick = function () {
+    validarRespuestaSeguridad(email);
+  };
+}
+
+async function validarRespuestaSeguridad(email) {
+  const respuestaInput = document.getElementById("respuestaSeguridad").value.trim();
+  
+  if (!respuestaInput) {
+    alert("❌ Por favor ingresa tu respuesta");
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:3000/api/usuarios/recuperar', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        correo: email,
+        respuestaSeguridad: respuestaInput
+      })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert(`✅ ${data.mensaje}. Tu contraseña es: ${data.contraseña}`);
+      // Opcional: redireccionar al login
+      location.reload();
+    } else {
+      alert("❌ " + data.mensaje);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('❌ Error de conexión con el servidor');
+  }
+}
+
+
+
 const planesData = {
   gratis: {
     nombre: "Plan Gratuito",
