@@ -1,3 +1,4 @@
+/* ===== RESET Y BASE ===== */
 * {
   margin: 0;
   padding: 0;
@@ -6,130 +7,398 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #1a1a1a;
+  color: #e1e1e1;
+  overflow: hidden;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: #0e1e1e;
-  color: white;
 }
 
+/* ===== BARRA SUPERIOR ===== */
 .barra-superior {
-  background-color: #093434;
-  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+  padding: 10px 20px;
+  border-bottom: 2px solid #4a5568;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  position: relative;
 }
 
-.logo-editor {
-  font-size: 1.5rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.logo-svg {
+  height: 35px;
+  width: auto;
 }
 
 .botones-acciones {
   display: flex;
   gap: 10px;
+  align-items: center;
 }
 
 .botones-acciones button {
-  background-color: #155e5e;
+  background: #4a5568;
   color: white;
   border: none;
   padding: 8px 12px;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: bold;
-}
-
-#contenedor-principal {
-  flex: 1;
+  font-size: 14px;
+  transition: all 0.2s ease;
   display: flex;
-  height: 100%;
-  overflow: hidden;
-}
-
-.panel-vista {
-  flex: 2;
-  background-color: white;
-  border-right: 2px solid #222;
-  display: flex;
-}
-
-.panel-vista iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-.panel-codigo {
-  flex: 1;
-  background-color: #1e1e1e;
-  display: flex;
-  flex-direction: column;
-  padding: 5px;
+  align-items: center;
   gap: 5px;
 }
 
-.editor-caja {
-  flex: 1;
+.botones-acciones button:hover {
+  background: #2d3748;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.botones-acciones button:active {
+  transform: translateY(0);
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+#contenedor-principal {
   display: flex;
-  flex-direction: column;
-  background-color: #2a2a2a;
-  border-radius: 5px;
-  overflow: hidden;
+  height: calc(100vh - 60px);
+  transition: all 0.3s ease;
 }
 
-.encabezado-editor {
-  padding: 5px 10px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: white;
-}
-
-.encabezado-editor.html {
-   background-color: #e44d26; 
-  }
-.encabezado-editor.css { 
-  background-color: #2965f1; 
-}
-.encabezado-editor.js { 
-  background-color: #f0db4f; color: #000; 
-}
-
-.area-editor {
-  flex: 1;
-  height: 100%;
-  width: 100%;
-  font-family: monospace;
-}
-
+/* Vista horizontal (por defecto) */
 .vista-horizontal {
   flex-direction: row;
 }
 
-.vista-horizontal-inversa {
-  flex-direction: row-reverse;
+.vista-horizontal .panel-vista {
+  width: 50%;
 }
 
+.vista-horizontal .panel-codigo {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Vista vertical */
 .vista-vertical {
   flex-direction: column;
 }
 
-.vista-vertical-inversa {
-  flex-direction: column-reverse;
+.vista-vertical .panel-vista {
+  width: 100%;
+  height: 50%;
 }
 
-.vista-vertical .panel-vista,
-.vista-vertical-inversa .panel-vista {
-  flex: 1;
+.vista-vertical .panel-codigo {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  flex-direction: row;
 }
 
-.vista-vertical .panel-codigo,
-.vista-vertical-inversa .panel-codigo {
+/* ===== PANEL VISTA PREVIA ===== */
+.panel-vista {
+  background: #2d3748;
+  border-right: 2px solid #4a5568;
+  position: relative;
+}
+
+.vista-vertical .panel-vista {
+  border-right: none;
+  border-bottom: 2px solid #4a5568;
+}
+
+#iframe-previo {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: white;
+}
+
+/* ===== PANEL DE CÓDIGO ===== */
+.panel-codigo {
+  background: #1a1a1a;
+}
+
+.vista-horizontal .panel-codigo {
+  flex-direction: column;
+}
+
+.vista-vertical .panel-codigo {
+  flex-direction: row;
+}
+
+/* ===== EDITORES ===== */
+.editor-caja {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #4a5568;
+  background: #2d3748;
+  position: relative;
+}
+
+.vista-horizontal .editor-caja {
+  min-height: 0;
+}
+
+.vista-vertical .editor-caja {
+  min-width: 0;
+  border-right: 1px solid #4a5568;
+}
+
+.vista-vertical .editor-caja:last-child {
+  border-right: none;
+}
+
+.encabezado-editor {
+  background: #4a5568;
+  padding: 10px 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #2d3748;
+  min-height: 44px;
+}
+
+.encabezado-editor.html {
+  color: #e34c26;
+}
+
+.encabezado-editor.css {
+  color: #1572b6;
+}
+
+.encabezado-editor.js {
+  color: #f7df1e;
+}
+
+.area-editor {
+  flex: 1;
+  min-height: 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+/* ===== PANEL SNIPPET ===== */
+.panel-snippet {
+  background: #1a1a1a;
+  height: 100%;
+}
+
+.snippet-info {
+  background: #2d3748;
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 2px solid #4a5568;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.snippet-info h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.snippet-info i {
+  font-size: 24px;
+}
+
+/* ===== ESTADOS DE GUARDADO ===== */
+.guardando {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.guardado {
+  background: #10b981 !important;
+}
+
+.sin-guardar {
+  background: #ef4444 !important;
+}
+
+/* ===== NOTIFICACIONES ===== */
+.notificacion {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  max-width: 300px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.notificacion.success {
+  background: #10b981;
+}
+
+.notificacion.error {
+  background: #ef4444;
+}
+
+.notificacion.info {
+  background: #6b7280;
+}
+
+/* ===== LOADING SPINNER ===== */
+.fa-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .barra-superior {
+    padding: 8px 15px;
+  }
+  
+  .logo-svg {
+    height: 30px;
+  }
+  
+  .botones-acciones button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  
+  .botones-acciones button span {
+    display: none;
+  }
+  
+  #contenedor-principal {
+    flex-direction: column !important;
+  }
+  
+  .panel-vista {
+    width: 100% !important;
+    height: 40% !important;
+    border-right: none !important;
+    border-bottom: 2px solid #4a5568 !important;
+  }
+  
+  .panel-codigo {
+    width: 100% !important;
+    height: 60% !important;
+    flex-direction: column !important;
+  }
+  
+  .editor-caja {
+    min-width: auto !important;
+    border-right: none !important;
+    border-bottom: 1px solid #4a5568;
+  }
+  
+  .editor-caja:last-child {
+    border-bottom: none;
+  }
+  
+  .encabezado-editor {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  
+  .snippet-info {
+    padding: 12px 15px;
+  }
+  
+  .snippet-info h3 {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .barra-superior {
+    padding: 6px 10px;
+  }
+  
+  .botones-acciones {
+    gap: 5px;
+  }
+  
+  .botones-acciones button {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+  
+  .snippet-info h3 {
+    font-size: 14px;
+  }
+}
+
+/* ===== SCROLLBAR PERSONALIZADA ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2d3748;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4a5568;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #718096;
+}
+
+/* ===== ACE EDITOR OVERRIDES ===== */
+.ace_editor {
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+.ace_gutter {
+  background: #2d3748 !important;
+  color: #a0aec0 !important;
+}
+
+.ace_active-line {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.ace_cursor {
+  color: #e2e8f0 !important;
+}
+
+/* ===== ESTADOS HOVER ===== */
+.editor-caja:hover {
+  box-shadow: 0 0 10px rgba(66, 153, 225, 0.3);
+}
+
+.panel-vista:hover iframe {
+  filter: brightness(1.02);
+}
+
+/* ===== ANIMACIONES ===== */
+.editor-caja {
+  transition: all 0.2s ease;
+}
+
+.encabezado-editor {
+  transition: background-color 0.2s ease;
+}
+
+.vista-horizontal,
+.vista-vertical {
+  transition: all 0.3s ease;
 }

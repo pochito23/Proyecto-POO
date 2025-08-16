@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloudler</title>
+    <title>Cloudler - Editar Perfil</title>
     <link rel="stylesheet" href="/frontend/css/login.css">
     <link rel="shortcut icon" href="/frontend/img/Logo.svg" type="image/x-icon">
     <script src="https://kit.fontawesome.com/1cc070e35a.js" crossorigin="anonymous"></script>
@@ -17,7 +17,10 @@
             <img src="/frontend/img/Logo.svg" alt="logo" >
             </a>
         </div>
-        <div class="btn"><a href="perfil.html"><button><i class="fa-solid fa-arrow-right-from-bracket fa-2x"></i></button></a>
+        <div class="btn">
+            <a href="perfil.html">
+                <button><i class="fa-solid fa-arrow-left fa-2x"></i></button>
+            </a>
         </div>
     </header>
     <main>
@@ -28,43 +31,130 @@
             <div class="login-logo" style="text-align: center;">
                 <img src="/frontend/img/Logo-dark.svg" alt="Cloudler Logo">
                 <h1>Editar perfil</h1>
+                <p style="color: #666; font-size: 14px; margin-top: 5px;">
+                    Actualiza tu información personal
+                </p>
             </div>
-            <form action="#"  id="form" onsubmit=" return validarFormulario()">
-                <div class="alert">
-                </div>
+            <form id="formEditarPerfil" onsubmit="actualizarPerfil(event); return false;">
+                <div class="alert"></div>
+                
                 <div class="form-group">
                     <label for="email">Correo</label>
-                    <input type="email" id="email" name="email" placeholder="Ingresa tu correo" value="Prueba123@gmail.com">
+                    <input type="email" id="email" name="email" placeholder="Ingresa tu correo" autocomplete="email" required>
                 </div>
+                
                 <div class="form-group">
                     <label for="usuario">Usuario</label>
-                    <input type="text" id="usuario" name="usuario" placeholder="Ingresa tu usuario" value="Prueba123">
+                    <input type="text" id="usuario" name="usuario" placeholder="Ingresa tu usuario" autocomplete="username" required>
                 </div>
+                
                 <div class="form-group">
-                    <label for="password">Contraseña</label>
-                    <input type="password" id="password" name="password" placeholder="•••••••" value="Prueba123!">
+                    <label for="password">Nueva contraseña (opcional)</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="new-password">
+                    <small style="color: #666; font-size: 12px;">
+                        Deja en blanco si no quieres cambiar la contraseña
+                    </small>
                 </div>
-                <div>
-                <button type="submit" class="login-button">EDITAR CUENTA</button>
-                </div>
+                
+                <button type="submit" class="login-button" id="btnActualizar">
+                    <i class="fa-solid fa-save"></i> ACTUALIZAR PERFIL
+                </button>
             </form>
+            
+            <div class="info-adicional" style="margin-top: 20px; text-align: center;">
+                <p style="color: #666; font-size: 12px;">
+                    <i class="fa-solid fa-info-circle"></i>
+                    Todos los campos marcados son obligatorios excepto la contraseña
+                </p>
+            </div>
         </div>
     </main>
 
+    <script src="/frontend/js/controlador.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const hamburger = document.querySelector('.hamburger');
-            const navLinks = document.querySelector('.nav-links');
+        // Script específico para editar perfil
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Verificar si hay usuario logueado
+            const usuarioGuardado = localStorage.getItem('usuarioClouder');
+            if (!usuarioGuardado) {
+                alert('❌ Debes iniciar sesión primero');
+                window.location.href = 'Login.html';
+                return;
+            }
 
-            hamburger.addEventListener('click', function () {
-                navLinks.classList.toggle('active');
-                hamburger.innerHTML = navLinks.classList.contains('active') ? '✕' : '☰';
-            });
+            const datosUsuario = JSON.parse(usuarioGuardado);
+            usuarioActual = datosUsuario.usuario || datosUsuario;
+
+            // Cargar datos actuales del usuario en el formulario
+            await cargarDatosEnFormulario();
+        });
+
+        async function cargarDatosEnFormulario() {
+            try {
+                // Intentar obtener datos actualizados del servidor
+                const response = await fetch(`http://localhost:3000/usuarios/${usuarioActual.numeroUsuario}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    // Actualizar formulario con datos del servidor
+                    document.getElementById('email').value = data.correo || '';
+                    document.getElementById('usuario').value = data.usuario || '';
+                    // No cargar la contraseña por seguridad
+                } else {
+                    // Si falla, usar datos del localStorage
+                    document.getElementById('email').value = usuarioActual.correo || '';
+                    document.getElementById('usuario').value = usuarioActual.usuario || '';
+                }
+            } catch (error) {
+                console.error('Error al cargar datos:', error);
+                // Usar datos del localStorage como fallback
+                document.getElementById('email').value = usuarioActual.correo || '';
+                document.getElementById('usuario').value = usuarioActual.usuario || '';
+            }
+        }
+
+        // Validación en tiempo real
+        document.getElementById('email').addEventListener('blur', function() {
+            const email = this.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const alertDiv = document.querySelector('.alert');
+            
+            if (email && !emailRegex.test(email)) {
+                alertDiv.innerHTML = '<i class="fa-solid fa-exclamation"></i> <label>El correo no tiene un formato válido</label>';
+                alertDiv.style.color = 'red';
+            } else {
+                alertDiv.innerHTML = '';
+            }
+        });
+
+        document.getElementById('usuario').addEventListener('blur', function() {
+            const usuario = this.value.trim();
+            const alertDiv = document.querySelector('.alert');
+            
+            if (usuario && usuario.length < 3) {
+                alertDiv.innerHTML = '<i class="fa-solid fa-exclamation"></i> <label>El usuario debe tener al menos 3 caracteres</label>';
+                alertDiv.style.color = 'red';
+            } else if (usuario && usuario.length > 20) {
+                alertDiv.innerHTML = '<i class="fa-solid fa-exclamation"></i> <label>El usuario no puede exceder 20 caracteres</label>';
+                alertDiv.style.color = 'red';
+            } else {
+                alertDiv.innerHTML = '';
+            }
+        });
+
+        document.getElementById('password').addEventListener('blur', function() {
+            const password = this.value;
+            const passRegex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+            const alertDiv = document.querySelector('.alert');
+            
+            if (password && !passRegex.test(password)) {
+                alertDiv.innerHTML = '<i class="fa-solid fa-exclamation"></i> <label>La contraseña debe tener al menos 6 caracteres, una mayúscula, una minúscula, un número y un caracter especial</label>';
+                alertDiv.style.color = 'red';
+            } else {
+                alertDiv.innerHTML = '';
+            }
         });
     </script>
-    <script src="/frontend/js/controlador.js"></script>
-
 </body>
 
 </html>
-

@@ -12,22 +12,24 @@ const opcionesEditor = {
   enableLiveAutocompletion: true
 };
 
-const editorHTML = ace.edit("editor-html", { mode: "ace/mode/html", ...opcionesEditor });
-const editorCSS = ace.edit("editor-css", { mode: "ace/mode/css", ...opcionesEditor });
-const editorJS = ace.edit("editor-js", { mode: "ace/mode/javascript", ...opcionesEditor });
+let editorHTML, editorCSS, editorJS, editorSnippet;
 
 async function hacerPeticion(url, opciones = {}) {
-    const respuesta = await fetch(`${API}${url}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        ...opciones.headers
-      },
-      ...opciones
-    });
-    
-    const data = await respuesta.json();
-    return { success: respuesta.ok, data, status: respuesta.status };
-
+    try {
+        const respuesta = await fetch(`${API}${url}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            ...opciones.headers
+          },
+          ...opciones
+        });
+        
+        const data = await respuesta.json();
+        return { success: respuesta.ok, data, status: respuesta.status };
+    } catch (error) {
+        console.error('Error en petición:', error);
+        return { success: false, error: error.message };
+    }
 }
 
 // Cargar usuario y proyecto
@@ -38,8 +40,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     window.location.href = 'Login.html';
     return;
   }
-  usuarioActual = JSON.parse(usuarioGuardado);
-  usuarioActual = datosUsuario.usuario || datosUsuario
+  
+  const datosUsuario = JSON.parse(usuarioGuardado);
+  usuarioActual = datosUsuario.usuario || datosUsuario;
 
   const params = new URLSearchParams(window.location.search);
   const proyectoId = params.get('id');
@@ -51,8 +54,13 @@ document.addEventListener('DOMContentLoaded', async function() {
   }
 
   configurarEventosEditores();
-    actualizarVistaPrevia();
+  actualizarVistaPrevia();
 
+  // Configurar event listeners para botones
+  configurarBotones();
+});
+
+function configurarBotones() {
   const btnGuardar = document.getElementById("btn-guardar");
   if (btnGuardar) {
     btnGuardar.addEventListener('click', guardarProyecto);
@@ -63,50 +71,171 @@ document.addEventListener('DOMContentLoaded', async function() {
     btnCambiarVista.addEventListener('click', cambiarVista);
   }
 
-});
+  // Botón de regresar a gestión de archivos
+  const btnRegresar = document.querySelector('button[onclick*="GestionArchivos"]');
+  if (btnRegresar) {
+    btnRegresar.addEventListener('click', () => {
+      if (cambiosSinGuardar) {
+        if (confirm('Tienes cambios sin guardar. ¿Deseas salir sin guardar?')) {
+          window.location.href = '/frontend/html/GestionArchivos.html';
+        }
+      } else {
+        window.location.href = '/frontend/html/GestionArchivos.html';
+      }
+    });
+  }
+}
 
 // Cargar proyecto desde el backend
 async function cargarProyecto(id) {
   try {
-    // USAR EL NUEVO ENDPOINT
-    const resultado = await hacerPeticion(`/archivos/${id}?usuario=${usuarioActual.numeroUsuario}`);
+    const resultado = await hacerPeticion(`/archivos/${id}`);
     
     if (resultado.success) {
       proyectoActual = resultado.data;
       
-      // Cargar el código en los editores
+      // Verificar permisos del usuario
+      if (proyectoActual.propietario !== usuarioActual.numeroUsuario) {
+        // Verificar si tiene permisos compartidos
+        const tienePermiso = proyectoActual.compartido?.some(
+          comp => comp.usuario === usuarioActual.numeroUsuario
+        );
+        
+        if (!tienePermiso) {
+          alert('❌ No tienes permisos para acceder a este archivo');
+          window.location.href = 'GestionArchivos.html';
+          return;
+        }
+      }
+      
+      // Configurar la interfaz según el tipo
       if (proyectoActual.tipo === 'proyecto') {
+        configurarVistaProyecto();
         editorHTML.setValue(proyectoActual.codigoHTML || '', -1);
         editorCSS.setValue(proyectoActual.codigoCSS || '', -1);
         editorJS.setValue(proyectoActual.codigoJS || '', -1);
       } else if (proyectoActual.tipo === 'snippet') {
-        // Para snippets, solo mostrar el código en el editor correspondiente
-        if (proyectoActual.lenguaje === 'html') {
-          editorHTML.setValue(proyectoActual.codigo || '', -1);
-        } else if (proyectoActual.lenguaje === 'css') {
-          editorCSS.setValue(proyectoActual.codigo || '', -1);
-        } else if (proyectoActual.lenguaje === 'javascript') {
-          editorJS.setValue(proyectoActual.codigo || '', -1);
-        }
+        configurarVistaSnippet();
+        editorSnippet.setValue(proyectoActual.codigo || '', -1);
       }
+      
+      // Actualizar el título de la página
+      document.title = `Cloudler Editor - ${proyectoActual.nombre}`;
       
       cambiosSinGuardar = false;
       actualizarBotonGuardar();
       actualizarVistaPrevia();
       
-      console.log('Proyecto cargado:', proyectoActual.nombre);
+      console.log('Archivo cargado:', proyectoActual.nombre);
     } else {
-      console.error('Error al cargar proyecto:', resultado.data?.mensaje);
-      alert('❌ Error al cargar el proyecto: ' + (resultado.data?.mensaje || 'Error desconocido'));
+      console.error('Error al cargar archivo:', resultado.data?.mensaje);
+      alert('❌ Error al cargar el archivo: ' + (resultado.data?.mensaje || 'Error desconocido'));
       establecerContenidoPorDefecto();
     }
   } catch (error) {
-    console.error('Error al cargar proyecto:', error);
+    console.error('Error al cargar archivo:', error);
     establecerContenidoPorDefecto();
   }
 }
+
+function configurarVistaProyecto() {
+  // Mostrar todos los editores para proyectos
+  document.getElementById('contenedor-principal').innerHTML = `
+    <section id="panel-vista-previa" class="panel-vista">
+      <iframe id="iframe-previo" title="Vista previa"></iframe>
+    </section>
+
+    <section id="panel-editores" class="panel-codigo">
+      <div class="editor-caja">
+        <div class="encabezado-editor html">
+          <i class="fa-brands fa-html5"></i> HTML
+        </div>
+        <div id="editor-html" class="area-editor"></div>
+      </div>
+
+      <div class="editor-caja">
+        <div class="encabezado-editor css">
+          <i class="fa-brands fa-css3-alt"></i> CSS
+        </div>
+        <div id="editor-css" class="area-editor"></div>
+      </div>
+
+      <div class="editor-caja">
+        <div class="encabezado-editor js">
+          <i class="fa-brands fa-js"></i> JS
+        </div>
+        <div id="editor-js" class="area-editor"></div>
+      </div>
+    </section>
+  `;
+
+  // Inicializar editores
+  editorHTML = ace.edit("editor-html", { mode: "ace/mode/html", ...opcionesEditor });
+  editorCSS = ace.edit("editor-css", { mode: "ace/mode/css", ...opcionesEditor });
+  editorJS = ace.edit("editor-js", { mode: "ace/mode/javascript", ...opcionesEditor });
+}
+
+function configurarVistaSnippet() {
+  // Mostrar solo un editor para snippets
+  const modoEditor = obtenerModoEditor(proyectoActual.lenguaje);
+  const iconoLenguaje = obtenerIconoLenguaje(proyectoActual.lenguaje);
+  
+  document.getElementById('contenedor-principal').innerHTML = `
+    <section id="panel-snippet" class="panel-snippet" style="width: 100%; display: flex; flex-direction: column;">
+      <div class="snippet-info" style="background: #2d3748; color: white; padding: 10px; display: flex; align-items: center; gap: 10px;">
+        <span>${iconoLenguaje}</span>
+        <h3>Snippet: ${proyectoActual.nombre} (${proyectoActual.lenguaje.toUpperCase()})</h3>
+      </div>
+      <div class="editor-caja" style="flex: 1;">
+        <div id="editor-snippet" class="area-editor" style="height: 100%;"></div>
+      </div>
+    </section>
+  `;
+
+  // Inicializar editor de snippet
+  editorSnippet = ace.edit("editor-snippet", { mode: modoEditor, ...opcionesEditor });
+  
+  // Ocultar vista previa para snippets
+  const btnCambiarVista = document.getElementById("btn-cambiar-vista");
+  if (btnCambiarVista) {
+    btnCambiarVista.style.display = 'none';
+  }
+}
+
+function obtenerModoEditor(lenguaje) {
+  const modos = {
+    html: "ace/mode/html",
+    css: "ace/mode/css",
+    javascript: "ace/mode/javascript",
+    typescript: "ace/mode/typescript",
+    python: "ace/mode/python",
+    java: "ace/mode/java",
+    php: "ace/mode/php",
+    sql: "ace/mode/sql",
+    otros: "ace/mode/text"
+  };
+  return modos[lenguaje] || "ace/mode/text";
+}
+
+function obtenerIconoLenguaje(lenguaje) {
+  const iconos = {
+    html: '<i class="fa-brands fa-html5" style="color: #e34c26;"></i>',
+    css: '<i class="fa-brands fa-css3-alt" style="color: #1572b6;"></i>',
+    javascript: '<i class="fa-brands fa-js-square" style="color: #f7df1e;"></i>',
+    typescript: '<i class="fa-brands fa-js-square" style="color: #3178c6;"></i>',
+    python: '<i class="fa-brands fa-python" style="color: #3776ab;"></i>',
+    java: '<i class="fa-brands fa-java" style="color: #ed8b00;"></i>',
+    php: '<i class="fa-brands fa-php" style="color: #777bb4;"></i>',
+    sql: '<i class="fa-solid fa-database" style="color: #336791;"></i>',
+    otros: '<i class="fa-solid fa-code" style="color: #6c757d;"></i>'
+  };
+  return iconos[lenguaje] || iconos.otros;
+}
+
 // Establecer contenido por defecto en los editores
 function establecerContenidoPorDefecto() {
+  configurarVistaProyecto();
+  
   const htmlDefault = `<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -199,31 +328,49 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function configurarEventosEditores() {
   // Detectar cambios en cualquier editor
-  editorHTML.session.on('change', () => {
-    cambiosSinGuardar = true;
-    actualizarVistaPrevia();
-    actualizarBotonGuardar();
-  });
+  if (editorHTML) {
+    editorHTML.session.on('change', () => {
+      cambiosSinGuardar = true;
+      actualizarVistaPrevia();
+      actualizarBotonGuardar();
+    });
+  }
 
-  editorCSS.session.on('change', () => {
-    cambiosSinGuardar = true;
-    actualizarVistaPrevia();
-    actualizarBotonGuardar();
-  });
+  if (editorCSS) {
+    editorCSS.session.on('change', () => {
+      cambiosSinGuardar = true;
+      actualizarVistaPrevia();
+      actualizarBotonGuardar();
+    });
+  }
 
-  editorJS.session.on('change', () => {
-    cambiosSinGuardar = true;
-    actualizarVistaPrevia();
-    actualizarBotonGuardar();
-  });
+  if (editorJS) {
+    editorJS.session.on('change', () => {
+      cambiosSinGuardar = true;
+      actualizarVistaPrevia();
+      actualizarBotonGuardar();
+    });
+  }
+
+  if (editorSnippet) {
+    editorSnippet.session.on('change', () => {
+      cambiosSinGuardar = true;
+      actualizarBotonGuardar();
+    });
+  }
 }
 
 function actualizarVistaPrevia() {
+  // Solo actualizar vista previa para proyectos
+  if (!editorHTML || !editorCSS || !editorJS) return;
+  
+  const iframe = document.getElementById("iframe-previo");
+  if (!iframe) return;
+  
   const html = editorHTML.getValue();
   const css = `<style>${editorCSS.getValue()}</style>`;
   const js = `<script>${editorJS.getValue()}<\/script>`;
 
-  const iframe = document.getElementById("iframe-previo");
   const doc = iframe.contentDocument || iframe.contentWindow.document;
   
   doc.open();
@@ -233,6 +380,8 @@ function actualizarVistaPrevia() {
 
 function actualizarBotonGuardar() {
   const btnGuardar = document.getElementById("btn-guardar");
+  if (!btnGuardar) return;
+  
   if (cambiosSinGuardar) {
     btnGuardar.style.background = "#ff6b6b";
     btnGuardar.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Guardar *';
@@ -248,30 +397,37 @@ async function guardarProyecto() {
     return;
   }
 
-
-
   const btnGuardar = document.getElementById("btn-guardar");
   const textoOriginal = btnGuardar.innerHTML;
   
   btnGuardar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando...';
   btnGuardar.disabled = true;
 
-    const datosGuardar = {
-      codigoHTML: editorHTML.getValue(),
-      codigoCSS: editorCSS.getValue(),
-      codigoJS: editorJS.getValue()
-    };
+  try {
+    let datosGuardar = {};
+    
+    if (proyectoActual && proyectoActual.tipo === 'proyecto') {
+      datosGuardar = {
+        codigoHTML: editorHTML.getValue(),
+        codigoCSS: editorCSS.getValue(),
+        codigoJS: editorJS.getValue()
+      };
+    } else if (proyectoActual && proyectoActual.tipo === 'snippet') {
+      datosGuardar = {
+        codigo: editorSnippet.getValue()
+      };
+    }
 
     let resultado;
     
     if (proyectoActual && proyectoActual._id) {
-      // Actualizar proyecto existente
+      // Actualizar archivo existente
       resultado = await hacerPeticion(`/archivos/actualizar/${proyectoActual._id}`, {
         method: 'PUT',
         body: JSON.stringify(datosGuardar)
       });
     } else {
-      const nombreProyecto = prompt('Nombre del proyecto:', 'Mi Nuevo Proyecto');
+      const nombreProyecto = prompt('Nombre del archivo:', 'Mi Nuevo Proyecto');
       if (!nombreProyecto) {
         btnGuardar.innerHTML = textoOriginal;
         btnGuardar.disabled = false;
@@ -298,14 +454,20 @@ async function guardarProyecto() {
     if (resultado.success) {
       cambiosSinGuardar = false;
       actualizarBotonGuardar();
-      
-      mostrarNotificacion('✅ Proyecto guardado correctamente', 'success');
+      mostrarNotificacion('✅ Archivo guardado correctamente', 'success');
     } else {
       mostrarNotificacion('❌ Error al guardar: ' + (resultado.data?.mensaje || 'Error desconocido'), 'error');
     }
+  } catch (error) {
+    console.error('Error al guardar:', error);
+    mostrarNotificacion('❌ Error de conexión al guardar', 'error');
   }
 
-  function mostrarNotificacion(mensaje, tipo = 'info') {
+  btnGuardar.innerHTML = textoOriginal;
+  btnGuardar.disabled = false;
+}
+
+function mostrarNotificacion(mensaje, tipo = 'info') {
   const notificacion = document.createElement('div');
   notificacion.className = `notificacion ${tipo}`;
   notificacion.textContent = mensaje;
@@ -334,14 +496,16 @@ async function guardarProyecto() {
   }
   
   document.body.appendChild(notificacion);
-    setTimeout(() => {
+  setTimeout(() => {
     notificacion.style.opacity = '1';
   }, 100);
   
   setTimeout(() => {
     notificacion.style.opacity = '0';
     setTimeout(() => {
-      document.body.removeChild(notificacion);
+      if (document.body.contains(notificacion)) {
+        document.body.removeChild(notificacion);
+      }
     }, 300);
   }, 3000);
 }
@@ -349,6 +513,8 @@ async function guardarProyecto() {
 // Función para cambiar vista (horizontal/vertical)
 function cambiarVista() {
   const contenedor = document.getElementById('contenedor-principal');
+  if (!contenedor) return;
+  
   if (contenedor.classList.contains('vista-horizontal')) {
     contenedor.classList.remove('vista-horizontal');
     contenedor.classList.add('vista-vertical');

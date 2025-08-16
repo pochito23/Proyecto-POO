@@ -72,9 +72,9 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error('Error al cargar archivos:', resultado.error);
       archivoTabla.innerHTML = `
         <tr>
-          <td colspan="5" style="text-align:center; padding: 20px; color: red;">
+          <  colspan="5" style="text-align:center; padding: 20px; color: red;">
             Error al cargar archivos
-          </td>
+          </>
         </tr>
       `;
     }
@@ -127,8 +127,7 @@ async function buscarArchivos(termino) {
                    archivo.tipo === "proyecto" ? "📄" : "📝";
       
       const fecha = new Date(archivo.fechaModificacion).toLocaleDateString();
-      const tamaño = archivo.tipo === "carpeta" ? "—" : 
-                    Math.floor(Math.random() * 5 + 1) + " MB";
+
       
       const fila = document.createElement("tr");
       fila.innerHTML = `
@@ -137,7 +136,6 @@ async function buscarArchivos(termino) {
           <span class="icono">${icono}</span> ${archivo.nombre}
         </td>
         <td>${fecha}</td>
-        <td>${tamaño}</td>
         <td style="position: relative;">
           <button class="btn-opciones" type="button" data-id="${archivo._id}">⋮</button>
           <ul class="menu-opciones">
@@ -430,14 +428,8 @@ async function buscarArchivos(termino) {
       case "fecha-antigua":
         arr.sort((a, b) => new Date(a.fechaModificacion) - new Date(b.fechaModificacion));
         break;
-      case "tamano-mayor":
-      case "tamano-menor":
-        // Para este proyecto, solo ordenamos carpetas al final
-        arr.sort((a, b) => {
-          if (a.tipo === 'carpeta' && b.tipo !== 'carpeta') return val === "tamano-mayor" ? 1 : -1;
-          if (b.tipo === 'carpeta' && a.tipo !== 'carpeta') return val === "tamano-mayor" ? -1 : 1;
-          return 0;
-        });
+
+
         break;
     }
     return arr;

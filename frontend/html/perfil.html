@@ -6,11 +6,7 @@
     <link rel="stylesheet" href="/frontend/css/estilos-perfil.css">
     <script src="https://kit.fontawesome.com/1cc070e35a.js" crossorigin="anonymous"></script>
     <title>Perfil Usuario</title>
-        <link
-      rel="shortcut icon"
-      href="/frontend/img/Logo.svg"
-      type="image/x-icon"
-    />
+    <link rel="shortcut icon" href="/frontend/img/Logo.svg" type="image/x-icon"/>
 </head>
 <body>
     <div class="container">
@@ -31,8 +27,9 @@
             </div>
             <div class="perfil-info">
                 <h3>Perfil</h3>
-                <h1>Usuario</h1>
-                <div class="plan">Gratis</div>
+                <h1 id="nombreUsuario">Cargando...</h1>
+                <div class="plan" id="planUsuario">Cargando...</div>
+                <div class="email" id="emailUsuario" style="margin-top: 8px; color: #666; font-size: 14px;">Cargando...</div>
             </div>
         </div>
 
@@ -45,7 +42,7 @@
                 Mis archivos
             </a>
 
-            <a href="#" class="menu-item">
+            <a href="#" class="menu-item" onclick="crearNuevoArchivo(event)">
                 <div class="menu-icono">
                     <i class="fa-regular fa-file-zipper"></i>
                 </div>
@@ -61,9 +58,9 @@
 
             <div class="alm-seccion">
                 <div class="alm-titulo">Almacenamiento</div>
-                <div class="alm-info">3GB / 5GB utilizados</div>
+                <div class="alm-info" id="almacenamientoInfo">Calculando...</div>
                 <div class="alm-barra">
-                    <div class="alm-progreso"></div>
+                    <div class="alm-progreso" id="almacenamientoProgreso"></div>
                 </div>
             </div>
 
@@ -71,7 +68,7 @@
                 Editar perfil
             </a>
 
-            <a href="Login.html" class="menu-item">
+            <a href="#" class="menu-item" onclick="cerrarSesion()">
                 <div class="menu-icono">
                     <i class="fa-solid fa-arrow-right-from-bracket "></i>
                 </div>
@@ -81,24 +78,134 @@
     </div>
 
     <script>
-  function ponerImagen(event) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
+        const API = 'http://localhost:3000';
+        let usuarioActual = null;
 
-      reader.onload = function(e) {
-        const img = document.getElementById("avatar");
-        const icon = document.getElementById("imagenAgregada");
+        // Función para hacer peticiones a la API
+        async function hacerPeticion(url, opciones = {}) {
+            try {
+                const respuesta = await fetch(`${API}${url}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...opciones.headers
+                    },
+                    ...opciones
+                });
+                
+                const data = await respuesta.json();
+                return { success: respuesta.ok, data, status: respuesta.status };
+            } catch (error) {
+                console.error('Error en petición:', error);
+                return { success: false, error: error.message };
+            }
+        }
 
-        img.src = e.target.result;
-        img.style.display = "block";
-        icon.style.display = "none";
-      };
+        // Cargar datos del usuario
+        async function cargarDatosUsuario() {
+            const usuarioGuardado = localStorage.getItem('usuarioClouder');
+            if (!usuarioGuardado) {
+                alert('❌ Debes iniciar sesión primero');
+                window.location.href = 'Login.html';
+                return;
+            }
 
-      reader.readAsDataURL(file);
-    }
-  }
-</script>
+            const datosGuardados = JSON.parse(usuarioGuardado);
+            usuarioActual = datosGuardados.usuario || datosGuardados;
 
-</body>
-</html>
+            // Obtener datos actualizados del servidor
+            try {
+                const resultado = await hacerPeticion(`/usuarios/${usuarioActual.numeroUsuario}`);
+                
+                if (resultado.success) {
+                    usuarioActual = resultado.data;
+                    renderizarPerfil();
+                    await cargarEstadisticasArchivos();
+                } else {
+                    console.error('Error al cargar usuario:', resultado.error);
+                    renderizarPerfilOffline();
+                }
+            } catch (error) {
+                console.error('Error al cargar usuario:', error);
+                renderizarPerfilOffline();
+            }
+        }
+
+        // Renderizar perfil con datos del servidor
+        function renderizarPerfil() {
+            document.getElementById('nombreUsuario').textContent = usuarioActual.usuario;
+            document.getElementById('planUsuario').textContent = capitalizarPlan(usuarioActual.plan);
+            document.getElementById('emailUsuario').textContent = usuarioActual.correo;
+            
+            // Actualizar título de la página
+            document.title = `Perfil - ${usuarioActual.usuario}`;
+        }
+
+        // Renderizar perfil con datos offline (localStorage)
+        function renderizarPerfilOffline() {
+            if (usuarioActual) {
+                document.getElementById('nombreUsuario').textContent = usuarioActual.usuario || 'Usuario';
+                document.getElementById('planUsuario').textContent = capitalizarPlan(usuarioActual.plan || 'gratis');
+                document.getElementById('emailUsuario').textContent = usuarioActual.correo || 'No disponible';
+            }
+        }
+
+
+        function getLimiteAlmacenamiento() {
+            const limites = {
+                'gratis': 1,
+                'estudiante': 5,
+                'pro': 10,
+                'empresarial': 100
+            };
+            return limites[usuarioActual.plan] || 1;
+        }
+
+        // Capitalizar nombre del plan
+        function capitalizarPlan(plan) {
+            const nombres = {
+                'gratis': 'Gratuito',
+                'estudiante': 'Estudiante',
+                'pro': 'Pro',
+                'empresarial': 'Empresarial'
+            };
+            return nombres[plan] || plan.charAt(0).toUpperCase() + plan.slice(1);
+        }
+
+        // Función para subir imagen
+        function ponerImagen(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const img = document.getElementById("avatar");
+                    const icon = document.getElementById("imagenAgregada");
+
+                    img.src = e.target.result;
+                    img.style.display = "block";
+                    icon.style.display = "none";
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Función para crear nuevo archivo (redirigir a gestión)
+        function crearNuevoArchivo(event) {
+            event.preventDefault();
+            window.location.href = 'GestionArchivos.html';
+        }
+
+        // Función para cerrar sesión
+        function cerrarSesion() {
+            if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+                localStorage.removeItem('usuarioClouder');
+                window.location.href = 'Login.html';
+            }
+        }
+
+        // Inicializar cuando la página carga
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarDatosUsuario();
+        });
+        </script>

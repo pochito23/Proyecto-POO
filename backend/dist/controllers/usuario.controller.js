@@ -119,7 +119,7 @@ exports.recuperarContraseña = recuperarContraseña;
 const actualizarUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = parseInt(req.params.id);
-        const { correo, usuario, contraseña } = req.body;
+        const { correo, usuario, contraseña, img } = req.body;
         const usuarioExistente = yield usuario_model_1.default.findOne({ numeroUsuario: id });
         if (!usuarioExistente) {
             return res.status(404).json({ mensaje: "Usuario no encontrado" });
@@ -151,6 +151,8 @@ const actualizarUsuario = (req, res) => __awaiter(void 0, void 0, void 0, functi
             datosActualizar.usuario = usuario;
         if (contraseña)
             datosActualizar.contraseña = contraseña;
+        if (img)
+            datosActualizar.img = img;
         const usuarioActualizado = yield usuario_model_1.default.findOneAndUpdate({ numeroUsuario: id }, datosActualizar, { new: true });
         if (!usuarioActualizado) {
             return res.status(404).json({ mensaje: "Usuario no encontrado" });

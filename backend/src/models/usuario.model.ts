@@ -9,6 +9,7 @@ export interface Usuario extends Document {
     preguntaSeguridad: '¿Cuál es el nombre de tu mascota?'|'¿Cómo se llamaba tu escuela primaria?'|'¿Cuál es el segundo nombre de tu madre?',
     respuestaSeguridad: string,
     numeroUsuario: number,
+    img?: string,
 
 }
 

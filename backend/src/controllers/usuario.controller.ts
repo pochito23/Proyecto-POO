@@ -108,7 +108,7 @@ export const recuperarContraseña = async (req: Request, res: Response) => {
 export const actualizarUsuario = async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id);
-    const { correo, usuario, contraseña } = req.body;
+    const { correo, usuario, contraseña , img} = req.body;
     
     const usuarioExistente = await Usuario.findOne({ numeroUsuario: id });
     if (!usuarioExistente) {
@@ -141,6 +141,7 @@ export const actualizarUsuario = async (req: Request, res: Response) => {
     if (correo) datosActualizar.correo = correo;
     if (usuario) datosActualizar.usuario = usuario;
     if (contraseña) datosActualizar.contraseña = contraseña;
+    if (img) datosActualizar.img = img;
 
     const usuarioActualizado = await Usuario.findOneAndUpdate(
       { numeroUsuario: id },
