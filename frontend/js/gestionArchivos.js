@@ -1,4 +1,20 @@
+// Configuración de la API
+const API_BASE = 'http://localhost:3000';
+
+// Variable global para el usuario actual
+let usuarioActual = null;
+
 document.addEventListener("DOMContentLoaded", function () {
+  // Cargar usuario actual
+  const usuarioGuardado = localStorage.getItem('usuarioCloudler');
+  if (!usuarioGuardado) {
+    alert('❌ Debes iniciar sesión primero');
+    window.location.href = 'Login.html';
+    return;
+  }
+  usuarioActual = JSON.parse(usuarioGuardado);
+
+  // Elementos del DOM
   const crearBtn = document.getElementById("crearBtn");
   const modal = document.getElementById("modalCrear");
   const archivoTabla = document.getElementById("archivoTabla");
@@ -11,53 +27,224 @@ document.addEventListener("DOMContentLoaded", function () {
   const btnHamburguesa = document.getElementById("btnHamburguesa");
   const sidebarOverlay = document.getElementById("sidebarOverlay");
 
-  let ubicacionActual = "root";
-  let carpetas = {};
-  let historial = [];
+  // Variables de estado
+  let carpetaActual = null;
+  let historialCarpetas = [];
+  let archivosActuales = [];
   let filtroBusqueda = "";
 
-  function cargarDatos() {
-    const data = window.localStorage && localStorage.getItem("cloudlerData");
-    if (data) {
-      carpetas = JSON.parse(data);
+  // Función para hacer peticiones a la API
+  async function hacerPeticion(url, opciones = {}) {
+    try {
+      const respuesta = await fetch(`${API_BASE}${url}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...opciones.headers
+        },
+        ...opciones
+      });
+      
+      const data = await respuesta.json();
+      return { success: respuesta.ok, data, status: respuesta.status };
+    } catch (error) {
+      console.error('Error en petición:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  // Cargar archivos de la carpeta actual
+  async function cargarArchivos() {
+    let url;
+    if (carpetaActual) {
+      url = `/archivos/usuario/${usuarioActual.numeroUsuario}/carpeta/${carpetaActual}`;
     } else {
-      carpetas = { root: [] };
+      url = `/archivos/usuario/${usuarioActual.numeroUsuario}/raiz`;
+    }
+
+    const resultado = await hacerPeticion(url);
+    
+    if (resultado.success) {
+      archivosActuales = resultado.data;
+      renderizarArchivos();
+    } else {
+      console.error('Error al cargar archivos:', resultado.error);
+      archivoTabla.innerHTML = `
+        <tr>
+          <td colspan="5" style="text-align:center; padding: 20px; color: red;">
+            Error al cargar archivos
+          </td>
+        </tr>
+      `;
     }
   }
 
-  function guardarDatos() {
-    if (window.localStorage) {
-      localStorage.setItem("cloudlerData", JSON.stringify(carpetas));
+  // Renderizar archivos en la tabla
+  function renderizarArchivos() {
+    archivoTabla.innerHTML = "";
+    
+    let archivos = [...archivosActuales];
+    
+    // Filtrar por búsqueda
+    if (filtroBusqueda.trim() !== "") {
+      archivos = archivos.filter(archivo => 
+        archivo.nombre.toLowerCase().includes(filtroBusqueda.toLowerCase())
+      );
+    }
+    
+    // Ordenar archivos
+    archivos = ordenarElementos(archivos);
+
+    if (archivos.length === 0) {
+      archivoTabla.innerHTML = `
+        <tr>
+          <td colspan="5" style="text-align:center; padding: 20px;">
+            ${filtroBusqueda ? 'No se encontraron archivos' : 'No hay archivos creados'}
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    archivos.forEach((archivo) => {
+      const icono = archivo.tipo === "carpeta" ? "📁" : 
+                   archivo.tipo === "proyecto" ? "📄" : "📝";
+      
+      const fecha = new Date(archivo.fechaModificacion).toLocaleDateString();
+      const tamaño = archivo.tipo === "carpeta" ? "—" : 
+                    Math.floor(Math.random() * 5 + 1) + " MB";
+      
+      const fila = document.createElement("tr");
+      fila.innerHTML = `
+        <td><input type="checkbox" class="fila-checkbox" data-id="${archivo._id}"/></td>
+        <td class="nombre-click" style="cursor:pointer;" data-id="${archivo._id}" data-tipo="${archivo.tipo}">
+          <span class="icono">${icono}</span> ${archivo.nombre}
+        </td>
+        <td>${fecha}</td>
+        <td>${tamaño}</td>
+        <td style="position: relative;">
+          <button class="btn-opciones" type="button" data-id="${archivo._id}">⋮</button>
+          <ul class="menu-opciones">
+            <li class="abrir-opcion">${archivo.tipo === "carpeta" ? "📂 Abrir" : "🔍 Ver"}</li>
+            <li class="renombrar-opcion">✏️ Renombrar</li>
+            <li class="eliminar-opcion">🗑️ Eliminar</li>
+          </ul>
+        </td>
+      `;
+      
+      archivoTabla.appendChild(fila);
+    });
+
+    // Agregar event listeners para nombres clickeables
+    document.querySelectorAll('.nombre-click').forEach(elemento => {
+      elemento.addEventListener('click', (e) => {
+        const id = e.currentTarget.getAttribute('data-id');
+        const tipo = e.currentTarget.getAttribute('data-tipo');
+        
+        if (tipo === 'carpeta') {
+          abrirCarpeta(id);
+        } else {
+          window.location.href = 'cajas.html?id=' + id;
+        }
+      });
+
+      elemento.addEventListener('dblclick', (e) => {
+        const id = e.currentTarget.getAttribute('data-id');
+        const tipo = e.currentTarget.getAttribute('data-tipo');
+        
+        if (tipo === 'carpeta') {
+          abrirCarpeta(id);
+        } else {
+          window.location.href = 'cajas.html?id=' + id;
+        }
+      });
+    });
+  }
+
+  // Abrir carpeta
+  function abrirCarpeta(id) {
+    if (carpetaActual) {
+      historialCarpetas.push(carpetaActual);
+    }
+    carpetaActual = id;
+    renderizarBreadcrumb();
+    cargarArchivos();
+  }
+
+  // Renderizar breadcrumb
+  function renderizarBreadcrumb() {
+    const carpetaNombre = carpetaActual ? 
+      archivosActuales.find(a => a._id === carpetaActual)?.nombre || 'Carpeta' : 
+      'Menú principal';
+
+    breadcrumb.innerHTML = `
+      <button id="btnAtras" class="btn-atras" style="${!carpetaActual ? 'display: none;' : ''}">
+        <span class="atras-icono">⬅️</span> <span class="atras-texto">Atrás</span>
+      </button>
+      <span class="breadcrumb-text">${carpetaActual ? 'Carpeta: ' + carpetaNombre : carpetaNombre}</span>
+    `;
+    
+    const btnAtras = document.getElementById('btnAtras');
+    if (btnAtras) {
+      btnAtras.addEventListener('click', () => {
+        carpetaActual = historialCarpetas.pop() || null;
+        renderizarBreadcrumb();
+        cargarArchivos();
+      });
     }
   }
 
-  let tipoAcrear = null;
+  // Mostrar modal para crear
   function mostrarModalCrear() {
     modal.innerHTML = `
       <div class="modal-content">
         <h3>¿Qué deseas crear?</h3>
         <button class="modal-btn" id="btnNuevaCarpeta">📁 Nueva Carpeta</button>
-        <button class="modal-btn" id="btnNuevoArchivo">📄 Nuevo Archivo</button><br>
+        <button class="modal-btn" id="btnNuevoProyecto">📄 Nuevo Proyecto</button>
+        <button class="modal-btn" id="btnNuevoSnippet">📝 Nuevo Snippet</button><br>
         <button class="modal-cerrar" id="btnCancelarCrear">Cancelar</button>
       </div>
     `;
     modal.style.display = "flex";
+    
     document.getElementById("btnNuevaCarpeta").onclick = () => pedirNombre("carpeta");
-    document.getElementById("btnNuevoArchivo").onclick = () => pedirNombre("archivo");
+    document.getElementById("btnNuevoProyecto").onclick = () => pedirNombre("proyecto");
+    document.getElementById("btnNuevoSnippet").onclick = () => pedirNombre("snippet");
     document.getElementById("btnCancelarCrear").onclick = cerrarModal;
   }
 
+  // Pedir nombre para nuevo elemento
   function pedirNombre(tipo) {
-    tipoAcrear = tipo;
+    let camposExtra = '';
+    
+    if (tipo === 'snippet') {
+      camposExtra = `
+        <select id="selectLenguaje" style="padding:8px;width:80%;margin-bottom:10px;">
+          <option value="">Selecciona un lenguaje</option>
+          <option value="html">HTML</option>
+          <option value="css">CSS</option>
+          <option value="javascript">JavaScript</option>
+          <option value="typescript">TypeScript</option>
+          <option value="python">Python</option>
+          <option value="java">Java</option>
+          <option value="php">PHP</option>
+          <option value="sql">SQL</option>
+          <option value="otros">Otros</option>
+        </select>
+      `;
+    }
+    
     modal.innerHTML = `
       <div class="modal-content">
-        <h3>Nombre del ${tipo === "carpeta" ? "carpeta" : "archivo"}</h3>
+        <h3>Nombre del ${tipo}</h3>
         <input type="text" id="inputNombre" placeholder="Escribe el nombre..." style="padding:8px;width:80%;margin-bottom:10px;" maxlength="40"/>
+        ${camposExtra}
         <div id="errorNombre" style="color:red;font-size:13px;height:18px;"></div>
         <button class="modal-btn" id="btnCrearAhora">Crear</button>
         <button class="modal-cerrar" id="btnCancelarCrear">Cancelar</button>
       </div>
     `;
+    
+    modal.style.display = "flex";
     document.getElementById("inputNombre").focus();
     document.getElementById("btnCrearAhora").onclick = () => crearElemento(tipo);
     document.getElementById("btnCancelarCrear").onclick = cerrarModal;
@@ -66,17 +253,15 @@ document.addEventListener("DOMContentLoaded", function () {
     };
   }
 
-  function cerrarModal() {
-    modal.style.display = "none";
-    modal.innerHTML = "";
-    tipoAcrear = null;
-  }
-
-  function crearElemento(tipo) {
+  // Crear elemento
+  async function crearElemento(tipo) {
     const input = document.getElementById("inputNombre");
     if (!input) return;
+    
     const nombre = input.value.trim();
     const errorDiv = document.getElementById("errorNombre");
+    
+    // Validaciones
     if (!nombre) {
       errorDiv.textContent = "El nombre no puede estar vacío.";
       return;
@@ -85,110 +270,136 @@ document.addEventListener("DOMContentLoaded", function () {
       errorDiv.textContent = "El nombre es demasiado largo.";
       return;
     }
-    if (carpetas[ubicacionActual]?.some(e => e.nombre.toLowerCase() === nombre.toLowerCase())) {
+    
+    // Verificar si ya existe
+    if (archivosActuales.some(a => a.nombre.toLowerCase() === nombre.toLowerCase())) {
       errorDiv.textContent = "Ya existe un elemento con ese nombre.";
       return;
     }
-    if (!carpetas[ubicacionActual]) carpetas[ubicacionActual] = [];
-    const fecha = new Date().toISOString();
-    const tamaño = tipo === "carpeta" ? "—" : (Math.random() * 5 + 1).toFixed(1) + " MB";
-    carpetas[ubicacionActual].push({ nombre, tipo, fecha, tamaño });
-    if (tipo === "carpeta" && !carpetas[nombre]) carpetas[nombre] = [];
-    guardarDatos();
-    renderizarCarpeta(ubicacionActual);
-    cerrarModal();
+
+    // Preparar datos según el tipo
+    let datosCrear = {
+      nombre: nombre,
+      propietario: usuarioActual.numeroUsuario,
+      carpetaPadre: carpetaActual,
+      tipo: tipo
+    };
+
+    // Agregar campos específicos según el tipo
+    if (tipo === 'proyecto') {
+      datosCrear.codigoHTML = '<!DOCTYPE html>\n<html>\n<head>\n  <title>Mi Proyecto</title>\n</head>\n<body>\n  <h1>Nuevo Proyecto</h1>\n</body>\n</html>';
+      datosCrear.codigoCSS = 'body {\n  font-family: Arial, sans-serif;\n  margin: 0;\n  padding: 20px;\n}';
+      datosCrear.codigoJS = 'console.log("Proyecto creado");';
+    } else if (tipo === 'snippet') {
+      const lenguajeSelect = document.getElementById("selectLenguaje");
+      if (!lenguajeSelect || !lenguajeSelect.value) {
+        errorDiv.textContent = "Selecciona un lenguaje para el snippet.";
+        return;
+      }
+      datosCrear.lenguaje = lenguajeSelect.value;
+      datosCrear.codigo = '// Tu código aquí';
+    }
+
+    // Hacer petición al backend
+    const resultado = await hacerPeticion('/archivos/crear', {
+      method: 'POST',
+      body: JSON.stringify(datosCrear)
+    });
+
+    if (resultado.success) {
+      cerrarModal();
+      cargarArchivos(); // Recargar la vista
+      alert(`✅ ${tipo.charAt(0).toUpperCase() + tipo.slice(1)} creado correctamente`);
+    } else {
+      errorDiv.textContent = "Error al crear el elemento: " + (resultado.data?.error || 'Error desconocido');
+    }
   }
 
-  function abrirElemento(nombre) {
-    const item = (carpetas[ubicacionActual] || []).find(e => e.nombre === nombre);
-    if (!item || item.tipo !== "carpeta") return;
-    historial.push(ubicacionActual);
-    ubicacionActual = nombre;
-    renderizarBreadcrumb();
-    renderizarCarpeta(ubicacionActual);
+  // Cerrar modal
+  function cerrarModal() {
+    modal.style.display = "none";
+    modal.innerHTML = "";
   }
 
-  function renderizarCarpeta(nombre) {
-    archivoTabla.innerHTML = "";
-    let elementos = carpetas[nombre] || [];
+  // Eliminar elemento
+  async function eliminarElemento(id, silencioso = false) {
+    const resultado = await hacerPeticion(`/archivos/eliminar/${id}`, {
+      method: 'DELETE'
+    });
+
+    if (resultado.success) {
+      cargarArchivos();
+      if (!silencioso) {
+        cerrarModal();
+        alert("✅ Elemento eliminado correctamente");
+      }
+    } else {
+      alert("❌ Error al eliminar: " + (resultado.data?.mensaje || 'Error desconocido'));
+    }
+  }
+
+  // Mostrar modal para renombrar
+  function mostrarModalRenombrar(id) {
+    const archivo = archivosActuales.find(a => a._id === id);
+    if (!archivo) return;
+
+    modal.innerHTML = `
+      <div class="modal-content">
+        <h3>Renombrar</h3>
+        <input type="text" id="inputNuevoNombre" value="${archivo.nombre}" style="padding:8px;width:80%;margin-bottom:10px;" maxlength="40"/>
+        <div id="errorNombre" style="color:red;font-size:13px;height:18px;"></div>
+        <button class="modal-btn" id="btnRenombrarAhora">Renombrar</button>
+        <button class="modal-cerrar" id="btnCancelarRenombrar">Cancelar</button>
+      </div>
+    `;
+    modal.style.display = "flex";
+    document.getElementById("inputNuevoNombre").focus();
+    document.getElementById("btnRenombrarAhora").onclick = () => renombrarElemento(id);
+    document.getElementById("btnCancelarRenombrar").onclick = cerrarModal;
+  }
+
+  // Renombrar elemento
+  async function renombrarElemento(id) {
+    const input = document.getElementById("inputNuevoNombre");
+    const nuevoNombre = input.value.trim();
+    const errorDiv = document.getElementById("errorNombre");
     
-    if (filtroBusqueda.trim() !== "") {
-      elementos = elementos.filter(e => e.nombre.toLowerCase().includes(filtroBusqueda.toLowerCase()));
+    if (!nuevoNombre) {
+      errorDiv.textContent = "El nombre no puede estar vacío.";
+      return;
     }
     
-    elementos = ordenarElementos(elementos);
-
-    if (elementos.length === 0) {
-      archivoTabla.innerHTML = `
-        <tr>
-          <td colspan="5" style="text-align:center; padding: 20px;">No hay archivos creados.</td>
-        </tr>
-      `;
+    if (nuevoNombre.length > 40) {
+      errorDiv.textContent = "El nombre es demasiado largo.";
       return;
     }
 
-    elementos.forEach((item, idx) => {
-      const icono = item.tipo === "carpeta" ? "📁" : "📄";
-      const fecha = item.fecha ? item.fecha.split("T")[0] : new Date().toISOString().split("T")[0];
-      const tamaño = item.tipo === "carpeta" ? "—" : item.tamaño || (Math.random() * 5 + 1).toFixed(1) + " MB";
-      const fila = document.createElement("tr");
-      fila.innerHTML = `
-        <td><input type="checkbox" class="fila-checkbox" data-nombre="${item.nombre}"/></td>
-        <td class="nombre-click" style="cursor:pointer;"><span class="icono">${icono}</span> ${item.nombre}</td>
-        <td>${fecha}</td>
-        <td>${tamaño}</td>
-        <td style="position: relative;">
-          <button class="btn-opciones" type="button">⋮</button>
-          <ul class="menu-opciones">
-            <li class="abrir-opcion" onclick="window.location.href='cajas.html'">${item.tipo === "carpeta" ? "📂 Abrir" : "🔍 Ver"}</li>
-            <li class="renombrar-opcion">✏️ Renombrar</li>
-            <li class="eliminar-opcion">🗑️ Eliminar</li>
-          </ul>
-        </td>
-      `;
-      
-      const nombreElemento = fila.querySelector(".nombre-click");
+    // Verificar que no exista otro con el mismo nombre
+    const archivo = archivosActuales.find(a => a._id === id);
+    if (archivosActuales.some(a => a._id !== id && a.nombre.toLowerCase() === nuevoNombre.toLowerCase())) {
+      errorDiv.textContent = "Ya existe un elemento con ese nombre.";
+      return;
+    }
 
-      nombreElemento.addEventListener("touchend", (e) => {
-        e.preventDefault();
-        if (item.tipo === "carpeta") {
-          abrirElemento(item.nombre);
-        } else {
-          window.location.href = 'cajas.html';
-        }
-      });
-
-      nombreElemento.addEventListener("dblclick", () => {
-        if (item.tipo === "carpeta") {
-          abrirElemento(item.nombre);
-        } else {
-          window.location.href = 'cajas.html';
-        }
-      });
-      archivoTabla.appendChild(fila);
+    const resultado = await hacerPeticion(`/archivos/actualizar/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ nombre: nuevoNombre })
     });
-  }
 
-  function renderizarBreadcrumb() {
-    breadcrumb.innerHTML = `
-      <button id="btnAtras" class="btn-atras" style="${ubicacionActual === 'root' ? 'display: none;' : ''}">
-        <span class="atras-icono">⬅️</span> <span class="atras-texto">Atrás</span>
-      </button>
-      <span class="breadcrumb-text">${ubicacionActual === 'root' ? 'Menú principal' : 'Carpeta: ' + ubicacionActual}</span>
-    `;
-    const btnAtras = document.getElementById('btnAtras');
-    if (btnAtras) {
-      btnAtras.addEventListener('click', () => {
-        ubicacionActual = historial.pop() || "root";
-        renderizarBreadcrumb();
-        renderizarCarpeta(ubicacionActual);
-      });
+    if (resultado.success) {
+      cerrarModal();
+      cargarArchivos();
+      alert("✅ Elemento renombrado correctamente");
+    } else {
+      errorDiv.textContent = "Error al renombrar: " + (resultado.data?.mensaje || 'Error desconocido');
     }
   }
 
+  // Ordenar elementos
   function ordenarElementos(elementos) {
     const val = ordenarPor.value;
     let arr = [...elementos];
+    
     switch (val) {
       case "nombre-asc":
         arr.sort((a, b) => a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base" }));
@@ -197,82 +408,100 @@ document.addEventListener("DOMContentLoaded", function () {
         arr.sort((a, b) => b.nombre.localeCompare(a.nombre, "es", { sensitivity: "base" }));
         break;
       case "fecha-reciente":
-        arr.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        arr.sort((a, b) => new Date(b.fechaModificacion) - new Date(a.fechaModificacion));
         break;
       case "fecha-antigua":
-        arr.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+        arr.sort((a, b) => new Date(a.fechaModificacion) - new Date(b.fechaModificacion));
         break;
       case "tamano-mayor":
-        arr.sort((a, b) => {
-          const ta = a.tipo === "carpeta" ? 0 : parseFloat(a.tamaño);
-          const tb = b.tipo === "carpeta" ? 0 : parseFloat(b.tamaño);
-          return tb - ta;
-        });
-        break;
       case "tamano-menor":
+        // Para este proyecto, solo ordenamos carpetas al final
         arr.sort((a, b) => {
-          const ta = a.tipo === "carpeta" ? 0 : parseFloat(a.tamaño);
-          const tb = b.tipo === "carpeta" ? 0 : parseFloat(b.tamaño);
-          return ta - tb;
+          if (a.tipo === 'carpeta' && b.tipo !== 'carpeta') return val === "tamano-mayor" ? 1 : -1;
+          if (b.tipo === 'carpeta' && a.tipo !== 'carpeta') return val === "tamano-mayor" ? -1 : 1;
+          return 0;
         });
         break;
     }
     return arr;
   }
 
-  // *** ESTA ES LA PARTE QUE FALTABA ***
-  // Event listener para manejar los clicks en los menús de opciones
-  document.addEventListener("click", function (e) {
-    if (e.target.classList.contains("btn-opciones")) {
-      toggleMenu(e.target);
-      e.stopPropagation();
-      return;
-    }
+  // Mostrar modal de información
+  function mostrarModalInfo(mensaje) {
+    modal.innerHTML = `
+      <div class="modal-content">
+        <div style="margin-bottom:15px;">${mensaje}</div>
+        <button class="modal-btn" id="btnCerrarInfo">OK</button>
+      </div>
+    `;
+    modal.style.display = "flex";
+    document.getElementById("btnCerrarInfo").onclick = cerrarModal;
+  }
 
-    if (e.target.classList.contains("abrir-opcion")) {
-      const fila = e.target.closest("tr");
-      const nombre = fila.querySelector("td:nth-child(2)").innerText.trim().replace(/^📁 |^📄 /, "");
-      abrirElemento(nombre);
-      document.querySelectorAll(".menu-opciones").forEach(m => m.style.display = "none");
-      return;
-    }
+  // Mostrar modal de confirmación de borrado
+  function mostrarModalConfirmarBorrar(ids) {
+    const nombres = ids.map(id => {
+      const archivo = archivosActuales.find(a => a._id === id);
+      return archivo ? archivo.nombre : 'Desconocido';
+    });
 
-    if (e.target.classList.contains("eliminar-opcion")) {
-      const fila = e.target.closest("tr");
-      const nombre = fila.querySelector("td:nth-child(2)").innerText.trim().replace(/^📁 |^📄 /, "");
-      eliminarElemento(nombre);
-      document.querySelectorAll(".menu-opciones").forEach(m => m.style.display = "none");
-      return;
-    }
+    modal.innerHTML = `
+      <div class="modal-content">
+        <div style="margin-bottom:15px;">¿Seguro que deseas eliminar los siguientes elementos?<br><b>${nombres.join("<br>")}</b></div>
+        <button class="modal-btn" id="btnBorrarAhora">Borrar</button>
+        <button class="modal-cerrar" id="btnCancelarBorrar">Cancelar</button>
+      </div>
+    `;
+    modal.style.display = "flex";
+    document.getElementById("btnBorrarAhora").onclick = () => {
+      ids.forEach(id => eliminarElemento(id, true));
+      cerrarModal();
+    };
+    document.getElementById("btnCancelarBorrar").onclick = cerrarModal;
+  }
 
-    if (e.target.classList.contains("renombrar-opcion")) {
-      const fila = e.target.closest("tr");
-      const nombre = fila.querySelector("td:nth-child(2)").innerText.trim().replace(/^📁 |^📄 /, "");
-      mostrarModalRenombrar(nombre);
-      document.querySelectorAll(".menu-opciones").forEach(m => m.style.display = "none");
-      return;
-    }
+  // Mostrar modal de cerrar sesión
+  function mostrarModalCerrarSesion() {
+    modal.innerHTML = `
+      <div class="modal-content">
+        <div style="margin-bottom:15px;">¿Seguro que deseas cerrar sesión?</div>
+        <button class="modal-btn" id="btnCerrarSesionAhora">Cerrar sesión</button>
+        <button class="modal-cerrar" id="btnCancelarCerrarSesion">Cancelar</button>
+      </div>
+    `;
+    modal.style.display = "flex";
+    document.getElementById("btnCerrarSesionAhora").onclick = () => {
+      localStorage.removeItem('usuarioCloudler');
+      window.location.href = "landing.html";
+    };
+    document.getElementById("btnCancelarCerrarSesion").onclick = cerrarModal;
+  }
 
-    if (!e.target.closest(".menu-opciones") && !e.target.classList.contains("btn-opciones")) {
-      document.querySelectorAll(".menu-opciones").forEach(m => m.style.display = "none");
-    }
-  });
+  // Event listeners
+  
+  // Click en crear
+  crearBtn.addEventListener("click", mostrarModalCrear);
 
+  // Cambio en ordenar
+  ordenarPor.addEventListener("change", () => renderizarArchivos());
+
+  // Búsqueda
   searchInput.addEventListener("input", function () {
     filtroBusqueda = this.value;
-    renderizarCarpeta(ubicacionActual);
+    renderizarArchivos();
   });
 
+  // Menú lateral
   menuLateral.addEventListener("click", function (e) {
     const opcion = e.target.innerText.trim();
     const seleccionados = Array.from(document.querySelectorAll(".fila-checkbox:checked"))
-      .map(cb => cb.getAttribute("data-nombre"));
+      .map(cb => cb.getAttribute("data-id"));
 
     if (opcion.includes("Mis archivos")) {
-      ubicacionActual = "root";
-      historial = [];
+      carpetaActual = null;
+      historialCarpetas = [];
       renderizarBreadcrumb();
-      renderizarCarpeta(ubicacionActual);
+      cargarArchivos();
       return;
     }
 
@@ -281,7 +510,12 @@ document.addEventListener("DOMContentLoaded", function () {
         mostrarModalInfo("Selecciona al menos un archivo o carpeta para descargar.");
         return;
       }
-      mostrarModalInfo("Descargando: <br>" + seleccionados.join("<br>"));
+      // Simular descarga
+      const nombres = seleccionados.map(id => {
+        const archivo = archivosActuales.find(a => a._id === id);
+        return archivo ? archivo.nombre : 'Desconocido';
+      });
+      mostrarModalInfo("Descargando: <br>" + nombres.join("<br>"));
       return;
     }
 
@@ -308,7 +542,12 @@ document.addEventListener("DOMContentLoaded", function () {
         mostrarModalInfo("Selecciona al menos un archivo o carpeta para compartir.");
         return;
       }
-      mostrarModalInfo("Compartiendo: <br>" + seleccionados.join("<br>"));
+      // Por ahora solo simular
+      const nombres = seleccionados.map(id => {
+        const archivo = archivosActuales.find(a => a._id === id);
+        return archivo ? archivo.nombre : 'Desconocido';
+      });
+      mostrarModalInfo("Compartiendo: <br>" + nombres.join("<br>"));
       return;
     }
 
@@ -318,119 +557,58 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  function mostrarModalInfo(mensaje) {
-    modal.innerHTML = `
-      <div class="modal-content">
-        <div style="margin-bottom:15px;">${mensaje}</div>
-        <button class="modal-btn" id="btnCerrarInfo">OK</button>
-      </div>
-    `;
-    modal.style.display = "flex";
-    document.getElementById("btnCerrarInfo").onclick = cerrarModal;
-  }
+  // Event listener para clicks en opciones de archivos
+  document.addEventListener("click", function (e) {
+    // Toggle menú opciones
+    if (e.target.classList.contains("btn-opciones")) {
+      toggleMenu(e.target);
+      e.stopPropagation();
+      return;
+    }
 
-  function mostrarModalConfirmarBorrar(nombres) {
-    modal.innerHTML = `
-      <div class="modal-content">
-        <div style="margin-bottom:15px;">¿Seguro que deseas eliminar los siguientes elementos?<br><b>${nombres.join("<br>")}</b></div>
-        <button class="modal-btn" id="btnBorrarAhora">Borrar</button>
-        <button class="modal-cerrar" id="btnCancelarBorrar">Cancelar</button>
-      </div>
-    `;
-    modal.style.display = "flex";
-    document.getElementById("btnBorrarAhora").onclick = () => {
-      nombres.forEach(nombre => eliminarElemento(nombre, true));
-      cerrarModal();
-    };
-    document.getElementById("btnCancelarBorrar").onclick = cerrarModal;
-  }
-
-  function mostrarModalCerrarSesion() {
-    modal.innerHTML = `
-      <div class="modal-content">
-        <div style="margin-bottom:15px;">¿Seguro que deseas cerrar sesión?</div>
-        <button class="modal-btn" id="btnCerrarSesionAhora">Cerrar sesión</button>
-        <button class="modal-cerrar" id="btnCancelarCerrarSesion">Cancelar</button>
-      </div>
-    `;
-    modal.style.display = "flex";
-    document.getElementById("btnCerrarSesionAhora").onclick = () => {
-      if (window.localStorage) {
-        localStorage.removeItem("cloudlerData");
+    // Abrir elemento
+    if (e.target.classList.contains("abrir-opcion")) {
+      const btnOpciones = e.target.closest("td").querySelector(".btn-opciones");
+      const id = btnOpciones.getAttribute("data-id");
+      const archivo = archivosActuales.find(a => a._id === id);
+      
+      if (archivo.tipo === 'carpeta') {
+        abrirCarpeta(id);
+      } else {
+        window.location.href = 'cajas.html?id=' + id;
       }
-      window.location.href = "landing.html";
-    };
-    document.getElementById("btnCancelarCerrarSesion").onclick = cerrarModal;
-  }
-
-  function eliminarElemento(nombre, silencioso = false) {
-    let idx = carpetas[ubicacionActual].findIndex(e => e.nombre === nombre);
-    if (idx !== -1) {
-      const tipo = carpetas[ubicacionActual][idx].tipo;
-      if (tipo === "carpeta") delete carpetas[nombre];
-      carpetas[ubicacionActual].splice(idx, 1);
-      guardarDatos();
-      renderizarCarpeta(ubicacionActual);
-    }
-    if (!silencioso) cerrarModal();
-  }
-
-  function mostrarModalRenombrar(nombreViejo) {
-    modal.innerHTML = `
-      <div class="modal-content">
-        <h3>Renombrar</h3>
-        <input type="text" id="inputNuevoNombre" value="${nombreViejo}" style="padding:8px;width:80%;margin-bottom:10px;" maxlength="40"/>
-        <div id="errorNombre" style="color:red;font-size:13px;height:18px;"></div>
-        <button class="modal-btn" id="btnRenombrarAhora">Renombrar</button>
-        <button class="modal-cerrar" id="btnCancelarRenombrar">Cancelar</button>
-      </div>
-    `;
-    modal.style.display = "flex";
-    document.getElementById("inputNuevoNombre").focus();
-    document.getElementById("btnRenombrarAhora").onclick = () => renombrarElemento(nombreViejo);
-    document.getElementById("btnCancelarRenombrar").onclick = cerrarModal;
-    document.getElementById("inputNuevoNombre").onkeydown = e => {
-      if (e.key === "Enter") renombrarElemento(nombreViejo);
-    };
-  }
-
-  function renombrarElemento(nombreViejo) {
-    const input = document.getElementById("inputNuevoNombre");
-    const nuevoNombre = input.value.trim();
-    const errorDiv = document.getElementById("errorNombre");
-    if (!nuevoNombre) {
-      errorDiv.textContent = "El nombre no puede estar vacío.";
+      document.querySelectorAll(".menu-opciones").forEach(m => m.style.display = "none");
       return;
     }
-    if (nuevoNombre.length > 40) {
-      errorDiv.textContent = "El nombre es demasiado largo.";
-      return;
-    }
-    if (carpetas[ubicacionActual].some(e => e.nombre.toLowerCase() === nuevoNombre.toLowerCase() && e.nombre !== nombreViejo)) {
-      errorDiv.textContent = "Ya existe un elemento con ese nombre.";
-      return;
-    }
-    let item = carpetas[ubicacionActual].find(e => e.nombre === nombreViejo);
-    if (!item) return;
-    if (item.tipo === "carpeta") {
-      carpetas[nuevoNombre] = carpetas[nombreViejo];
-      delete carpetas[nombreViejo];
-      if (ubicacionActual === nombreViejo) ubicacionActual = nuevoNombre;
-    }
-    item.nombre = nuevoNombre;
-    guardarDatos();
-    renderizarBreadcrumb();
-    renderizarCarpeta(ubicacionActual);
-    cerrarModal();
-  }
 
-  modal.addEventListener("click", function (e) {
-    if (e.target === modal) cerrarModal();
+    // Eliminar elemento
+    if (e.target.classList.contains("eliminar-opcion")) {
+      const btnOpciones = e.target.closest("td").querySelector(".btn-opciones");
+      const id = btnOpciones.getAttribute("data-id");
+      
+      if (confirm("¿Estás seguro de eliminar este elemento?")) {
+        eliminarElemento(id);
+      }
+      document.querySelectorAll(".menu-opciones").forEach(m => m.style.display = "none");
+      return;
+    }
+
+    // Renombrar elemento
+    if (e.target.classList.contains("renombrar-opcion")) {
+      const btnOpciones = e.target.closest("td").querySelector(".btn-opciones");
+      const id = btnOpciones.getAttribute("data-id");
+      mostrarModalRenombrar(id);
+      document.querySelectorAll(".menu-opciones").forEach(m => m.style.display = "none");
+      return;
+    }
+
+    // Cerrar menús si se hace click fuera
+    if (!e.target.closest(".menu-opciones") && !e.target.classList.contains("btn-opciones")) {
+      document.querySelectorAll(".menu-opciones").forEach(m => m.style.display = "none");
+    }
   });
 
-  crearBtn.addEventListener("click", mostrarModalCrear);
-  ordenarPor.addEventListener("change", () => renderizarCarpeta(ubicacionActual));
-
+  // Menú hamburguesa
   btnHamburguesa.addEventListener("click", function () {
     sidebar.classList.add("abierta");
     sidebarOverlay.classList.add("activa");
@@ -441,18 +619,26 @@ document.addEventListener("DOMContentLoaded", function () {
     sidebarOverlay.classList.remove("activa");
   });
 
-  cargarDatos();
-  renderizarBreadcrumb();
-  renderizarCarpeta(ubicacionActual);
-
-  window.cerrarModal = cerrarModal;
-  window.crearElemento = crearElemento;
-});
-
-function toggleMenu(button) {
-  const menu = button.nextElementSibling;
-  menu.style.display = menu.style.display === "block" ? "none" : "block";
-  document.querySelectorAll(".menu-opciones").forEach(m => {
-    if (m !== menu) m.style.display = "none";
+  // Click fuera del modal para cerrar
+  modal.addEventListener("click", function (e) {
+    if (e.target === modal) cerrarModal();
   });
-}
+
+  // Función para toggle de menú
+  function toggleMenu(button) {
+    const menu = button.nextElementSibling;
+    const todosMenus = document.querySelectorAll(".menu-opciones");
+    
+    // Cerrar todos los otros menús
+    todosMenus.forEach(m => {
+      if (m !== menu) m.style.display = "none";
+    });
+    
+    // Toggle del menú actual
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+  }
+
+  // Cargar datos iniciales
+  renderizarBreadcrumb();
+  cargarArchivos();
+});
