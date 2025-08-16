@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerCompartidosConmigo = exports.compartirArchivo = exports.eliminarArchivo = exports.actualizarArchivo = exports.crearArchivo = exports.obtenerContenidoCarpeta = exports.obtenerCarpetasRaiz = void 0;
+exports.obtenerArchivosPorID = exports.buscarArchivos = exports.obtenerArchivosPorTipo = exports.obtenerCompartidosConmigo = exports.compartirArchivo = exports.eliminarArchivo = exports.actualizarArchivo = exports.crearArchivo = exports.obtenerContenidoCarpeta = exports.obtenerCarpetasRaiz = void 0;
 const mongoose_1 = require("mongoose");
 const archivos_model_1 = __importDefault(require("../models/archivos.model"));
 // Obtener carpetas/proyectos/snippets raíz del usuario
@@ -59,6 +59,7 @@ const eliminarArchivo = (req, res) => __awaiter(void 0, void 0, void 0, function
     res.json({ mensaje: "Archivo eliminado" });
 });
 exports.eliminarArchivo = eliminarArchivo;
+// Compartir archivo con otro usuario
 const compartirArchivo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { usuario, permisos } = req.body;
     const archivo = yield archivos_model_1.default.findById(req.params.id);
@@ -81,3 +82,43 @@ const obtenerCompartidosConmigo = (req, res) => __awaiter(void 0, void 0, void 0
     res.json(compartidos);
 });
 exports.obtenerCompartidosConmigo = obtenerCompartidosConmigo;
+// Obtener archivos por tipo
+const obtenerArchivosPorTipo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { numeroUsuario, tipo } = req.params;
+        const archivos = yield archivos_model_1.default.find({ propietario: parseInt(numeroUsuario), tipo });
+        res.json(archivos);
+    }
+    catch (error) {
+        res.status(500).json({ mensaje: "Error al obtener archivos" });
+    }
+});
+exports.obtenerArchivosPorTipo = obtenerArchivosPorTipo;
+//buscar archivos por nombre
+const buscarArchivos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const propietario = parseInt(req.params.numeroUsuario);
+    const { q } = req.query;
+    if (!q || typeof q !== 'string') {
+        return res.status(400).json({ mensaje: "Término de búsqueda requerido" });
+    }
+    const archivos = yield archivos_model_1.default.find({
+        propietario,
+        nombre: { $regex: q, $options: 'i' }
+    }).sort({ fechaModificacion: -1 });
+    res.json(archivos);
+});
+exports.buscarArchivos = buscarArchivos;
+// Obtener archivos por oID
+const obtenerArchivosPorID = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const archivo = yield archivos_model_1.default.findById(req.params.id); // ✅ Agregado await
+        if (!archivo) {
+            return res.status(404).json({ mensaje: "Archivo no encontrado" });
+        }
+        res.json(archivo);
+    }
+    catch (error) {
+        res.status(400).json({ mensaje: "ID inválido" });
+    }
+});
+exports.obtenerArchivosPorID = obtenerArchivosPorID;

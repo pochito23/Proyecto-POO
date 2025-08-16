@@ -47,8 +47,7 @@ export const eliminarArchivo = async (req: Request, res: Response) => {
 };
 
 
-
-
+// Compartir archivo con otro usuario
 export const compartirArchivo = async (req: Request, res: Response) => {
   const { usuario, permisos } = req.body;
   const archivo = await Archivo.findById(req.params.id);
@@ -72,4 +71,47 @@ export const obtenerCompartidosConmigo = async (req: Request, res: Response) => 
   const numeroUsuario = parseInt(req.params.numeroUsuario);
   const compartidos = await Archivo.find({ 'compartido.usuario': numeroUsuario });
   res.json(compartidos);
+};
+
+
+
+// Obtener archivos por tipo
+export const obtenerArchivosPorTipo = async (req: Request, res: Response) => {
+  try {
+    const { numeroUsuario, tipo } = req.params;
+    const archivos = await Archivo.find({ propietario: parseInt(numeroUsuario), tipo }); 
+    res.json(archivos);
+  } catch (error) {
+    res.status(500).json({ mensaje: "Error al obtener archivos" });
+  }
+};
+
+//buscar archivos por nombre
+export const buscarArchivos = async (req: Request, res: Response) => {
+    const propietario = parseInt(req.params.numeroUsuario);
+    const { q } = req.query;
+    
+    if (!q || typeof q !== 'string') {
+      return res.status(400).json({ mensaje: "Término de búsqueda requerido" });
+    }
+
+    const archivos = await Archivo.find({
+      propietario,
+      nombre: { $regex: q, $options: 'i' }
+    }).sort({ fechaModificacion: -1 });
+    
+    res.json(archivos);
+};
+
+// Obtener archivos por oID
+  export const obtenerArchivosPorID = async (req: Request, res: Response) => {
+ try {
+    const archivo = await Archivo.findById(req.params.id); // ✅ Agregado await
+    if (!archivo) {
+      return res.status(404).json({ mensaje: "Archivo no encontrado" });
+    }
+    res.json(archivo);
+  } catch (error) {
+    res.status(400).json({ mensaje: "ID inválido" });
+  }
 };
