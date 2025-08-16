@@ -6,7 +6,7 @@ import { obtenerusuarioId,
     recuperarContraseña,
     actualizarUsuario,
     cambiarPlan
- } from "../controllers/usuario.controller.js";
+ } from "../controllers/usuario.controller";
 
 const router = Router();
 

@@ -406,7 +406,7 @@ async function Registro(e) {
   }
 
   try {
-    const response = await fetch('http://localhost:3000/', {
+    const response = await fetch('http://localhost:3000/usuarios', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
