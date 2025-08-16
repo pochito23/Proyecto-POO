@@ -15,57 +15,55 @@
 <body>
     <div class="container">
         <header class="header">
-            <div class="header-left">
+            <div class="header-principal">
                <a href="landing.html"> <div class="logo"><img src="/frontend/img/Logo (1).svg"></div> </a>
             </div>
             <button class="inicio-btn" onclick="window.location.href = 'landing.html' ">INICIO</button>
         </header>
 
-        <div class="profile-section">
-            <div class="profile-avatar" onclick="document.getElementById('fileInput').click()">
-            <img id="avatar" alt="Avatar Preview">
-                <div id="iconContainer">
+        <div class="perfil-seccion">
+            <div class="perfil-avatar" onclick="document.getElementById('guardarImagen').click()">
+                <img id="avatar" alt="Avatar Preview">            
+                <div id="imagenAgregada">
                     <i class="fa-regular fa-user fa-2x"></i>
                 </div>
-                <input type="file" id="fileInput" accept="image/*" onchange="previewAvatar(event)">
+                <input type="file" id="guardarImagen" accept="image/*" onchange="ponerImagen(event)">
             </div>
-            <div class="profile-info">
+            <div class="perfil-info">
                 <h3>Perfil</h3>
                 <h1>Usuario</h1>
                 <div class="plan">Gratis</div>
             </div>
         </div>
 
-        <div class="menu-section" onclick="window.location.href = 'GestionArchivos.html' ">
+        <div class="menu-seccion" onclick="window.location.href = 'GestionArchivos.html' ">
+    
             <a href="#" class="menu-item">
-                <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-                </svg>
+                <div class="menu-icono">
+                <i class="fa-regular fa-folder"></i>
+                </div>
                 Mis archivos
             </a>
 
             <a href="#" class="menu-item">
-                <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14,2 14,8 20,8"></polyline>
-                </svg>
+                <div class="menu-icono">
+                    <i class="fa-regular fa-file-zipper"></i>
+                </div>
                 Crear nuevo archivo
             </a>
 
             <a href="planes.html" class="menu-item">
-                <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
+                <div class="menu-icono">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
                 Cambiar plan
             </a>
 
-            <div class="storage-section">
-                <div class="storage-title">Almacenamiento</div>
-                <div class="storage-info">3GB / 5GB utilizados</div>
-                <div class="storage-bar">
-                    <div class="storage-progress"></div>
+            <div class="alm-seccion">
+                <div class="alm-titulo">Almacenamiento</div>
+                <div class="alm-info">3GB / 5GB utilizados</div>
+                <div class="alm-barra">
+                    <div class="alm-progreso"></div>
                 </div>
             </div>
 
@@ -74,7 +72,7 @@
             </a>
 
             <a href="Login.html" class="menu-item">
-                <div class="menu-icon">
+                <div class="menu-icono">
                     <i class="fa-solid fa-arrow-right-from-bracket "></i>
                 </div>
                 Cerrar sesión
@@ -83,14 +81,14 @@
     </div>
 
     <script>
-  function previewAvatar(event) {
+  function ponerImagen(event) {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
 
       reader.onload = function(e) {
         const img = document.getElementById("avatar");
-        const icon = document.getElementById("iconContainer");
+        const icon = document.getElementById("imagenAgregada");
 
         img.src = e.target.result;
         img.style.display = "block";
