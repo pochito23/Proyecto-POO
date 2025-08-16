@@ -1,5 +1,5 @@
 
-var usuarios = [
+ var usuarios = [
   {
     id: 1,
     correo: "eduardo@gmail.com",
@@ -358,7 +358,7 @@ async function validarLogin(e) {
 
   try {
     // Hacer petición POST al backend
-    const response = await fetch('http://localhost:3000/api/usuarios/login', {
+    const response = await fetch("http://localhost:3000/usuarios/login", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -406,7 +406,7 @@ async function Registro(e) {
   }
 
   try {
-    const response = await fetch('http://localhost:3000/api/usuarios/registro', {
+    const response = await fetch('http://localhost:3000/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -476,7 +476,7 @@ async function recuperarClave(e) {
 
   try {
     // Primera petición para obtener la pregunta de seguridad
-    const response = await fetch('http://localhost:3000/api/usuarios/recuperar', {
+    const response = await fetch('http://localhost:3000/usuarios/recuperar', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -527,7 +527,7 @@ async function validarRespuestaSeguridad(email) {
   }
 
   try {
-    const response = await fetch('http://localhost:3000/api/usuarios/recuperar', {
+    const response = await fetch('http://localhost:3000/usuarios/recuperar', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
