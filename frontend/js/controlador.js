@@ -1,4 +1,3 @@
-const { request } = require("http");
 
 var usuarios = [
   {
@@ -48,17 +47,18 @@ var usuarios = [
   },
 ];
 
-const urlPostman = 'http://localhost:3000'
+const urlPostman = "http://localhost:3000";
 let usuarioActual = null;
 
 document.addEventListener("DOMContentLoaded", function () {
-    const usuarioGuardado = localStorage.getItem("usuarioClouder");
-    if (usuarioGuardado) {
-        usuarioActual = JSON.parse(usuarioGuardado);
-        document.getElementById("usuarioActual").textContent = `Usuario: ${usuarioActual.usuario}`;
-}
-})
-
+  const usuarioGuardado = localStorage.getItem("usuarioClouder");
+  if (usuarioGuardado) {
+    usuarioActual = JSON.parse(usuarioGuardado);
+    document.getElementById(
+      "usuarioActual"
+    ).textContent = `Usuario: ${usuarioActual.usuario}`;
+  }
+});
 
 //landing
 // Menú móvil
@@ -70,8 +70,6 @@ if (vistaMovil && Menu) {
     Menu.classList.toggle("active");
   });
 }
-
-
 
 // Cerrar menú móvil al hacer click en un enlace
 const Links = document.querySelectorAll("#menu a");
@@ -88,78 +86,81 @@ async function recuperarClave(e) {
   e.preventDefault();
 
   const email = document.getElementById("email").value.trim();
-  if(!email) {
+  if (!email) {
     alert("❌ Debes completar el campo de email");
     return;
   }
   const requestOptions = {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ correo: email })
+    body: JSON.stringify({ correo: email }),
   };
-  const conseguirPregunta = await fetch(`${urlPostman}/usuarios/recuperar-contrasena`, requestOptions);
+  const conseguirPregunta = await fetch(
+    `${urlPostman}/usuarios/recuperar-contrasena`,
+    requestOptions
+  );
   const data = await conseguirPregunta.json();
-  if( data.status === 404) {
+  if (data.status === 404) {
     alert("❌ Email no encontrado");
     return;
   }
 
-  if(conseguirPregunta.status ===200 && data.pregunta) {
-    mostrarFormularioRespuesta(email,data.pregunta);
+  if (conseguirPregunta.status === 200 && data.pregunta) {
+    mostrarFormularioRespuesta(email, data.pregunta);
   }
   function mostrarFormularioRespuesta(email, pregunta) {
+    const loginlog = document.querySelector("div.login-logo p i");
+    const content = document.querySelector(".form-group");
 
-  const loginlog = document.querySelector("div.login-logo p i");
-  const content = document.querySelector(".form-group");
-
-  loginlog.innerHTML = `Responde la siguiente pregunta de seguridad para recuperar tu cuenta`;
-  content.innerHTML = `
+    loginlog.innerHTML = `Responde la siguiente pregunta de seguridad para recuperar tu cuenta`;
+    content.innerHTML = `
         <div class="form-group">
             <label for="respuestaSeguridad">${pregunta}</label>
             <input type="text" id="respuestaSeguridad" placeholder="Ingresa tu respuesta">
         </div>
     `;
-  document.querySelector(".login-button").innerHTML = "VERIFICAR RESPUESTA";
-  document.querySelector(".login-button").onclick = function () {
-    validarRespuestaSeguridad(email);
-  };
-}
-
-
-
-async function validarRespuestaSeguridad(email) {
-  const respuestaInput = document
-    .getElementById("respuestaSeguridad")
-    .value.trim();
-
-  if (!respuestaInput) {
-    alert("❌ Respuesta incorrecta");
-    return;
+    document.querySelector(".login-button").innerHTML = "VERIFICAR RESPUESTA";
+    document.querySelector(".login-button").onclick = function () {
+      validarRespuestaSeguridad(email);
+    };
   }
 
-  requestOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      correo: email,
-      respuestaSeguridad: respuestaInput
-    })
-  }
+  async function validarRespuestaSeguridad(email) {
+    const respuestaInput = document
+      .getElementById("respuestaSeguridad")
+      .value.trim();
 
-    const verificarRespuesta = await fetch(`${urlPostman}/usuarios/recuperar-contrasena`, requestOptions);
+    if (!respuestaInput) {
+      alert("❌ Respuesta incorrecta");
+      return;
+    }
+
+    requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        correo: email,
+        respuestaSeguridad: respuestaInput,
+      }),
+    };
+
+    const verificarRespuesta = await fetch(
+      `${urlPostman}/usuarios/recuperar-contrasena`,
+      requestOptions
+    );
     const data = await verificarRespuesta.json();
 
-if (verificarRespuesta.status === 200 && data.contraseña) {
-  alert("✅ Respuesta correcta. Tu contraseña es: " + data.contraseña);
-  window.location.href = 'login.html';
-} else {
-  alert("❌ Respuesta incorrecta");
-}
-}
+    if (verificarRespuesta.status === 200 && data.contraseña) {
+      alert("✅ Respuesta correcta. Tu contraseña es: " + data.contraseña);
+      window.location.href = "login.html";
+    } else {
+      alert("❌ Respuesta incorrecta");
+    }
+  }
 }
 //============================ Validacion del formulario ============================
 function validarFormulario() {
@@ -208,7 +209,6 @@ function validarFormulario() {
 
 //Funcion para validar que el usuario no exista
 
-
 async function Registro(e) {
   e.preventDefault();
 
@@ -221,7 +221,7 @@ async function Registro(e) {
   const preguntas = {
     mascota: "¿Cuál es el nombre de tu mascota?",
     escuela: "¿Cómo se llamaba tu escuela primaria?",
-    madre: "¿Cuál es el segundo nombre de tu madre?"
+    madre: "¿Cuál es el segundo nombre de tu madre?",
   };
 
   if (!validarFormulario()) {
@@ -231,23 +231,25 @@ async function Registro(e) {
   const requestOptions = {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       correo,
       usuario,
       contraseña,
       preguntaSeguridad: preguntas[preguntaSeleccionada],
-      respuestaSeguridad: respuesta
-    })
+      respuestaSeguridad: respuesta,
+    }),
   };
 
-    const respuestaRegistro = await fetch(`${urlPostman}/usuarios`, requestOptions);
-
+  const respuestaRegistro = await fetch(
+    `${urlPostman}/usuarios`,
+    requestOptions
+  );
 
   if (respuestaRegistro.ok) {
     const usuarioRegistrado = await respuestaRegistro.json();
-    alert("✅ Usuario registrado exitosamente"); 
+    alert("✅ Usuario registrado exitosamente");
     // Animación del botón
     document.getElementById("inicioSes").innerHTML = `
       <button style="
@@ -265,9 +267,11 @@ async function Registro(e) {
         INICIA SESIÓN
       </button>
     `;
-    
+
     setTimeout(() => {
-      document.getElementById("inicioSes").innerHTML = `<button>INICIA SESIÓN</button>`;
+      document.getElementById(
+        "inicioSes"
+      ).innerHTML = `<button>INICIA SESIÓN</button>`;
     }, 5000);
 
     // Limpiar formulario
@@ -276,17 +280,15 @@ async function Registro(e) {
     document.getElementById("password").value = "";
     document.getElementById("pregunta").value = "";
     document.getElementById("respuesta").value = "";
-      return usuarioRegistrado;
+    return usuarioRegistrado;
   } else {
-    const errorData = await respuestaRegistro.json();
-    if (typeof errorData.data === 'string' && errorData.data.includes('ya existe')) {
-      alert("❌ " + errorData.data);
-    } else {
-      alert("❌ Error al registrar usuario");
-    }
+      if (typeof data === 'string' && data.includes('ya existe')) {
+        alert("❌ " + data);
+      } else {
+        alert("❌ Error al registrar usuario: " + (data.mensaje || 'Error desconocido'));
+      }
   }
 }
-
 
 document.addEventListener("DOMContentLoaded", function () {
   const grupoRespuesta = document.getElementById("grupo-respuesta");
@@ -303,107 +305,107 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-
 async function validarLogin(e) {
   e.preventDefault();
 
   const email = document.getElementById("email").value.trim();
   const contraseña = document.getElementById("password").value;
 
-  if(!email || !contraseña) {
+  if (!email || !contraseña) {
     alert("❌ Debes completar todos los campos");
     return;
   }
   const requestOptions = {
-    method: "POST", 
+    method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       correo: email,
-      contraseña: contraseña
-    })
+      contraseña: contraseña,
+    }),
   };
 
-  const usuarioEncontrado = await fetch(`${urlPostman}/usuarios/login`, requestOptions);
+  const usuarioEncontrado = await fetch(
+    `${urlPostman}/usuarios/login`,
+    requestOptions
+  );
   const data = await usuarioEncontrado.json();
   if (usuarioEncontrado.ok) {
-    usuarioActual = data.usuario
+    usuarioActual = data.usuario;
     localStorage.setItem("usuarioClouder", JSON.stringify(data));
-    window.location.href = 'GestionArchivos.html';
+    window.location.href = "GestionArchivos.html";
   } else {
-    alert('❌ Credenciales incorrectas');
+    alert("❌ Credenciales incorrectas");
   }
 }
 
 //============================ Planes y suscripciones ============================
 
-   // Datos de los planes
-      const planesData = {
-        gratis: {
-          nombre: "Plan Gratuito",
-          precio: "$0.00",
-          cantidad: 1,
-          beneficios: [
-            "✅  Proyecto unico",
-            "✅  vista previa",
-            "✅  Acceso web",
-            "❌  Sin soporte prioritario",
-          ],
-        },
-        basico: {
-          nombre: "Plan Básico",
-          precio: "$9.99",
-          cantidad: 5,
-          beneficios: [
-            "✅  5 proyectos",
-            "✅  Acceso web y móvil",
-            "✅  Soporte por email",
-            "✅  Sincronización automática",
-            "❌  Sin soporte prioritario",
+// Datos de los planes
+const planesData = {
+  gratis: {
+    nombre: "Plan Gratuito",
+    precio: "$0.00",
+    cantidad: 1,
+    beneficios: [
+      "✅  Proyecto unico",
+      "✅  vista previa",
+      "✅  Acceso web",
+      "❌  Sin soporte prioritario",
+    ],
+  },
+  basico: {
+    nombre: "Plan Básico",
+    precio: "$9.99",
+    cantidad: 5,
+    beneficios: [
+      "✅  5 proyectos",
+      "✅  Acceso web y móvil",
+      "✅  Soporte por email",
+      "✅  Sincronización automática",
+      "❌  Sin soporte prioritario",
+    ],
+  },
+  pro: {
+    nombre: "Plan Pro",
+    precio: "$12.00",
+    cantidad: 10,
+    beneficios: [
+      "✅  10 proyectos",
+      "✅  Todas las características básicas",
+      "✅  Soporte prioritario 24/7",
+    ],
+  },
+  empresarial: {
+    nombre: "Plan Empresarial",
+    precio: "$49.99",
+    cantidad: 20,
+    beneficios: [
+      "✅  Almacenamiento ilimitado",
+      "✅  Todas las características Pro",
+      "✅  Administración de usuarios",
+      "✅  Gerente de cuenta dedicado",
+    ],
+  },
+};
 
-          ],
-        },
-        pro: {
-          nombre: "Plan Pro",
-          precio: "$12.00",
-          cantidad: 10,
-          beneficios: [
-            "✅  10 proyectos",
-            "✅  Todas las características básicas",
-            "✅  Soporte prioritario 24/7",
+// Obtener plan seleccionado
+let planSeleccionado = "gratis";
+const urlParametro = new URLSearchParams(window.location.search);
+if (urlParametro.get("plan")) {
+  planSeleccionado = urlParametro.get("plan").toLowerCase();
+}
 
-          ],
-        },
-        empresarial: {
-          nombre: "Plan Empresarial",
-          precio: "$49.99",
-          cantidad: 20,
-          beneficios: [
-            "✅  Almacenamiento ilimitado",
-            "✅  Todas las características Pro",
-            "✅  Administración de usuarios",
-            "✅  Gerente de cuenta dedicado",
-          ],
-        },
-      };
+// Llenar información del plan
+function cargarInformacionPlan() {
+  const plan = planesData[planSeleccionado] || planesData.basico;
 
-      // Obtener plan seleccionado
-      let planSeleccionado = "gratis";
-      const urlParametro = new URLSearchParams(window.location.search);
-      if (urlParametro.get("plan")) {
-        planSeleccionado = urlParametro.get("plan").toLowerCase();
-      }
-
-      // Llenar información del plan
-      function cargarInformacionPlan() {
-        const plan = planesData[planSeleccionado] || planesData.basico;
-
-          const resumenElemento = document.getElementById("resumenPlan");
-          const precioElemento = document.getElementById("precioTotal");
-          const beneficiosElemento = document.getElementById("beneficiosPlan");
-        if(resumenElemento){
-        document.getElementById("resumenPlan").innerHTML = `
+  const resumenElemento = document.getElementById("resumenPlan");
+  const precioElemento = document.getElementById("precioTotal");
+  const beneficiosElemento = document.getElementById("beneficiosPlan");
+  if (resumenElemento) {
+    document.getElementById("resumenPlan").innerHTML = `
                 <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
                     <div>
                         <h3 class="font-bold text-text-title">${plan.nombre}</h3>
@@ -412,26 +414,25 @@ async function validarLogin(e) {
                     <div class="text-xl font-bold text-primary">${plan.precio}/mes</div>
                 </div>
             `;
-        }
-          if (precioElemento) {
+  }
+  if (precioElemento) {
     precioElemento.textContent = `${plan.precio}/mes`;
   }
 
   if (beneficiosElemento) {
-    const beneficiosHTML = plan.beneficios
-      .map(
-        (beneficio) =>
-          `<li class="flex items-center text-sm text-gray-700">
+    const beneficiosHTML = plan.beneficios.map(
+      (beneficio) =>
+        `<li class="flex items-center text-sm text-gray-700">
             <span class="mr-2">${beneficio.substring(0, 2)}</span>
             <span>${beneficio.substring(3)}</span>
           </li>`
-      )
-        document.getElementById("beneficiosPlan").innerHTML = beneficiosHTML;
-      }
-    }
-    const selectorPlan = document.getElementById('selectorPlan');
+    );
+    document.getElementById("beneficiosPlan").innerHTML = beneficiosHTML;
+  }
+}
+const selectorPlan = document.getElementById("selectorPlan");
 if (selectorPlan) {
-  selectorPlan.addEventListener('change', function(e) {
+  selectorPlan.addEventListener("change", function (e) {
     planSeleccionado = e.target.value;
     cargarInformacionPlan();
   });
@@ -458,7 +459,7 @@ if (fechaVencimiento) {
     e.target.value = valor;
   });
 }
- const cvv = document.getElementById("cvv");
+const cvv = document.getElementById("cvv");
 if (cvv) {
   cvv.addEventListener("input", function (e) {
     e.target.value = e.target.value.replace(/[^0-9]/g, "");
@@ -467,7 +468,7 @@ if (cvv) {
 
 const formularioPago = document.getElementById("formularioPago");
 if (formularioPago) {
-   formularioPago.addEventListener("submit", async function (e) {
+  formularioPago.addEventListener("submit", async function (e) {
     e.preventDefault();
 
     if (!usuarioActual) {
@@ -485,47 +486,53 @@ if (formularioPago) {
       },
       body: JSON.stringify({
         plan: planSeleccionado,
-      })
+      }),
     };
-        const respuesta = await fetch(`${urlPostman}/usuarios/${usuarioActual.id}/plan`, requestOptions);
-      
-      setTimeout(() => {
-            // En un sistema real, aquí harías la llamada al backend
-            document
-              .getElementById("modalConfirmacion")
-              .classList.remove("hidden");
-            document.getElementById("modalConfirmacion").classList.add("flex");
-          }, 2000);
-        });
-      }
-        if(respuesta.ok){
-          const data = await respuesta.json();
-          usuarioActual.plan = data.plan;
-          localStorage.setItem("usuarioClouder", JSON.stringify(usuarioActual));
-              document.getElementById("modalConfirmacion").classList.remove("hidden");
-        document.getElementById("modalConfirmacion").classList.add("flex");
-      } else {
-        alert("❌ Error al cambiar plan");
-        boton.textContent = "Confirmar Suscripción";
-      }
+    const respuesta = await fetch(
+      `${urlPostman}/usuarios/${usuarioActual.numeroUsuario}/plan`,
+      requestOptions
+    );
 
-      // Cerrar modal
+    setTimeout(() => {
+      // En un sistema real, aquí harías la llamada al backend
+      document.getElementById("modalConfirmacion").classList.remove("hidden");
+      document.getElementById("modalConfirmacion").classList.add("flex");
+    }, 2000);
+  });
+}
+if (respuesta.ok) {
+  const data = await respuesta.json();
+  usuarioActual.plan = planSeleccionado; // Usar la variable local
+  localStorage.setItem(
+    "usuarioClouder",
+    JSON.stringify({ usuario: usuarioActual })
+  );
 
-      // Redirigir a gestión
-      function redirigirGestion() {
-        window.location.href = "GestionArchivos.html";
-      }
+  document.getElementById("modalConfirmacion").classList.remove("hidden");
+  document.getElementById("modalConfirmacion").classList.add("flex");
+} else {
+  const error = await respuesta.json();
+  alert("❌ Error al cambiar plan: " + (error.mensaje || "Error desconocido"));
+  boton.textContent = "Confirmar Suscripción";
+}
 
-      // Cargar información al iniciar
-      document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById('selectorPlan').value = planSeleccionado;
-        cargarInformacionPlan();
-      });
+// Cerrar modal
 
-      //PERFIL USUARIO
-      async function actualizarPerfil(e) {
+// Redirigir a gestión
+function redirigirGestion() {
+  window.location.href = "GestionArchivos.html";
+}
+
+// Cargar información al iniciar
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("selectorPlan").value = planSeleccionado;
+  cargarInformacionPlan();
+});
+
+//PERFIL USUARIO
+async function actualizarPerfil(e) {
   e.preventDefault();
-  
+
   if (!usuarioActual) {
     alert("❌ No hay usuario logueado");
     return;
@@ -546,22 +553,26 @@ if (formularioPago) {
   }
 
   const requestOptions = {
-    method: 'PUT',
-  headers: {
-        'Content-Type': 'application/json'
-  },
-          body: JSON.stringify(datosActualizar)
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(datosActualizar),
+  };
 
-}
+  const respuesta = await fetch(
+    `${urlPostman}/usuarios/${usuarioActual.numeroUsuario}`,
+    requestOptions
+  );
 
-  const respuesta = await fetch(`${urlPostman}/usuarios/${usuarioActual.id}`, requestOptions);
-  const resultado = await respuesta.json();
+  if (respuesta.ok) {
+    const resultado = await respuesta.json();
 
-
-
-  if (resultado.success) {
-    usuarioActual = resultado.data.usuario;
-    localStorage.setItem('usuarioClouder', JSON.stringify(usuarioActual));
+    usuarioActual = resultado.usuario;
+    localStorage.setItem(
+      "usuarioClouder",
+      JSON.stringify({ usuario: usuarioActual })
+    );
     alert("✅ Perfil actualizado correctamente");
   } else {
     alert("❌ " + resultado.data.mensaje);

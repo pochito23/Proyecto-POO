@@ -17,10 +17,10 @@ router.delete('/eliminar/:id', archivos_controller_1.eliminarArchivo);
 router.put('/compartir/:id', archivos_controller_1.compartirArchivo);
 // Obtener elementos compartidos conmigo
 router.get('/usuario/:numeroUsuario/compartidos', archivos_controller_1.obtenerCompartidosConmigo);
-// Obtener archivos por tipo (NUEVO)
+// Obtener archivos por tipo 
 router.get('/usuario/:numeroUsuario/tipo/:tipo', archivos_controller_1.obtenerArchivosPorTipo);
-// Buscar archivos (NUEVO)
+// Buscar archivos 
 router.get('/usuario/:numeroUsuario/buscar', archivos_controller_1.buscarArchivos);
-// Obtener archivo específico por ID (NUEVO)
+// Obtener archivo específico por ID 
 router.get('/:id', archivos_controller_1.obtenerArchivosPorID);
 exports.default = router;

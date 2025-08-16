@@ -1,11 +1,9 @@
-const API_BASE = 'http://localhost:3000';
+const API = 'http://localhost:3000';
 
-// Variables globales
 let usuarioActual = null;
 let proyectoActual = null;
 let cambiosSinGuardar = false;
 
-// Configuración de los editores
 const opcionesEditor = {
   theme: "ace/theme/monokai",
   fontSize: "14px",
@@ -18,9 +16,8 @@ const editorHTML = ace.edit("editor-html", { mode: "ace/mode/html", ...opcionesE
 const editorCSS = ace.edit("editor-css", { mode: "ace/mode/css", ...opcionesEditor });
 const editorJS = ace.edit("editor-js", { mode: "ace/mode/javascript", ...opcionesEditor });
 
-// Función para hacer peticiones a la API
 async function hacerPeticion(url, opciones = {}) {
-    const respuesta = await fetch(`${API_BASE}${url}`, {
+    const respuesta = await fetch(`${API}${url}`, {
       headers: {
         'Content-Type': 'application/json',
         ...opciones.headers
@@ -35,16 +32,15 @@ async function hacerPeticion(url, opciones = {}) {
 
 // Cargar usuario y proyecto
 document.addEventListener('DOMContentLoaded', async function() {
-  // Verificar usuario logueado
-  const usuarioGuardado = localStorage.getItem('usuarioCloudler');
+  const usuarioGuardado = localStorage.getItem('usuarioClouder');
   if (!usuarioGuardado) {
     alert('❌ Debes iniciar sesión primero');
     window.location.href = 'Login.html';
     return;
   }
   usuarioActual = JSON.parse(usuarioGuardado);
+  usuarioActual = datosUsuario.usuario || datosUsuario
 
-  // Obtener ID del proyecto desde URL
   const params = new URLSearchParams(window.location.search);
   const proyectoId = params.get('id');
   
@@ -54,26 +50,61 @@ document.addEventListener('DOMContentLoaded', async function() {
     establecerContenidoPorDefecto();
   }
 
-  // Configurar eventos de los editores
   configurarEventosEditores();
+    actualizarVistaPrevia();
+
+  const btnGuardar = document.getElementById("btn-guardar");
+  if (btnGuardar) {
+    btnGuardar.addEventListener('click', guardarProyecto);
+  }
   
-  // Actualizar vista previa inicial
-  actualizarVistaPrevia();
+  const btnCambiarVista = document.getElementById("btn-cambiar-vista");
+  if (btnCambiarVista) {
+    btnCambiarVista.addEventListener('click', cambiarVista);
+  }
+
 });
 
 // Cargar proyecto desde el backend
 async function cargarProyecto(id) {
-  // En este caso, necesitarías un endpoint específico para obtener un archivo por ID
-  // Como no está en tu backend actual, simularemos con los datos que ya tienes
-  
-  // Por ahora, establecer contenido por defecto
-  // TODO: Implementar endpoint GET /archivos/:id
-  establecerContenidoPorDefecto();
-  proyectoActual = { _id: id };
-  
-  console.log('Cargando proyecto:', id);
+  try {
+    // USAR EL NUEVO ENDPOINT
+    const resultado = await hacerPeticion(`/archivos/${id}?usuario=${usuarioActual.numeroUsuario}`);
+    
+    if (resultado.success) {
+      proyectoActual = resultado.data;
+      
+      // Cargar el código en los editores
+      if (proyectoActual.tipo === 'proyecto') {
+        editorHTML.setValue(proyectoActual.codigoHTML || '', -1);
+        editorCSS.setValue(proyectoActual.codigoCSS || '', -1);
+        editorJS.setValue(proyectoActual.codigoJS || '', -1);
+      } else if (proyectoActual.tipo === 'snippet') {
+        // Para snippets, solo mostrar el código en el editor correspondiente
+        if (proyectoActual.lenguaje === 'html') {
+          editorHTML.setValue(proyectoActual.codigo || '', -1);
+        } else if (proyectoActual.lenguaje === 'css') {
+          editorCSS.setValue(proyectoActual.codigo || '', -1);
+        } else if (proyectoActual.lenguaje === 'javascript') {
+          editorJS.setValue(proyectoActual.codigo || '', -1);
+        }
+      }
+      
+      cambiosSinGuardar = false;
+      actualizarBotonGuardar();
+      actualizarVistaPrevia();
+      
+      console.log('Proyecto cargado:', proyectoActual.nombre);
+    } else {
+      console.error('Error al cargar proyecto:', resultado.data?.mensaje);
+      alert('❌ Error al cargar el proyecto: ' + (resultado.data?.mensaje || 'Error desconocido'));
+      establecerContenidoPorDefecto();
+    }
+  } catch (error) {
+    console.error('Error al cargar proyecto:', error);
+    establecerContenidoPorDefecto();
+  }
 }
-
 // Establecer contenido por defecto en los editores
 function establecerContenidoPorDefecto() {
   const htmlDefault = `<!DOCTYPE html>
@@ -213,9 +244,11 @@ function actualizarBotonGuardar() {
 
 async function guardarProyecto() {
   if (!cambiosSinGuardar) {
-    alert('ℹ️ No hay cambios para guardar');
+    mostrarNotificacion('ℹ️ No hay cambios para guardar', 'info');
     return;
   }
+
+
 
   const btnGuardar = document.getElementById("btn-guardar");
   const textoOriginal = btnGuardar.innerHTML;
@@ -271,3 +304,56 @@ async function guardarProyecto() {
       mostrarNotificacion('❌ Error al guardar: ' + (resultado.data?.mensaje || 'Error desconocido'), 'error');
     }
   }
+
+  function mostrarNotificacion(mensaje, tipo = 'info') {
+  const notificacion = document.createElement('div');
+  notificacion.className = `notificacion ${tipo}`;
+  notificacion.textContent = mensaje;
+  notificacion.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  `;
+  
+  switch (tipo) {
+    case 'success':
+      notificacion.style.background = '#10B981';
+      break;
+    case 'error':
+      notificacion.style.background = '#EF4444';
+      break;
+    default:
+      notificacion.style.background = '#6B7280';
+  }
+  
+  document.body.appendChild(notificacion);
+    setTimeout(() => {
+    notificacion.style.opacity = '1';
+  }, 100);
+  
+  setTimeout(() => {
+    notificacion.style.opacity = '0';
+    setTimeout(() => {
+      document.body.removeChild(notificacion);
+    }, 300);
+  }, 3000);
+}
+
+// Función para cambiar vista (horizontal/vertical)
+function cambiarVista() {
+  const contenedor = document.getElementById('contenedor-principal');
+  if (contenedor.classList.contains('vista-horizontal')) {
+    contenedor.classList.remove('vista-horizontal');
+    contenedor.classList.add('vista-vertical');
+  } else {
+    contenedor.classList.remove('vista-vertical');
+    contenedor.classList.add('vista-horizontal');
+  }
+}

@@ -104,66 +104,63 @@ export const recuperarContraseña = async (req: Request, res: Response) => {
   }
 };
 
+//actulizar usuario
 export const actualizarUsuario = async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
-  const { correo, usuario, contraseña } = req.body;
-  const usuarioExistente = await Usuario.findOne({ numeroUsuario: id });
-  if (!usuarioExistente) {
-    return res.status(404).json({ mensaje: "Usuario no encontrado" });
-  }
-
-  if (correo && correo !== usuarioExistente.correo) {
-    const correoEnUso = await Usuario.findOne({
-      correo,
-      numeroUsuario: { $ne: id },
-    }); //ne significa "no igual"
-    if (correoEnUso) {
-      return res
-        .status(400)
-        .json({ mensaje: "El correo ya está en uso por otro usuario" });
+  try {
+    const id = parseInt(req.params.id);
+    const { correo, usuario, contraseña } = req.body;
+    
+    const usuarioExistente = await Usuario.findOne({ numeroUsuario: id });
+    if (!usuarioExistente) {
+      return res.status(404).json({ mensaje: "Usuario no encontrado" });
     }
-  }
 
-  if (usuario && usuario !== usuarioExistente.usuario) {
-    const usuarioEnUso = await Usuario.findOne({
-      usuario,
-      numeroUsuario: { $ne: id },
+    // Verificar correo único
+    if (correo && correo !== usuarioExistente.correo) {
+      const correoEnUso = await Usuario.findOne({
+        correo,
+        numeroUsuario: { $ne: id },
+      });
+      if (correoEnUso) {
+        return res.status(400).json({ mensaje: "El correo ya está en uso por otro usuario" });
+      }
+    }
+
+    // Verificar usuario único
+    if (usuario && usuario !== usuarioExistente.usuario) {
+      const usuarioEnUso = await Usuario.findOne({
+        usuario,
+        numeroUsuario: { $ne: id },
+      });
+      if (usuarioEnUso) {
+        return res.status(400).json({ mensaje: "El nombre de usuario ya está en uso" });
+      }
+    }
+
+    const datosActualizar: any = {};
+    if (correo) datosActualizar.correo = correo;
+    if (usuario) datosActualizar.usuario = usuario;
+    if (contraseña) datosActualizar.contraseña = contraseña;
+
+    const usuarioActualizado = await Usuario.findOneAndUpdate(
+      { numeroUsuario: id },
+      datosActualizar,
+      { new: true }
+    );
+
+    if (!usuarioActualizado) {
+      return res.status(404).json({ mensaje: "Usuario no encontrado" });
+    }
+
+    const { contraseña: _, ...usuarioSinClave } = usuarioActualizado.toObject();
+    res.json({
+      success: true, // ✅ Agregado para consistencia
+      usuario: usuarioSinClave,
+      mensaje: "Perfil actualizado correctamente",
     });
-    if (usuarioEnUso) {
-      return res
-        .status(400)
-        .json({ mensaje: "El nombre de usuario ya está en uso" });
-    }
+  } catch (error) {
+    res.status(500).json({ mensaje: "Error interno del servidor" });
   }
-
-const datosActualizar: any = {}
-    // Solo actualizar los campos que se proporcionaron
-    //con partial todas las propiedades son opcionales  
-  if (correo) {
-    datosActualizar.correo = correo;
-  }
-  if (usuario) {
-    datosActualizar.usuario = usuario;
-  }
-
-  if (contraseña) {
-    datosActualizar.contraseña = contraseña;
-  }
-
-  const usuarioActualizado = await Usuario.findOneAndUpdate(
-    { numeroUsuario: id },
-    datosActualizar,
-    { new: true }
-  );
-if (!usuarioActualizado) {
-  return res.status(404).json({ mensaje: "Usuario no encontrado" });
-}
-  // Devolver usuario sin contraseña
-  const { contraseña: _, ...usuarioSinClave } = usuarioActualizado.toObject();
-  res.json({
-    usuario: usuarioSinClave,
-    mensaje: "Perfil actualizado correctamente",
-  });
 };
 
 //endpoint para cambiar el plan del usuario

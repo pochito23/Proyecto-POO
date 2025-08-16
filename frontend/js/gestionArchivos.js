@@ -1,18 +1,20 @@
 // Configuración de la API
-const API_BASE = 'http://localhost:3000';
+const API = 'http://localhost:3000';
 
 // Variable global para el usuario actual
 let usuarioActual = null;
 
 document.addEventListener("DOMContentLoaded", function () {
   // Cargar usuario actual
-  const usuarioGuardado = localStorage.getItem('usuarioCloudler');
+  const usuarioGuardado = localStorage.getItem('usuarioClouder');
   if (!usuarioGuardado) {
     alert('❌ Debes iniciar sesión primero');
     window.location.href = 'Login.html';
     return;
   }
-  usuarioActual = JSON.parse(usuarioGuardado);
+  const datosUsuario = JSON.parse(usuarioGuardado);
+  usuarioActual = datosUsuario.usuario || datosUsuario;
+
 
   // Elementos del DOM
   const crearBtn = document.getElementById("crearBtn");
@@ -36,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Función para hacer peticiones a la API
   async function hacerPeticion(url, opciones = {}) {
     try {
-      const respuesta = await fetch(`${API_BASE}${url}`, {
+      const respuesta = await fetch(`${API}${url}`, {
         headers: {
           'Content-Type': 'application/json',
           ...opciones.headers
@@ -77,7 +79,22 @@ document.addEventListener("DOMContentLoaded", function () {
       `;
     }
   }
-
+async function buscarArchivos(termino) {
+  if (!termino.trim()) {
+    cargarArchivos(); 
+    return;
+  }
+  
+  const url = `/archivos/usuario/${usuarioActual.numeroUsuario}/buscar?q=${encodeURIComponent(termino)}`;
+  const resultado = await hacerPeticion(url);
+  
+  if (resultado.success) {
+    archivosActuales = resultado.data;
+    renderizarArchivos();
+  } else {
+    console.error('Error en búsqueda:', resultado.error);
+  }
+}
   // Renderizar archivos en la tabla
   function renderizarArchivos() {
     archivoTabla.innerHTML = "";
@@ -471,25 +488,44 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
     modal.style.display = "flex";
     document.getElementById("btnCerrarSesionAhora").onclick = () => {
-      localStorage.removeItem('usuarioCloudler');
+      localStorage.removeItem('usuarioClouder');
       window.location.href = "landing.html";
     };
     document.getElementById("btnCancelarCerrarSesion").onclick = cerrarModal;
   }
 
-  // Event listeners
+
+async function filtrarPorTipo(tipo) {
+  const url = `/archivos/usuario/${usuarioActual.numeroUsuario}/tipo/${tipo}${carpetaActual ? '?carpeta=' + carpetaActual : ''}`;
+  const resultado = await hacerPeticion(url);
   
-  // Click en crear
+  if (resultado.success) {
+    archivosActuales = resultado.data;
+    renderizarArchivos();
+    
+    // Actualizar breadcrumb para mostrar el filtro
+    const breadcrumbText = document.querySelector('.breadcrumb-text');
+    if (breadcrumbText) {
+      breadcrumbText.textContent += ` - Solo ${tipo}s`;
+    }
+  } else {
+    console.error('Error al filtrar por tipo:', resultado.error);
+  }
+}
+  
   crearBtn.addEventListener("click", mostrarModalCrear);
 
-  // Cambio en ordenar
   ordenarPor.addEventListener("change", () => renderizarArchivos());
 
-  // Búsqueda
   searchInput.addEventListener("input", function () {
-    filtroBusqueda = this.value;
-    renderizarArchivos();
-  });
+      const termino = this.value.trim();
+
+if (termino.length === 0) {
+    cargarArchivos(); 
+  } else if (termino.length >= 2) {
+    buscarArchivos(termino);
+  }
+});
 
   // Menú lateral
   menuLateral.addEventListener("click", function (e) {
