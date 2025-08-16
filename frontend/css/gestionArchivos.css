@@ -35,7 +35,7 @@ body {
 }
 
 #btnAtras{
-  color: #004d4d;
+  color: white;
   background-color: #c8c3cc;
     width: 100px;
     height: 50px;
@@ -75,7 +75,7 @@ body {
 .menu-lateral {
   list-style: none;
   padding: 0;
-  margin: 5px 0 0 0;
+  margin-top: 20px ;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -123,7 +123,7 @@ body {
   border-radius: 10px;
   overflow: hidden;
   margin: 10px 0 8px 0;
-  height: 14px;
+  height: 18px;
 }
 
 .usado {

@@ -155,7 +155,7 @@ export const actualizarUsuario = async (req: Request, res: Response) => {
 
     const { contraseña: _, ...usuarioSinClave } = usuarioActualizado.toObject();
     res.json({
-      success: true, // ✅ Agregado para consistencia
+      success: true, 
       usuario: usuarioSinClave,
       mensaje: "Perfil actualizado correctamente",
     });
@@ -166,33 +166,61 @@ export const actualizarUsuario = async (req: Request, res: Response) => {
 
 //endpoint para cambiar el plan del usuario
 export const cambiarPlan = async (req: Request, res: Response) => {
+  try {
     const id = parseInt(req.params.id);
-    const plan  = req.body.plan;
+    const { plan } = req.body;
 
-    if (!req.body.plan) {
-    return res.status(400).json({ mensaje: "Plan es requerido" });
-}
+
+    if (!plan) {
+      return res.status(400).json({ mensaje: "Plan es requerido" });
+    }
+    
+    const mapeoPlanes: Record<string, string> = {
+      'gratis': 'gratis',
+      'basico': 'estudiante', 
+      'pro': 'pro',
+      'empresarial': 'empresarial'
+    };
+
+    const planBackend = mapeoPlanes[plan] || plan;
     
     const planesValidos = ['gratis', 'estudiante', 'pro', 'empresarial'];
-    if (!planesValidos.includes(plan)) {
-      return res.status(400).json({ mensaje: "Plan no válido" });
+    if (!planesValidos.includes(planBackend)) {
+      return res.status(400).json({ mensaje: `Plan no válido: ${plan}. Planes válidos: ${planesValidos.join(', ')}` });
+    }
+    
+    const usuarioExistente = await Usuario.findOne({ numeroUsuario: id });
+    if (!usuarioExistente) {
+      return res.status(404).json({ mensaje: "Usuario no encontrado" });
     }
     
     const usuarioActualizado = await Usuario.findOneAndUpdate(
       { numeroUsuario: id },
-      { plan: plan },
+      { plan: planBackend },
       { new: true }
     );
     
     if (!usuarioActualizado) {
-      return res.status(404).json({ mensaje: "Usuario no encontrado" });
+      return res.status(404).json({ mensaje: "Error al actualizar usuario" });
     }
     
-    const { contraseña: _, ...usuarioSinClave } = usuarioActualizado.toObject();
+    const { contraseña, ...usuarioSinClave } = usuarioActualizado.toObject();
+    
     res.json({ 
+      success: true, 
       usuario: usuarioSinClave, 
-      mensaje: `Plan cambiado a ${plan} exitosamente` 
+      mensaje: `Plan cambiado a ${planBackend} exitosamente`,
+      planOriginal: plan, 
+      planGuardado: planBackend 
     });
     
+  } catch (error) {
+    console.error('Error al cambiar plan:', error);
+    res.status(500).json({ mensaje: "Error interno del servidor" });
+  }
+};
 
+export const obtenerTodosUsuarios = async (req: Request, res: Response) => {
+  const usuarios = await Usuario.find({}, 'numeroUsuario nombre correo'); 
+  res.json(usuarios);
 };

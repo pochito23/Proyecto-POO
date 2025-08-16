@@ -15,8 +15,6 @@ router.put('/actualizar/:id', archivos_controller_1.actualizarArchivo);
 router.delete('/eliminar/:id', archivos_controller_1.eliminarArchivo);
 // Compartir con otro usuario
 router.put('/compartir/:id', archivos_controller_1.compartirArchivo);
-// Obtener elementos compartidos conmigo
-router.get('/usuario/:numeroUsuario/compartidos', archivos_controller_1.obtenerCompartidosConmigo);
 // Obtener archivos por tipo 
 router.get('/usuario/:numeroUsuario/tipo/:tipo', archivos_controller_1.obtenerArchivosPorTipo);
 // Buscar archivos 

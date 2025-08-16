@@ -47,31 +47,6 @@ export const eliminarArchivo = async (req: Request, res: Response) => {
 };
 
 
-// Compartir archivo con otro usuario
-export const compartirArchivo = async (req: Request, res: Response) => {
-  const { usuario, permisos } = req.body;
-  const archivo = await Archivo.findById(req.params.id);
-  
-  if (!archivo) {
-    return res.status(404).json({ mensaje: "Archivo no encontrado" });
-  }
-
-  if (!usuario || !permisos) {
-    return res.status(400).json({ mensaje: "Falta usuario o permisos" });
-  }
-
-  // Convertir a número por si viene como string
-  archivo.compartido.push({ usuario: Number(usuario), permisos });
-  await archivo.save();
-
-  res.json(archivo);
-};
-// Obtener archivos compartidos conmigo
-export const obtenerCompartidosConmigo = async (req: Request, res: Response) => {
-  const numeroUsuario = parseInt(req.params.numeroUsuario);
-  const compartidos = await Archivo.find({ 'compartido.usuario': numeroUsuario });
-  res.json(compartidos);
-};
 
 
 
@@ -106,7 +81,7 @@ export const buscarArchivos = async (req: Request, res: Response) => {
 // Obtener archivos por oID
   export const obtenerArchivosPorID = async (req: Request, res: Response) => {
  try {
-    const archivo = await Archivo.findById(req.params.id); // ✅ Agregado await
+    const archivo = await Archivo.findById(req.params.id); 
     if (!archivo) {
       return res.status(404).json({ mensaje: "Archivo no encontrado" });
     }
@@ -115,3 +90,21 @@ export const buscarArchivos = async (req: Request, res: Response) => {
     res.status(400).json({ mensaje: "ID inválido" });
   }
 };
+
+export const compartirArchivo = async (req: Request, res: Response) => {
+  const archivo = await Archivo.findById(req.params.id);
+  if (!archivo) return res.status(404).json({ mensaje: 'Archivo no encontrado' });
+
+  const { usuarios } = req.body; // array de {usuario, permisos}
+
+  usuarios.forEach((u: {usuario: number, permisos: 'lectura'|'escritura'}) => {
+    const existe = archivo.compartido.some(c => c.usuario === u.usuario);
+    if (!existe) {
+      archivo.compartido.push({ usuario: u.usuario, permisos: u.permisos });
+    }
+  });
+
+  await archivo.save();
+  res.json({ mensaje: 'Archivo compartido correctamente' });
+};
+

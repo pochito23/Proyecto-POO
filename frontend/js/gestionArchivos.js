@@ -1,5 +1,4 @@
-// Configuración de la API
-const API = 'http://localhost:3000';
+const API = 'http://192.168.1.28:3000';
 
 // Variable global para el usuario actual
 let usuarioActual = null;
@@ -670,3 +669,69 @@ if (termino.length === 0) {
   renderizarBreadcrumb();
   cargarArchivos();
 });
+
+// Mostrar modal de compartir
+async function mostrarModalCompartir(idsArchivos) {
+  const usuarios = await obtenerListaUsuarios();
+
+  const nombresArchivos = idsArchivos.map(id => {
+    const archivo = archivosActuales.find(a => a._id === id);
+    return archivo ? archivo.nombre : 'Desconocido';
+  });
+
+  const opcionesUsuarios = usuarios.map(usuario => 
+    `<label style="display:block;margin:5px 0;">
+       <input type="checkbox" class="usuario-checkbox" value="${usuario.numeroUsuario}"> 
+       ${usuario.nombre} (${usuario.correo})
+     </label>`
+  ).join('');
+
+  modal.innerHTML = `
+    <div class="modal-content">
+      <h3>Compartir archivos</h3>
+      <p>Archivos: <strong>${nombresArchivos.join(', ')}</strong></p>
+      <div style="max-height:200px;overflow-y:auto;margin:10px 0;">
+        ${opcionesUsuarios}
+      </div>
+      <button class="modal-btn" id="btnCompartirAhora">Compartir</button>
+      <button class="modal-cerrar" id="btnCancelarCompartir">Cancelar</button>
+    </div>
+  `;
+
+  modal.style.display = "flex";
+  document.getElementById("btnCompartirAhora").onclick = () => compartirArchivos(idsArchivos);
+  document.getElementById("btnCancelarCompartir").onclick = cerrarModal;
+}
+
+// Obtener lista de usuarios
+async function obtenerListaUsuarios() {
+  const resultado = await hacerPeticion('/usuarios'); // Endpoint que creamos
+  return resultado.success ? resultado.data : [];
+}
+
+// Compartir archivos con usuarios seleccionados
+async function compartirArchivos(idsArchivos) {
+  const usuariosSeleccionados = Array.from(document.querySelectorAll('.usuario-checkbox:checked'))
+    .map(cb => cb.value);
+
+  if (usuariosSeleccionados.length === 0) {
+    alert('Selecciona al menos un usuario');
+    return;
+  }
+
+  let exitosos = 0;
+  for (const id of idsArchivos) {
+    const resultado = await hacerPeticion(`/archivos/compartir/${id}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        usuarios: usuariosSeleccionados,
+        permisos: 'lectura'
+      })
+    });
+
+    if (resultado.success) exitosos++;
+  }
+
+  cerrarModal();
+  alert(`✅ ${exitosos} archivo(s) compartido(s) correctamente`);
+}

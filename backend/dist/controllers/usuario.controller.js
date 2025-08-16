@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cambiarPlan = exports.actualizarUsuario = exports.recuperarContraseña = exports.loginUsuario = exports.registrarUsuario = exports.obtenerusuarioId = void 0;
+exports.obtenerTodosUsuarios = exports.cambiarPlan = exports.actualizarUsuario = exports.recuperarContraseña = exports.loginUsuario = exports.registrarUsuario = exports.obtenerusuarioId = void 0;
 const usuario_model_1 = __importDefault(require("../models/usuario.model"));
 //endpoint para conseguir usuario por id
 const obtenerusuarioId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -159,7 +159,7 @@ const actualizarUsuario = (req, res) => __awaiter(void 0, void 0, void 0, functi
         }
         const _a = usuarioActualizado.toObject(), { contraseña: _ } = _a, usuarioSinClave = __rest(_a, ["contrase\u00F1a"]);
         res.json({
-            success: true, // ✅ Agregado para consistencia
+            success: true,
             usuario: usuarioSinClave,
             mensaje: "Perfil actualizado correctamente",
         });
@@ -171,23 +171,48 @@ const actualizarUsuario = (req, res) => __awaiter(void 0, void 0, void 0, functi
 exports.actualizarUsuario = actualizarUsuario;
 //endpoint para cambiar el plan del usuario
 const cambiarPlan = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = parseInt(req.params.id);
-    const plan = req.body.plan;
-    if (!req.body.plan) {
-        return res.status(400).json({ mensaje: "Plan es requerido" });
+    try {
+        const id = parseInt(req.params.id);
+        const { plan } = req.body;
+        if (!plan) {
+            return res.status(400).json({ mensaje: "Plan es requerido" });
+        }
+        const mapeoPlanes = {
+            'gratis': 'gratis',
+            'basico': 'estudiante',
+            'pro': 'pro',
+            'empresarial': 'empresarial'
+        };
+        const planBackend = mapeoPlanes[plan] || plan;
+        const planesValidos = ['gratis', 'estudiante', 'pro', 'empresarial'];
+        if (!planesValidos.includes(planBackend)) {
+            return res.status(400).json({ mensaje: `Plan no válido: ${plan}. Planes válidos: ${planesValidos.join(', ')}` });
+        }
+        const usuarioExistente = yield usuario_model_1.default.findOne({ numeroUsuario: id });
+        if (!usuarioExistente) {
+            return res.status(404).json({ mensaje: "Usuario no encontrado" });
+        }
+        const usuarioActualizado = yield usuario_model_1.default.findOneAndUpdate({ numeroUsuario: id }, { plan: planBackend }, { new: true });
+        if (!usuarioActualizado) {
+            return res.status(404).json({ mensaje: "Error al actualizar usuario" });
+        }
+        const _a = usuarioActualizado.toObject(), { contraseña } = _a, usuarioSinClave = __rest(_a, ["contrase\u00F1a"]);
+        res.json({
+            success: true,
+            usuario: usuarioSinClave,
+            mensaje: `Plan cambiado a ${planBackend} exitosamente`,
+            planOriginal: plan,
+            planGuardado: planBackend
+        });
     }
-    const planesValidos = ['gratis', 'estudiante', 'pro', 'empresarial'];
-    if (!planesValidos.includes(plan)) {
-        return res.status(400).json({ mensaje: "Plan no válido" });
+    catch (error) {
+        console.error('Error al cambiar plan:', error);
+        res.status(500).json({ mensaje: "Error interno del servidor" });
     }
-    const usuarioActualizado = yield usuario_model_1.default.findOneAndUpdate({ numeroUsuario: id }, { plan: plan }, { new: true });
-    if (!usuarioActualizado) {
-        return res.status(404).json({ mensaje: "Usuario no encontrado" });
-    }
-    const _a = usuarioActualizado.toObject(), { contraseña: _ } = _a, usuarioSinClave = __rest(_a, ["contrase\u00F1a"]);
-    res.json({
-        usuario: usuarioSinClave,
-        mensaje: `Plan cambiado a ${plan} exitosamente`
-    });
 });
 exports.cambiarPlan = cambiarPlan;
+const obtenerTodosUsuarios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const usuarios = yield usuario_model_1.default.find({}, 'numeroUsuario nombre correo');
+    res.json(usuarios);
+});
+exports.obtenerTodosUsuarios = obtenerTodosUsuarios;

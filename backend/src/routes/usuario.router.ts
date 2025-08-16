@@ -5,7 +5,8 @@ import { obtenerusuarioId,
     loginUsuario,
     recuperarContraseña,
     actualizarUsuario,
-    cambiarPlan
+    cambiarPlan,
+    obtenerTodosUsuarios 
  } from "../controllers/usuario.controller";
 
 const router = Router();
@@ -16,5 +17,5 @@ router.post('/login',loginUsuario);
 router.post('/recuperar-contrasena',recuperarContraseña);
 router.put('/:id',actualizarUsuario);
 router.put('/:id/plan',cambiarPlan);
-
+router.get('/usuarios', obtenerTodosUsuarios);
 export default router;

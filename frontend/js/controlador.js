@@ -1,5 +1,5 @@
 // ===== CONFIGURACIÓN Y VARIABLES GLOBALES =====
-const urlPostman = "http://localhost:3000";
+const urlPostman = "http://192.168.1.28:3000";
 let usuarioActual = null;
 
 // ===== INICIALIZACIÓN =====
@@ -547,14 +547,14 @@ const planesData = {
     precio: "$0.00",
     cantidad: 1,
     beneficios: [
-      "✅  Proyecto único",
+      "✅  1 proyecto",
       "✅  Vista previa",
       "✅  Acceso web",
       "❌  Sin soporte prioritario",
     ],
   },
-  basico: {
-    nombre: "Plan Basico",
+  basico: { // ❗ Frontend usa 'basico'
+    nombre: "Plan Básico",
     precio: "$9.99",
     cantidad: 5,
     beneficios: [
@@ -686,6 +686,26 @@ document.addEventListener('DOMContentLoaded', function() {
     formularioPago.addEventListener("submit", async function (e) {
       e.preventDefault();
 
+        const usuarioGuardado = localStorage.getItem("usuarioClouder");
+      if (!usuarioGuardado) {
+        alert("❌ Debes iniciar sesión primero");
+        window.location.href = 'Login.html';
+        return;
+      }
+      let usuarioActual;
+      try {
+        const datosUsuario = JSON.parse(usuarioGuardado);
+        usuarioActual = datosUsuario.usuario;
+      } catch (error) {
+        console.error('Error al parsear usuario:', error);
+        alert("❌ Error en los datos del usuario. Inicia sesión nuevamente.");
+        localStorage.removeItem("usuarioClouder");
+        window.location.href = 'Login.html';
+        return;
+      }
+
+      console.log('Usuario actual:', usuarioActual);
+      console.log('Plan seleccionado:', planSeleccionado);
       if (!usuarioActual) {
         alert("❌ Debes iniciar sesión primero");
         return;
@@ -743,4 +763,16 @@ document.addEventListener('DOMContentLoaded', function() {
 // Función para redirigir a gestión
 function redirigirGestion() {
   window.location.href = "GestionArchivos.html";
+}
+
+function redirigirPlanes() {
+  const usuarioGuardado = localStorage.getItem("usuarioClouder");
+
+  if (usuarioGuardado) {
+    const usuario = JSON.parse(usuarioGuardado);
+    const plan = usuario.plan ? usuario.plan : "basico";
+    window.location.href = "Planes.html?plan=" + plan;
+  } else {
+    window.location.href = "login.html";
+  }
 }

@@ -6,10 +6,9 @@ import {
   actualizarArchivo,
   eliminarArchivo,
   compartirArchivo,
-  obtenerCompartidosConmigo,
   obtenerArchivosPorID,
   buscarArchivos,
-  obtenerArchivosPorTipo
+  obtenerArchivosPorTipo,
 } from '../controllers/archivos.controller';
 
 const router = Router();
@@ -32,8 +31,6 @@ router.delete('/eliminar/:id', eliminarArchivo);
 // Compartir con otro usuario
 router.put('/compartir/:id', compartirArchivo);
 
-// Obtener elementos compartidos conmigo
-router.get('/usuario/:numeroUsuario/compartidos', obtenerCompartidosConmigo);
 
 // Obtener archivos por tipo 
 router.get('/usuario/:numeroUsuario/tipo/:tipo', obtenerArchivosPorTipo);

@@ -9,4 +9,5 @@ router.post('/login', usuario_controller_1.loginUsuario);
 router.post('/recuperar-contrasena', usuario_controller_1.recuperarContraseña);
 router.put('/:id', usuario_controller_1.actualizarUsuario);
 router.put('/:id/plan', usuario_controller_1.cambiarPlan);
+router.get('/usuarios', usuario_controller_1.obtenerTodosUsuarios);
 exports.default = router;

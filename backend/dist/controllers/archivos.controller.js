@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerArchivosPorID = exports.buscarArchivos = exports.obtenerArchivosPorTipo = exports.obtenerCompartidosConmigo = exports.compartirArchivo = exports.eliminarArchivo = exports.actualizarArchivo = exports.crearArchivo = exports.obtenerContenidoCarpeta = exports.obtenerCarpetasRaiz = void 0;
+exports.compartirArchivo = exports.obtenerArchivosPorID = exports.buscarArchivos = exports.obtenerArchivosPorTipo = exports.eliminarArchivo = exports.actualizarArchivo = exports.crearArchivo = exports.obtenerContenidoCarpeta = exports.obtenerCarpetasRaiz = void 0;
 const mongoose_1 = require("mongoose");
 const archivos_model_1 = __importDefault(require("../models/archivos.model"));
 // Obtener carpetas/proyectos/snippets raíz del usuario
@@ -59,29 +59,6 @@ const eliminarArchivo = (req, res) => __awaiter(void 0, void 0, void 0, function
     res.json({ mensaje: "Archivo eliminado" });
 });
 exports.eliminarArchivo = eliminarArchivo;
-// Compartir archivo con otro usuario
-const compartirArchivo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { usuario, permisos } = req.body;
-    const archivo = yield archivos_model_1.default.findById(req.params.id);
-    if (!archivo) {
-        return res.status(404).json({ mensaje: "Archivo no encontrado" });
-    }
-    if (!usuario || !permisos) {
-        return res.status(400).json({ mensaje: "Falta usuario o permisos" });
-    }
-    // Convertir a número por si viene como string
-    archivo.compartido.push({ usuario: Number(usuario), permisos });
-    yield archivo.save();
-    res.json(archivo);
-});
-exports.compartirArchivo = compartirArchivo;
-// Obtener archivos compartidos conmigo
-const obtenerCompartidosConmigo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const numeroUsuario = parseInt(req.params.numeroUsuario);
-    const compartidos = yield archivos_model_1.default.find({ 'compartido.usuario': numeroUsuario });
-    res.json(compartidos);
-});
-exports.obtenerCompartidosConmigo = obtenerCompartidosConmigo;
 // Obtener archivos por tipo
 const obtenerArchivosPorTipo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -111,7 +88,7 @@ exports.buscarArchivos = buscarArchivos;
 // Obtener archivos por oID
 const obtenerArchivosPorID = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const archivo = yield archivos_model_1.default.findById(req.params.id); // ✅ Agregado await
+        const archivo = yield archivos_model_1.default.findById(req.params.id);
         if (!archivo) {
             return res.status(404).json({ mensaje: "Archivo no encontrado" });
         }
@@ -122,3 +99,18 @@ const obtenerArchivosPorID = (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.obtenerArchivosPorID = obtenerArchivosPorID;
+const compartirArchivo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const archivo = yield archivos_model_1.default.findById(req.params.id);
+    if (!archivo)
+        return res.status(404).json({ mensaje: 'Archivo no encontrado' });
+    const { usuarios } = req.body; // array de {usuario, permisos}
+    usuarios.forEach((u) => {
+        const existe = archivo.compartido.some(c => c.usuario === u.usuario);
+        if (!existe) {
+            archivo.compartido.push({ usuario: u.usuario, permisos: u.permisos });
+        }
+    });
+    yield archivo.save();
+    res.json({ mensaje: 'Archivo compartido correctamente' });
+});
+exports.compartirArchivo = compartirArchivo;

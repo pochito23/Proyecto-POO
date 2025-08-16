@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000';
+const API = 'http://192.168.1.28:3000';
 
 let usuarioActual = null;
 let proyectoActual = null;

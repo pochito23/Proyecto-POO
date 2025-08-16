@@ -61,6 +61,16 @@ const usuarioSchema: Schema = new Schema({
     type: String,
     required: [true, 'La respuesta de seguridad es requerida'],
     trim: true
+  },
+    img: {
+    type: String,
+    default: null,
+    validate: {
+      validator: function(v: string) {
+        return !v || /^https?:\/\/.+/.test(v); // URL válida o null
+      },
+      message: 'La imagen debe ser una URL válida'
+    }
   }
 });
 

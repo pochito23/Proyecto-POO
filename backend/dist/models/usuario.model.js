@@ -91,6 +91,16 @@ const usuarioSchema = new mongoose_1.Schema({
         type: String,
         required: [true, 'La respuesta de seguridad es requerida'],
         trim: true
+    },
+    img: {
+        type: String,
+        default: null,
+        validate: {
+            validator: function (v) {
+                return !v || /^https?:\/\/.+/.test(v); // URL válida o null
+            },
+            message: 'La imagen debe ser una URL válida'
+        }
     }
 });
 usuarioSchema.methods.limiteProyectos = function () {
