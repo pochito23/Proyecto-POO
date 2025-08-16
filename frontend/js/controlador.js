@@ -547,22 +547,22 @@ const planesData = {
     precio: "$0.00",
     cantidad: 1,
     beneficios: [
-      "✅ Proyecto único",
-      "✅ Vista previa",
-      "✅ Acceso web",
-      "❌ Sin soporte prioritario",
+      "✅  Proyecto único",
+      "✅  Vista previa",
+      "✅  Acceso web",
+      "❌  Sin soporte prioritario",
     ],
   },
-  estudiante: {
-    nombre: "Plan Estudiante",
+  basico: {
+    nombre: "Plan Basico",
     precio: "$9.99",
     cantidad: 5,
     beneficios: [
-      "✅ 5 proyectos",
-      "✅ Acceso web y móvil",
-      "✅ Soporte por email",
-      "✅ Sincronización automática",
-      "❌ Sin soporte prioritario",
+      "✅  5 proyectos",
+      "✅  Acceso web y móvil",
+      "✅  Soporte por email",
+      "✅  Sincronización automática",
+      "❌  Sin soporte prioritario",
     ],
   },
   pro: {
@@ -570,10 +570,10 @@ const planesData = {
     precio: "$19.99",
     cantidad: 10,
     beneficios: [
-      "✅ 10 proyectos",
-      "✅ Todas las características básicas",
-      "✅ Soporte prioritario 24/7",
-      "✅ Colaboración en equipo",
+      "✅  10 proyectos",
+      "✅  Todas las características básicas",
+      "✅  Soporte prioritario 24/7",
+      "✅  Colaboración en equipo",
     ],
   },
   empresarial: {
@@ -581,16 +581,16 @@ const planesData = {
     precio: "$49.99",
     cantidad: 100,
     beneficios: [
-      "✅ Proyectos ilimitados",
-      "✅ Todas las características Pro",
-      "✅ Administración de usuarios",
-      "✅ Gerente de cuenta dedicado",
+      "✅  Proyectos ilimitados",
+      "✅  Todas las características Pro",
+      "✅  Administración de usuarios",
+      "✅  Gerente de cuenta dedicado",
     ],
   },
 };
 
 // Obtener plan seleccionado
-let planSeleccionado = "gratis";
+let planSeleccionado = "basico";
 const urlParametro = new URLSearchParams(window.location.search);
 if (urlParametro.get("plan")) {
   planSeleccionado = urlParametro.get("plan").toLowerCase();
@@ -635,12 +635,16 @@ function cargarInformacionPlan() {
 // Event listeners para formularios de pago
 document.addEventListener('DOMContentLoaded', function() {
   const selectorPlan = document.getElementById("selectorPlan");
+
   if (selectorPlan) {
+    // Establecer el valor seleccionado basado en la URL o en 'basico'
+    planSeleccionado = urlParametro.get("plan")?.toLowerCase() || "basico";
+    selectorPlan.value = planSeleccionado;
+    
     selectorPlan.addEventListener("change", function (e) {
       planSeleccionado = e.target.value;
       cargarInformacionPlan();
     });
-    selectorPlan.value = planSeleccionado;
     cargarInformacionPlan();
   }
 
